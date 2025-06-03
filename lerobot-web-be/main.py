@@ -61,6 +61,7 @@ async def start_teleoperate(params: TeleoperateParams):
         control_robot_script_path = "lerobot/scripts/control_robot.py"
         script_path = os.path.join(base_dir, control_robot_script_path)
         env = os.environ.copy()
+        env["DISPLAY"] = ":0"
 
         command = [
             "python",
