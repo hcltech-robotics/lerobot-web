@@ -21,6 +21,7 @@
     "types": [
       "node"
     ],
+    "jsx": "react-jsx",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
