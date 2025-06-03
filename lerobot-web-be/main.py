@@ -7,6 +7,7 @@ import time
 import threading
 from pydantic import BaseModel, Field, validator
 from typing import Optional
+import re
 
 app = FastAPI(
     title="LeRobot Backend",
@@ -30,13 +31,34 @@ app.add_middleware(
 process = None
 output_lines = []
 
+log_start_teleoperate_pattern = re.compile(
+    r"^INFO \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
+)
+
+@app.on_event("startup")
+def start_xvfb_if_needed():
+    try:
+        result = subprocess.run(["pgrep", "Xvfb"], stdout=subprocess.DEVNULL)
+        if result.returncode != 0:
+            print("[startup] Xvfb is not running, starting it...")
+            subprocess.Popen(
+                ["Xvfb", ":0", "-screen", "0", "1024x768x24"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL
+            )
+        else:
+            print("[startup] Xvfb is already running.")
+
+        os.environ["DISPLAY"] = ":0"
+        print("[startup] DISPLAY environment variable set: :0")
+
+    except Exception as e:
+        print("[startup] An error occurred while starting Xvfb: ", str(e))
+
 def read_teleoperate_stdout(proc):
     global output_lines
-    while True:
-        line = proc.stdout.readline()
-        if not line:
-            break
-        decoded_line = line.decode("utf-8").strip()
+    for line in proc.stdout:
+        decoded_line = line.strip()
         print("[robot log]:", decoded_line)
         output_lines.append(decoded_line)
 
@@ -61,7 +83,6 @@ async def start_teleoperate(params: TeleoperateParams):
         control_robot_script_path = "lerobot/scripts/control_robot.py"
         script_path = os.path.join(base_dir, control_robot_script_path)
         env = os.environ.copy()
-        env["DISPLAY"] = ":0"
 
         command = [
             "python",
@@ -79,7 +100,8 @@ async def start_teleoperate(params: TeleoperateParams):
             env=env,
             cwd=base_dir,
             preexec_fn=os.setsid,
-            bufsize=1
+            bufsize=1,
+            text=True
         )
 
         t = threading.Thread(target=read_teleoperate_stdout, args=(process,))
@@ -90,11 +112,32 @@ async def start_teleoperate(params: TeleoperateParams):
         waited = 0
         while waited < timeout:
             if output_lines:
-                return {"status": "started", "pid": process.pid, "message": output_lines[0]}
+                first_line = output_lines[0]
+                if log_start_teleoperate_pattern.match(first_line):
+                    return {
+                        "status": "started",
+                        "pid": process.pid,
+                        "message": first_line
+                    }
+                else:
+                    print("[startup error] Unexpected log line: ", first_line)
+                    os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+                    process.wait()
+                    process = None
+                    return {
+                        "status": "error",
+                        "pid": 0,
+                        "message": f"Robot startup failed, first line of log:: {first_line}"
+                    }
+
             time.sleep(0.2)
             waited += 0.2
 
-        return {"status": "started", "pid": process.pid, "message": "no output yet"}
+        return {
+            "status": "started",
+            "pid": process.pid,
+            "message": "no output yet"
+        }
 
     except Exception as e:
         return {"status": "error", "pid": 0, "message": str(e)}
@@ -109,10 +152,10 @@ class StopTeleoperateParams(BaseModel):
             with open("/proc/sys/kernel/pid_max") as f:
                 pid_max = int(f.read().strip())
         except Exception:
-            raise ValueError("Nem sikerült lekérdezni a pid_max értéket")
+            raise ValueError("Failed to query pid_max value.")
 
         if not (0 <= id <= pid_max):
-            raise ValueError(f"pid értékének 0 és {pid_max} között kell lennie")
+            raise ValueError(f"pid must be between 0 and {pid_max}")
         return id
 
 class StopTeleoperateResponse(BaseModel):
