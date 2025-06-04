@@ -30,7 +30,9 @@ app.add_middleware(
 
 process = None
 output_lines = []
-
+base_dir = "/home/jetson/lerobot"
+control_robot_script_path = "lerobot/scripts/control_robot.py"
+calibration_file_path = ".cache/calibration/so100/main_follower.json"
 log_start_teleoperate_pattern = re.compile(
     r"^INFO \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
 )
@@ -55,6 +57,18 @@ def start_xvfb_if_needed():
     except Exception as e:
         print("[startup] An error occurred while starting Xvfb: ", str(e))
 
+def check_calibration_file_exits():
+    calibration_script_path = os.path.join(base_dir, calibration_file_path)
+    calibration_exists = os.path.exists(calibration_script_path)
+    return calibration_exists
+
+class StatusResponse(BaseModel):
+    calibration: bool
+
+@app.get("/status", response_model=StatusResponse, tags=["status"])
+async def get_status():
+    return StatusResponse(calibration=check_calibration_file_exits())
+
 def read_teleoperate_stdout(proc):
     global output_lines
     for line in proc.stdout:
@@ -77,10 +91,18 @@ async def start_teleoperate(params: TeleoperateParams):
     try:
         if process is not None and process.poll() is None:
             return {"status": "already running", "pid": process.pid}
+        
+        calibration_script_path = os.path.join(base_dir, calibration_file_path)
+    
+        if not os.path.exists(calibration_script_path):
+            return {
+                "status": "error",
+                "pid": 0,
+                "message": f"No calibration file found, a new calibration is required."
+            }
 
         output_lines = []
-        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../lerobot"))
-        control_robot_script_path = "lerobot/scripts/control_robot.py"
+        
         script_path = os.path.join(base_dir, control_robot_script_path)
         env = os.environ.copy()
 
