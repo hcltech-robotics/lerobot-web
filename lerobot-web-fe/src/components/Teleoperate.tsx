@@ -1,11 +1,8 @@
-import { useState } from "react";
-import {
-  startTeleoperate,
-  stopTeleoperate,
-} from "../services/teleoperateService";
+import { useState } from 'react';
+import { startTeleoperate, stopTeleoperate } from '../services/teleoperateService';
 
 export default function Teleoperate() {
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<string>('');
   const [pid, setPid] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,15 +39,13 @@ export default function Teleoperate() {
     }
   };
 
-  const statusText = loading
-    ? "loading..."
-    : (status || " - ").concat(pid ? ` - pid: ${pid}` : "");
+  const statusText = loading ? 'loading...' : (status || ' - ').concat(pid ? ` - pid: ${pid}` : '');
 
   return (
     <>
       <p>Teleoperated status:</p>
       <p>{statusText}</p>
-      {error && <p style={{ color: "red" }}>Error: {error}</p>}
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
       <button onClick={handleStart} disabled={!!pid || loading}>
         Start teleoperate
       </button>

@@ -13,13 +13,13 @@ type StopResponse = {
 const API_BASE = "http://127.0.0.1:8000";
 
 export async function startTeleoperate(): Promise<StartResponse> {
-  const res = await fetch(`${API_BASE}/start-teleoperate`, {
+  const res = await fetch(`${API_BASE}/teleoperate`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({}),
+    body: JSON.stringify({mode: "start"}),
   });
 
   if (!res.ok) {
@@ -34,13 +34,13 @@ export async function stopTeleoperate(
 ): Promise<StopResponse> {
   if (pid === null) throw new Error("PID is required to stop teleoperate");
 
-  const res = await fetch(`${API_BASE}/stop-teleoperate`, {
+  const res = await fetch(`${API_BASE}/teleoperate`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ pid }),
+    body: JSON.stringify({mode: "stop", pid}),
   });
 
   if (!res.ok) {
