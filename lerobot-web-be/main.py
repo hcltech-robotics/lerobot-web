@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 import subprocess
 import os
@@ -8,6 +8,9 @@ import threading
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 import re
+import asyncio
+import json
+import random
 
 app = FastAPI(
     title="LeRobot Backend",
@@ -56,6 +59,27 @@ def start_xvfb_if_needed():
 
     except Exception as e:
         print("[startup] An error occurred while starting Xvfb: ", str(e))
+
+def get_robot_joint_state():
+    return {
+                "rotation": random.uniform(-1.6, 1.6),
+                "pitch": random.uniform(-1.6, 1.6),
+                "elbow": random.uniform(-1.6, 1.6),
+                "wristPitch": random.uniform(-1.6, 1.6),
+                "wristRoll": random.uniform(-1.6, 1.6),
+                "jaw": random.uniform(-1.6, 1.6),
+            }
+
+@app.websocket("/ws/joint_state")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            joint_state = get_robot_joint_state()
+            await websocket.send_text(json.dumps(joint_state))
+            await asyncio.sleep(0.1)
+    except WebSocketDisconnect:
+        print("Client disconnected")
 
 def check_calibration_file_exits():
     calibration_script_path = os.path.join(base_dir, calibration_file_path)
