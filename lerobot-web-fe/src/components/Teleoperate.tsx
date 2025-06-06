@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { startTeleoperate, stopTeleoperate } from '../services/teleoperateService';
+import { MainScene } from './MainScene';
+import { Robot } from './Robot';
 
 export default function Teleoperate() {
   const [status, setStatus] = useState<string>('');
@@ -52,6 +54,9 @@ export default function Teleoperate() {
       <button onClick={handleStop} disabled={!pid || loading}>
         Stop teleoperate
       </button>
+      <MainScene>
+        <Robot />
+      </MainScene>
     </>
   );
 }

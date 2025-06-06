@@ -10,8 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^10.1.2",
+    "@react-three/fiber": "^9.1.2",
+    "@types/three": "^0.177.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "three": "^0.177.0",
+    "urdf-loader": "^0.12.5"
   },
   "devDependencies": {
     "@types/node": "^22.15.29",
