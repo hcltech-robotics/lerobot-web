@@ -1,13 +1,40 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { startTeleoperate, stopTeleoperate } from '../services/teleoperateService';
 import { MainScene } from './MainScene';
 import { Robot } from './Robot';
+
+export interface JointState {
+  rotation: number;
+  pitch: number;
+  elbow: number;
+  wristPitch: number;
+  wristRoll: number;
+  jaw: number;
+};
 
 export default function Teleoperate() {
   const [status, setStatus] = useState<string>('');
   const [pid, setPid] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [jointState, setJointState] = useState<JointState | null>(null);
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8000/ws/joint_state');
+
+    socket.onmessage = (event) => {
+      const data: JointState = JSON.parse(event.data);
+      setJointState(data);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket closed for joint state');
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   const handleStart = async () => {
     setLoading(true);
@@ -55,7 +82,7 @@ export default function Teleoperate() {
         Stop teleoperate
       </button>
       <MainScene>
-        <Robot />
+        <Robot jointState={jointState} />
       </MainScene>
     </>
   );
