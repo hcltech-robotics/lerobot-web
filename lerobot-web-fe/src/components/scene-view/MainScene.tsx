@@ -5,7 +5,7 @@ import { Grid, OrbitControls } from '@react-three/drei';
 export function MainScene(props: PropsWithChildren) {
   return (
     <>
-      <Canvas camera={{ position: [10, 2, 5], fov: 5 }}>
+      <Canvas camera={{ position: [10, 2, 5], fov: 5 }} draggable="false">
         <ambientLight intensity={0.5} />
         <directionalLight position={[5, 10, 5]} intensity={1} castShadow />
         <Grid
