@@ -18,6 +18,7 @@ export default function Teleoperate() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [jointState, setJointState] = useState<JointState | null>(null);
+  const [videoStream, setVideoStream] = useState<string | null>(null);
 
   useEffect(() => {
     const socket = new WebSocket('ws://localhost:8000/ws/joint_state');
@@ -29,6 +30,23 @@ export default function Teleoperate() {
 
     socket.onclose = () => {
       console.log('WebSocket closed for joint state');
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8000/ws/video');
+
+    socket.onmessage = (event) => {
+      const data = `data:image/jpeg;base64,${JSON.parse(event.data).data}`;
+      setVideoStream(data);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket closed for video');
     };
 
     return () => {
@@ -81,6 +99,7 @@ export default function Teleoperate() {
       <button onClick={handleStop} disabled={!pid || loading}>
         Stop teleoperate
       </button>
+      {videoStream && <img src={videoStream} />}
       <MainScene>
         <Robot jointState={jointState} />
       </MainScene>
