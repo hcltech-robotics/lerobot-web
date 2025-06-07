@@ -11,6 +11,8 @@ import re
 import asyncio
 import json
 import random
+import cv2
+import base64
 
 app = FastAPI(
     title="LeRobot Backend",
@@ -39,6 +41,8 @@ calibration_file_path = ".cache/calibration/so100/main_follower.json"
 log_start_teleoperate_pattern = re.compile(
     r"^INFO \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
 )
+
+cap = cv2.VideoCapture(0)
 
 @app.on_event("startup")
 def start_xvfb_if_needed():
@@ -79,7 +83,26 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.send_text(json.dumps(joint_state))
             await asyncio.sleep(0.1)
     except WebSocketDisconnect:
-        print("Client disconnected")
+        print("Client disconnected from joint state")
+
+@app.websocket("/ws/video")
+async def video_feed(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                continue
+
+            _, buffer = cv2.imencode('.jpg', frame)
+            jpg_as_text = base64.b64encode(buffer).decode('utf-8')
+
+            await websocket.send_text(json.dumps({"type": "camera_frame", "data": jpg_as_text}))
+            await asyncio.sleep(1 / 30) # 30 fps
+    except WebSocketDisconnect:
+        print("Client disconnected from camera stream")
+    except Exception as e:
+        print(f"Error: {e}")
 
 def check_calibration_file_exits():
     calibration_script_path = os.path.join(base_dir, calibration_file_path)
