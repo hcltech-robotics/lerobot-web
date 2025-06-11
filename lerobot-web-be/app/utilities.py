@@ -5,7 +5,6 @@ import threading
 import time
 import re
 import random
-import cv2
 
 process = None
 output_lines = []
@@ -16,8 +15,6 @@ calibration_file_path = ".cache/calibration/so100/main_follower.json"
 log_start_teleoperate_pattern = re.compile(
     r"^INFO \d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"
 )
-
-cap = cv2.VideoCapture(0)
 
 def get_robot_joint_state():
     return {

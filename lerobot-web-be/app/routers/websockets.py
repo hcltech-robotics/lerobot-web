@@ -2,7 +2,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import json
 import asyncio
 import base64
-from ..utilities import get_robot_joint_state, cap
+import cv2
+from ..utilities import get_robot_joint_state
 
 router = APIRouter()
 
@@ -19,6 +20,7 @@ async def websocket_joint_state(websocket: WebSocket):
 
 @router.websocket("/ws/video")
 async def websocket_video_feed(websocket: WebSocket):
+    cap = cv2.VideoCapture(0)
     await websocket.accept()
     try:
         while True:
