@@ -2,24 +2,38 @@
 
 Created by Python based FastAPI web framework.
 
+## Activate lerobot env
+
+```bash
+conda activate lerobot
+```
+
 ## Install
 
+Install dependecies via txt:
+
+```bash
+pip install -r requirements.txt
 ```
+
+or,
+
+```bash
 pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python
 ```
 
-Set a virtual display (if needed):
-```
+Install a virtual display:
+
+```bash
 sudo api install xvfb
-Xvfb :0 -screen 0 1024x768x24&
-export DISPLAY=:0
 ```
 
 ## Run
 
 Run the application itself:
+
 ```
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
 
 Then, you can check it in the browser, just open: http://127.0.0.1:8000
