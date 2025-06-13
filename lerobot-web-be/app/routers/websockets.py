@@ -7,6 +7,8 @@ from ..utilities import get_robot_joint_state
 
 router = APIRouter()
 
+MAX_CAMERA_IDS = 3
+
 @router.websocket("/ws/joint_state")
 async def websocket_joint_state(websocket: WebSocket):
     await websocket.accept()
@@ -18,11 +20,21 @@ async def websocket_joint_state(websocket: WebSocket):
     except WebSocketDisconnect:
         print("Client disconnected from ws/joint_state")
 
+
 @router.websocket("/ws/video")
 async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...)):
     await websocket.accept()
+
     try:
-        ids = [int(camera_id) for camera_id in camera_ids.split(",")]
+        ids = [int(camera_id.strip()) for camera_id in camera_ids.split(",")]
+
+        if len(ids) > MAX_CAMERA_IDS:
+            await websocket.send_text(json.dumps({
+                "error": "too_many_cameras",
+                "data": "Maximum 3 camera IDs allowed"
+            }))
+            await websocket.close()
+            return
     except ValueError:
         await websocket.send_text(json.dumps({"error": "Invalid camera ID(s)"}))
         await websocket.close()
@@ -34,10 +46,17 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
         if capture.isOpened():
             cameras[camera_id] = capture
         else:
-            await websocket.send_text(json.dumps({"error": "not_found", "camera_id": camera_id, "data": f"Camera {camera_id} is unavailable"}))
+            await websocket.send_text(json.dumps({
+                "error": "not_found",
+                "camera_id": camera_id,
+                "data": f"Camera {camera_id} is unavailable"
+            }))
 
     if not cameras:
-        await websocket.send_text(json.dumps({"error": "no_cameras", "data": "No cameras available"}))
+        await websocket.send_text(json.dumps({
+            "error": "no_cameras",
+            "data": "No cameras available"
+        }))
         await websocket.close()
         return
 
@@ -60,7 +79,10 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
         finally:
             capture.release()
 
-    tasks = [asyncio.create_task(stream_camera(camera_id, capture)) for camera_id, capture in cameras.items()]
+    tasks = [
+        asyncio.create_task(stream_camera(camera_id, capture))
+        for camera_id, capture in cameras.items()
+    ]
 
     try:
         await asyncio.gather(*tasks)
