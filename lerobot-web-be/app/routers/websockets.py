@@ -20,13 +20,19 @@ async def websocket_joint_state(websocket: WebSocket):
     except WebSocketDisconnect:
         print("Client disconnected from ws/joint_state")
 
-
 @router.websocket("/ws/video")
 async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...)):
     await websocket.accept()
 
     try:
-        ids = [int(camera_id.strip()) for camera_id in camera_ids.split(",")]
+        ids = {
+            int(c.strip())
+            for c in camera_ids.split(",") if c.strip() != ""
+        }
+        if not ids:
+            await websocket.send_text(json.dumps({"error": "no_ids", "data": "No valid camera IDs supplied"}))
+            await websocket.close()
+            return
 
         if len(ids) > MAX_CAMERA_IDS:
             await websocket.send_text(json.dumps({
