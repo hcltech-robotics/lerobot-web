@@ -7,7 +7,7 @@ from ..utilities import get_robot_joint_state
 
 router = APIRouter()
 
-MAX_CAMERA_IDS = 3
+MAX_CAMERA_IDS_NUMBER = 3
 
 @router.websocket("/ws/joint_state")
 async def websocket_joint_state(websocket: WebSocket):
@@ -25,24 +25,29 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
     await websocket.accept()
 
     try:
-        ids = {
-            int(c.strip())
-            for c in camera_ids.split(",") if c.strip() != ""
-        }
-        if not ids:
-            await websocket.send_text(json.dumps({"error": "no_ids", "data": "No valid camera IDs supplied"}))
-            await websocket.close()
-            return
+        raw_ids = [id_str.strip() for id_str in camera_ids.split(",")]
 
-        if len(ids) > MAX_CAMERA_IDS:
-            await websocket.send_text(json.dumps({
-                "error": "too_many_cameras",
-                "data": "Maximum 3 camera IDs allowed"
-            }))
-            await websocket.close()
-            return
-    except ValueError:
-        await websocket.send_text(json.dumps({"error": "Invalid camera ID(s)"}))
+        if any(id_str == "" for id_str in raw_ids):
+            raise ValueError("Camera ID list contains empty values or malformed input (e.g., double commas or spaces)")
+
+        if len(raw_ids) > 3:
+            raise ValueError("Maximum 3 camera IDs allowed")
+
+        ids = []
+        for id_str in raw_ids:
+            camera_id = int(id_str)
+            if camera_id < 0:
+                raise ValueError("Camera IDs must be non-negative integers")
+            ids.append(camera_id)
+
+        if len(set(ids)) != len(ids):
+            raise ValueError("Duplicate camera IDs are not allowed")
+
+    except ValueError as e:
+        await websocket.send_text(json.dumps({
+            "error": "invalid_camera_ids",
+            "data": str(e)
+        }))
         await websocket.close()
         return
 
@@ -53,6 +58,7 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
         if capture.isOpened():
             cameras[camera_id] = capture
         else:
+            capture.release()
             await websocket.send_text(json.dumps({
                 "error": "not_found",
                 "camera_id": camera_id,
