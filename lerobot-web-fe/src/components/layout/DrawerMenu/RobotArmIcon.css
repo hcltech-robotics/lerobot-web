@@ -1,0 +1,21 @@
+.robot-arm-icon {
+    stroke: 'none';
+    stroke-width: 0;
+    stroke-dasharray: 'none';
+    stroke-linecap: 'butt';
+    stroke-linejoin: 'miter';
+    stroke-miterlimit: 10;
+    fill-rule: 'nonzero';
+    opacity: 1;
+    width: '28px';
+    fill: aqua;
+    height: '28px';
+}
+
+.robot-arm-icon.active {
+    fill: #BEEBB4;
+}
+
+.robot-arm-icon.inactive {
+    fill:  #A5AFBE;
+}
