@@ -47,6 +47,7 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
         return
 
     cameras = {}
+
     for camera_id in ids:
         capture = cv2.VideoCapture(camera_id)
         if capture.isOpened():
@@ -66,6 +67,8 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
         await websocket.close()
         return
 
+    send_lock = asyncio.Lock()
+
     async def stream_camera(camera_id, capture):
         try:
             while True:
@@ -74,11 +77,12 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
                     continue
                 _, buffer = cv2.imencode('.jpg', frame)
                 jpg_as_text = base64.b64encode(buffer).decode('utf-8')
-                await websocket.send_text(json.dumps({
-                    "type": "camera_frame",
-                    "camera_id": camera_id,
-                    "data": jpg_as_text
-                }))
+                async with send_lock:
+                    await websocket.send_text(json.dumps({
+                        "type": "camera_frame",
+                        "camera_id": camera_id,
+                        "data": jpg_as_text
+                    }))
                 await asyncio.sleep(0.05)
         except asyncio.CancelledError:
             pass
@@ -91,7 +95,7 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
     ]
 
     try:
-        await asyncio.gather(*tasks)
+        await asyncio.gather(*tasks, return_exceptions=True)
     except WebSocketDisconnect:
         print("Client disconnected from /ws/video")
     except Exception as e:
