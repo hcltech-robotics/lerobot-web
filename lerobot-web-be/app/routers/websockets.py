@@ -95,7 +95,7 @@ async def websocket_video_feed(websocket: WebSocket, camera_ids: str = Query(...
     ]
 
     try:
-        await asyncio.gather(*tasks, return_exceptions=True)
+        await asyncio.gather(*tasks)
     except WebSocketDisconnect:
         print("Client disconnected from /ws/video")
     except Exception as e:
