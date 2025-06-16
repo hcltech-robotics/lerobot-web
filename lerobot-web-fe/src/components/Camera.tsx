@@ -7,8 +7,16 @@ export function CameraFeed() {
     const socket = new WebSocket('ws://localhost:8000/ws/video');
 
     socket.onmessage = (event) => {
-      const data = `data:image/jpeg;base64,${JSON.parse(event.data).data}`;
-      setVideoStream(data);
+      try {
+        const payload = JSON.parse(event.data);
+        if (payload?.data) {
+          setVideoStream(`data:image/jpeg;base64,${payload.data}`);
+        } else {
+          console.warn('CameraFeed: missing data field in message', payload);
+        }
+      } catch (err) {
+        console.error('CameraFeed: invalid JSON message', err);
+      }
     };
 
     socket.onclose = () => {
