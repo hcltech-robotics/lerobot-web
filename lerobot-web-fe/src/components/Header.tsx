@@ -12,7 +12,7 @@ export default function Appbar({ isDrawerOpen, robotStatus }: AppbarProps) {
       <h1 className={styles.title}>Lerobot Robot Arm</h1>
       <div className={styles.robotIcons}>
         {robotStatus.map((isActive) => (
-          <div className={isActive ? styles.activeRobotIcon : styles.inactiveRobotIcon}>
+          <div className={`${styles.robotIcon} ${isActive ? styles.active : ''}`}>
             <RobotIcon />
           </div>
         ))}
