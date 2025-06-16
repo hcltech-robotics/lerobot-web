@@ -1,0 +1,28 @@
+.appbar {
+  height: 60px;
+  background: linear-gradient(90deg, #5F1EBE, #0F5FDC 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  color: white;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.robotIcons {
+  display: flex;
+  gap: 10px;
+}
+
+.activeRobotIcon {
+    fill: #BEEBB4;
+}
+
+.inactiveRobotIcon {
+    fill:  #A5AFBE;
+}
