@@ -19,10 +19,10 @@
   gap: 10px;
 }
 
-.activeRobotIcon {
+.activeRobotIcon svg{
     fill: #BEEBB4;
 }
 
-.inactiveRobotIcon {
+.inactiveRobotIcon svg{
     fill:  #A5AFBE;
 }

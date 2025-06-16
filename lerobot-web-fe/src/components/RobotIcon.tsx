@@ -1,10 +1,5 @@
-interface RobotIconProps {
-  className?: string | undefined;
-}
-
-const RobotIcon = ({ className }: RobotIconProps) => (
+const RobotIcon = () => (
   <svg
-    className={className}
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
     width={40}
