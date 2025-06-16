@@ -10,12 +10,24 @@ import { BrandLogo } from './BrandLogo';
 import { MainScene } from './MainScene';
 import Robot from './Robot';
 
-const pages = [<Teleoperate />, <Calibration />, <Policies />, <AITraining />];
+type PageConfig = {
+  key: string;
+  component: React.FC;
+};
+
+const pages: readonly PageConfig[] = [
+  { key: 'teleoperate', component: Teleoperate },
+  { key: 'calibration', component: Calibration },
+  { key: 'policies', component: Policies },
+  { key: 'ai-training', component: AITraining },
+];
 
 export function Layout() {
   const [isOpen, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [robotStatus, setRobotStatus] = useState([false, false]);
+
+  const Page = pages[selectedIndex]?.component;
 
   return (
     <div className={styles.root}>
@@ -23,7 +35,7 @@ export function Layout() {
       <div className={styles.mainArea}>
         <Header isDrawerOpen={isOpen} robotStatus={robotStatus} />
         <div className={styles.pageContainer}>
-          {pages[selectedIndex]}
+          {Page && <Page key={pages[selectedIndex]?.key} />}
           <div className={styles.sceneContainer}>
             <div className={styles.mainScene}>
               <MainScene>
