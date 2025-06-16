@@ -29,7 +29,7 @@
   border: none;
   cursor: pointer;
   padding: 8px 0px;
-  color: grey;
+  color: #8291A0;
 }
 
 .drawerContent {
@@ -54,12 +54,12 @@
 }
 
 .selected {
-  background-color: lightgrey;
+  background-color: #C8D2DD;
 }
 
 .drawerLabel {
   font-size: 18px;
-  color:grey;
+  color: #8291A0;
   align-self: center;
 }
 
@@ -72,5 +72,5 @@
 .drawerIcon svg {
   height: 24px;
   width: 24px;
-  color:grey;
+  color: #8291A0;
 }

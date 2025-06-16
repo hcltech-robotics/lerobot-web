@@ -5,7 +5,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  color: white;
+  color: #fff;
   transition: margin-left 0.3s ease, width 0.3s ease;
 }
 

@@ -52,7 +52,7 @@
 
 .start {
   background-color: #3c91ff;
-  color: white;
+  color: #fff;
 }
 
 .start:hover {
@@ -61,7 +61,7 @@
 
 .stop {
   background-color: #ff4f4f;
-  color: white;
+  color: #fff;
 }
 
 .stop:hover {
@@ -75,8 +75,8 @@
 
 .loader {
   border: 2px solid transparent;
-  border-top: 2px solid white;
-  border-right: 2px solid white;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
   border-radius: 50%;
   width: 0.9rem;
   height: 0.9rem;
