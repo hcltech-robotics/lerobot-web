@@ -59,7 +59,7 @@ export default function Teleoperate() {
         onClick={isRunning ? handleStop : handleStart}
         disabled={loading}
       >
-        {false ? (
+        {loading ? (
           <>
             <span className={styles.loader} />
             Loading
