@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type FC } from 'react';
 import { DrawerMenu } from './DrawerMenu';
 import Header from './Header';
 import styles from './Layout.module.css';
@@ -27,14 +27,16 @@ export function Layout() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [robotStatus, setRobotStatus] = useState([false, false]);
 
-  const Page = pages[selectedIndex]?.component;
+  const { component: SelectedPage, key } = pages[selectedIndex] as PageConfig;
 
   return (
     <div className={styles.root}>
       <DrawerMenu isOpen={isOpen} setOpen={setOpen} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
       <div className={styles.mainArea}>
         <Header isDrawerOpen={isOpen} robotStatus={robotStatus} />
-        <div className={styles.pageContainer}>{Page && <Page key={pages[selectedIndex]?.key} />}</div>
+        <div className={styles.pageContainer}>
+          <SelectedPage key={key} />
+        </div>
         <div className={styles.sceneContainer}>
           <div className={styles.mainScene}>
             <MainScene>
