@@ -1,0 +1,5 @@
+.brandLogo {
+  opacity: 50%;
+  height: 50px;
+  pointer-events: none;
+}
