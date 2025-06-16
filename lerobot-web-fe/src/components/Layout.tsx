@@ -34,16 +34,14 @@ export function Layout() {
       <DrawerMenu isOpen={isOpen} setOpen={setOpen} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
       <div className={styles.mainArea}>
         <Header isDrawerOpen={isOpen} robotStatus={robotStatus} />
-        <div className={styles.pageContainer}>
-          {Page && <Page key={pages[selectedIndex]?.key} />}
-          <div className={styles.sceneContainer}>
-            <div className={styles.mainScene}>
-              <MainScene>
-                <Robot />
-              </MainScene>
-            </div>
-            <div className={styles.cameraContainer}>{/* placeholder for camera feeds */}</div>
+        <div className={styles.pageContainer}>{Page && <Page key={pages[selectedIndex]?.key} />}</div>
+        <div className={styles.sceneContainer}>
+          <div className={styles.mainScene}>
+            <MainScene>
+              <Robot />
+            </MainScene>
           </div>
+          <div className={styles.cameraContainer}>{/* placeholder for camera feeds */}</div>
         </div>
         <div className={styles.logoArea}>
           <BrandLogo />
