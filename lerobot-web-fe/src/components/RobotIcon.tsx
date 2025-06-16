@@ -11,6 +11,8 @@ const RobotIcon = ({ className }: RobotIconProps) => (
     height={40}
     viewBox="0 0 256 256"
     xmlSpace="preserve"
+    aria-hidden="true"
+    focusable="false"
   >
     <g transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
       <path
