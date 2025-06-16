@@ -6,9 +6,9 @@ interface AppbarProps {
   robotStatus: boolean[];
 }
 
-export default function Appbar({ isDrawerOpen, robotStatus }: AppbarProps) {
+export default function Appbar({ robotStatus }: AppbarProps) {
   return (
-    <header className={`${styles.appbar} ${isDrawerOpen ? styles.open : styles.closed}`}>
+    <header className={styles.appbar}>
       <h1 className={styles.title}>Lerobot Robot Arm</h1>
       <div className={styles.robotIcons}>
         {robotStatus.map((isActive) => (
