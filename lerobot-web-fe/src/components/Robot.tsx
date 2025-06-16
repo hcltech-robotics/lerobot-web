@@ -1,13 +1,22 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import URDFLoader from 'urdf-loader';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
-import type { JointState } from './Teleoperate';
 
-export function Robot({ jointState, onRobotReady }: { jointState: JointState | null; onRobotReady?: (robot: THREE.Object3D) => void }) {
+export interface JointState {
+  rotation: number;
+  pitch: number;
+  elbow: number;
+  wristPitch: number;
+  wristRoll: number;
+  jaw: number;
+}
+
+export default function Robot() {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
+  const [jointState, setJointState] = useState<JointState | null>(null);
 
   React.useEffect(() => {
     const manager = new THREE.LoadingManager();
@@ -36,9 +45,25 @@ export function Robot({ jointState, onRobotReady }: { jointState: JointState | n
       robot.rotation.x = -Math.PI / 2;
       scene.add(robot);
       robotRef.current = robot;
-      if (onRobotReady) onRobotReady(robot);
     });
-  }, [scene, onRobotReady]);
+  }, [scene]);
+
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8000/ws/joint_state');
+
+    socket.onmessage = (event) => {
+      const data: JointState = JSON.parse(event.data);
+      setJointState(data);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket closed for joint state');
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, []);
 
   useEffect(() => {
     if (!robotRef.current || !jointState) return;

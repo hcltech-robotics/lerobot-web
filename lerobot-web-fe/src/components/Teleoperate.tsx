@@ -1,58 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
+import styles from './Teleoperate.module.css';
 import { startTeleoperate, stopTeleoperate } from '../services/teleoperateService';
-import { MainScene } from './MainScene';
-import { Robot } from './Robot';
-
-export interface JointState {
-  rotation: number;
-  pitch: number;
-  elbow: number;
-  wristPitch: number;
-  wristRoll: number;
-  jaw: number;
-};
 
 export default function Teleoperate() {
   const [status, setStatus] = useState<string>('');
   const [pid, setPid] = useState<number | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [jointState, setJointState] = useState<JointState | null>(null);
-  const [videoStream, setVideoStream] = useState<string | null>(null);
-
-  useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8000/ws/joint_state');
-
-    socket.onmessage = (event) => {
-      const data: JointState = JSON.parse(event.data);
-      setJointState(data);
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket closed for joint state');
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
-
-  useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8000/ws/video');
-
-    socket.onmessage = (event) => {
-      const data = `data:image/jpeg;base64,${JSON.parse(event.data).data}`;
-      setVideoStream(data);
-    };
-
-    socket.onclose = () => {
-      console.log('WebSocket closed for video');
-    };
-
-    return () => {
-      socket.close();
-    };
-  }, []);
 
   const handleStart = async () => {
     setLoading(true);
@@ -86,23 +41,41 @@ export default function Teleoperate() {
     }
   };
 
-  const statusText = loading ? 'loading...' : (status || ' - ').concat(pid ? ` - pid: ${pid}` : '');
+  const isRunning = !!pid && !!status;
 
   return (
-    <>
-      <p>Teleoperated status:</p>
-      <p>{statusText}</p>
-      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-      <button onClick={handleStart} disabled={!!pid || loading}>
-        Start teleoperate
+    <div className={styles.container}>
+      <div className={styles.statusBox}>
+        <h2 className={styles.statusTitle}>Teleoperation Status</h2>
+        <p className={styles.statusText}>
+          {loading ? 'Loading...' : status || 'Not started'}
+          {pid && !loading ? ` – PID: ${pid}` : ''}
+        </p>
+        {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
+      </div>
+
+      <button
+        className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
+        onClick={isRunning ? handleStop : handleStart}
+        disabled={loading}
+      >
+        {false ? (
+          <>
+            <span className={styles.loader} />
+            Loading
+          </>
+        ) : isRunning ? (
+          <>
+            <StopIcon className={styles.icon} />
+            Stop
+          </>
+        ) : (
+          <>
+            <PlayIcon className={styles.icon} />
+            Start
+          </>
+        )}
       </button>
-      <button onClick={handleStop} disabled={!pid || loading}>
-        Stop teleoperate
-      </button>
-      {videoStream && <img src={videoStream} />}
-      <MainScene>
-        <Robot jointState={jointState} />
-      </MainScene>
-    </>
+    </div>
   );
 }
