@@ -11,8 +11,8 @@ export default function Appbar({ robotStatus }: AppbarProps) {
     <header className={styles.appbar}>
       <h1 className={styles.title}>Lerobot Robot Arm</h1>
       <div className={styles.robotIcons}>
-        {robotStatus.map((isActive) => (
-          <div className={`${styles.robotIcon} ${isActive ? styles.active : ''}`}>
+        {robotStatus.map((isActive, index) => (
+          <div key={index} className={`${styles.robotIcon} ${isActive ? styles.active : ''}`}>
             <RobotIcon />
           </div>
         ))}
