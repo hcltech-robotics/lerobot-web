@@ -11,8 +11,8 @@ export default function Appbar({ isDrawerOpen, robotStatus }: AppbarProps) {
     <header className={`${styles.appbar} ${isDrawerOpen ? styles.open : styles.closed}`}>
       <h1 className={styles.title}>Lerobot Robot Arm</h1>
       <div className={styles.robotIcons}>
-        {robotStatus.map((isActive, idx) => (
-          <RobotIcon key={idx} className={isActive ? styles.activeRobotIcon : styles.inactiveRobotIcon} />
+        {robotStatus.map((isActive, index) => (
+          <RobotIcon key={index} className={isActive ? styles.activeRobotIcon : styles.inactiveRobotIcon} />
         ))}
       </div>
     </header>
