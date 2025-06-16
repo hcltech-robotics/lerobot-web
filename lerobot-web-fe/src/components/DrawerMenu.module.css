@@ -64,7 +64,13 @@
 }
 
 .drawerIcon {
-    height: 24px;
-    width: 24px;
-    color:grey
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawerIcon svg {
+  height: 24px;
+  width: 24px;
+  color:grey;
 }

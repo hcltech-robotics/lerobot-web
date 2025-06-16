@@ -11,10 +11,10 @@ interface DrawerProps {
 }
 
 const pages = [
-  { label: 'Teleoperate', icon: <RocketIcon className={styles.drawerIcon} /> },
-  { label: 'Calibration', icon: <GearIcon className={styles.drawerIcon} /> },
-  { label: 'Policies', icon: <LightningBoltIcon className={styles.drawerIcon} /> },
-  { label: 'AI Training', icon: <LayersIcon className={styles.drawerIcon} /> },
+  { label: 'Teleoperate', icon: <RocketIcon /> },
+  { label: 'Calibration', icon: <GearIcon /> },
+  { label: 'Policies', icon: <LightningBoltIcon /> },
+  { label: 'AI Training', icon: <LayersIcon /> },
 ];
 
 export function DrawerMenu({ isOpen, setOpen, selectedIndex, setSelectedIndex }: DrawerProps) {
@@ -36,7 +36,7 @@ export function DrawerMenu({ isOpen, setOpen, selectedIndex, setSelectedIndex }:
               className={`${styles.drawerItem} ${selectedIndex === index ? styles.selected : ''}`}
               onClick={() => setSelectedIndex(index)}
             >
-              <span>{page.icon}</span>
+              <span className={styles.drawerIcon}>{page.icon}</span>
               {isOpen && <span className={styles.drawerLabel}>{page.label}</span>}
             </button>
           ))}
