@@ -47,16 +47,16 @@ export function CameraFeeds() {
     <div className={styles.cameraFeeds}>
       {cameraIds.map((cameraId) => (
         <div key={cameraId} className={styles.cameraWrapper}>
-          <div className={styles.cameraBox}>
-            {videoStreams[cameraId] ? (
-              <img src={videoStreams[cameraId]!} alt={`Camera ${cameraId}`} className={styles.cameraImage} />
-            ) : (
-              <div className={styles.noSignal}>
-                <ExclamationTriangleIcon className={styles.noSignalIcon} />
-                <span>No Signal!</span>
-              </div>
-            )}
-          </div>
+          {videoStreams[cameraId] ? (
+            <div className={styles.cameraBox}>
+              <img src={videoStreams[cameraId]!} alt={`Camera ${cameraId}`} className={styles.cameraImage} />ß{' '}
+            </div>
+          ) : (
+            <div className={styles.noSignal}>
+              <ExclamationTriangleIcon className={styles.noSignalIcon} />
+              <span>No Signal!</span>
+            </div>
+          )}
           <div className={styles.cameraLabel}>Camera ID {cameraId}</div>
         </div>
       ))}
