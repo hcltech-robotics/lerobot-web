@@ -49,7 +49,7 @@ export function CameraFeeds() {
         <div key={cameraId} className={styles.cameraWrapper}>
           {videoStreams[cameraId] ? (
             <div className={styles.cameraBox}>
-              <img src={videoStreams[cameraId]!} alt={`Camera ${cameraId}`} className={styles.cameraImage} />ß{' '}
+              <img src={videoStreams[cameraId]!} alt={`Camera ${cameraId}`} className={styles.cameraImage} />
             </div>
           ) : (
             <div className={styles.noSignal}>
