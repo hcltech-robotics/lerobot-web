@@ -1,0 +1,76 @@
+.drawer {
+  height: 100vh;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ddd;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.open {
+  width: 200px;
+}
+
+.closed {
+  width: 60px;
+  align-items: center;
+}
+
+.drawerHeader {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+.burger,
+.close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0px;
+  color: #8291A0;
+}
+
+.drawerContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px 0px;
+}
+
+.drawerItem {
+  display: flex;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.drawerItem:hover {
+  background-color: #e0e0e0;
+}
+
+.selected {
+  background-color: #C8D2DD;
+}
+
+.drawerLabel {
+  font-size: 18px;
+  color: #8291A0;
+  align-self: center;
+}
+
+.drawerIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawerIcon svg {
+  height: 24px;
+  width: 24px;
+  color: #8291A0;
+}

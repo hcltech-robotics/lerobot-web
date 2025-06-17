@@ -1,11 +1,9 @@
-import Teleoperate from "./components/Teleoperate";
-
-import "./App.css";
+import { Layout } from './components/Layout';
 
 function App() {
   return (
     <>
-      <Teleoperate />
+      <Layout />
     </>
   );
 }

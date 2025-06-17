@@ -1,9 +1,9 @@
-import './BrandLogo.css';
+import styles from './BrandLogo.module.css';
 
 export const BrandLogo = () => {
   return (
     <>
-      <img className="brand-logo" src="/assets/brand-logo-darkblue.svg"/>
+      <img className={styles.brandLogo} src="/assets/brand-logo-darkblue.svg" />
     </>
   );
 };
