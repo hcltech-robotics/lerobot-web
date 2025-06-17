@@ -1,0 +1,68 @@
+.cameraFeeds {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #e2e2e2;
+  gap: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  min-height: 0;
+  min-width: 0;
+}
+
+.cameraWrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.cameraBox {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+  background: #F0F2F8;
+  position: relative;
+  overflow: hidden;
+}
+
+.cameraImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.noSignal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  font-weight: bold;
+  font-size: 18px;
+  flex-direction: column;
+  gap: 6px;
+
+}
+
+.noSignalIcon {
+  width: 32px;
+  height: 32px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.cameraLabel {
+  position: absolute;
+  bottom: 5px;
+  left: 10px;
+  padding: 2px 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: #8291A0;
+}

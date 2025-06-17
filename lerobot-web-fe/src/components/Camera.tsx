@@ -1,18 +1,33 @@
 import { useEffect, useState } from 'react';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import styles from './Camera.module.css';
 
-export function CameraFeed() {
-  const [videoStream, setVideoStream] = useState<string | null>(null);
+type CameraFrame = Record<number, string | undefined>;
+
+const cameraIds = [0, 1, 2];
+
+export function CameraFeeds() {
+  const [videoStreams, setVideoStreams] = useState<CameraFrame>({});
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const socket = new WebSocket('ws://localhost:8000/ws/video');
+    const query = cameraIds.join(',');
+    const socket = new WebSocket(`ws://localhost:8000/ws/video?camera_ids=${query}`);
 
     socket.onmessage = (event) => {
       try {
         const payload = JSON.parse(event.data);
-        if (payload?.data) {
-          setVideoStream(`data:image/jpeg;base64,${payload.data}`);
-        } else {
-          console.warn('CameraFeed: missing data field in message', payload);
+
+        if (payload.error) {
+          setError(`Camera ${payload.camera_id ?? ''}: ${payload.data}`);
+          return;
+        }
+
+        if (payload.type === 'camera_frame' && payload.camera_id != null && payload.data) {
+          setVideoStreams((prev) => ({
+            ...prev,
+            [payload.camera_id]: `data:image/jpeg;base64,${payload.data}`,
+          }));
         }
       } catch (err) {
         console.error('CameraFeed: invalid JSON message', err);
@@ -29,6 +44,22 @@ export function CameraFeed() {
   }, []);
 
   return (
-    <>{videoStream && <img src={videoStream} alt="Camera feed" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />}</>
+    <div className={styles.cameraFeeds}>
+      {cameraIds.map((cameraId) => (
+        <div key={cameraId} className={styles.cameraWrapper}>
+          <div className={styles.cameraBox}>
+            {videoStreams[cameraId] ? (
+              <img src={videoStreams[cameraId]!} alt={`Camera ${cameraId}`} className={styles.cameraImage} />
+            ) : (
+              <div className={styles.noSignal}>
+                <ExclamationTriangleIcon className={styles.noSignalIcon} />
+                <span>No Signal!</span>
+              </div>
+            )}
+          </div>
+          <div className={styles.cameraLabel}>Camera ID {cameraId}</div>
+        </div>
+      ))}
+    </div>
   );
 }
