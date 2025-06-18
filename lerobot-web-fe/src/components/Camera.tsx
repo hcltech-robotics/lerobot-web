@@ -8,7 +8,6 @@ const cameraIds = [0, 1, 2];
 
 export function CameraFeeds() {
   const [videoStreams, setVideoStreams] = useState<CameraFrame>({});
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const query = cameraIds.join(',');
@@ -19,7 +18,7 @@ export function CameraFeeds() {
         const payload = JSON.parse(event.data);
 
         if (payload.error) {
-          setError(`Camera ${payload.camera_id ?? ''}: ${payload.data}`);
+          console.error(`Camera ${payload.camera_id ?? ''} error: ${payload.data}`);
           return;
         }
 
