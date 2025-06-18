@@ -9,6 +9,7 @@ import AITraining from './AITraining';
 import { BrandLogo } from './BrandLogo';
 import { MainScene } from './MainScene';
 import Robot from './Robot';
+import { CameraFeeds } from './Camera';
 
 type PageConfig = {
   key: string;
@@ -34,16 +35,22 @@ export function Layout() {
       <DrawerMenu isOpen={isOpen} setOpen={setOpen} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
       <div className={styles.mainArea}>
         <Header isDrawerOpen={isOpen} robotStatus={robotStatus} />
-        <div className={styles.pageContainer}>
-          <SelectedPage key={key} />
-        </div>
-        <div className={styles.sceneContainer}>
-          <div className={styles.mainScene}>
-            <MainScene>
-              <Robot />
-            </MainScene>
+        <div className={styles.contentArea}>
+          <div className={styles.leftArea}>
+            <div className={styles.pageContainer}>
+              <SelectedPage key={key} />
+            </div>
+            <div className={styles.sceneContainer}>
+              <div className={styles.mainScene}>
+                <MainScene>
+                  <Robot />
+                </MainScene>
+              </div>
+            </div>
           </div>
-          <div className={styles.cameraContainer}>{/* placeholder for camera feeds */}</div>
+          <div className={styles.cameraContainer}>
+            <CameraFeeds />
+          </div>
         </div>
         <div className={styles.logoArea}>
           <BrandLogo />

@@ -10,27 +10,49 @@
   flex-direction: column;
 }
 
-.pageContainer {
+.contentArea {
+  display: flex;
+  flex: 1;
   padding: 16px;
-  flex-shrink: 0;
+  gap: 16px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.leftArea {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  gap: 16px;
+  min-width: 0;
+}
+
+.pageContainer {
+  flex: 0 0 auto;
+  padding: 16px;
 }
 
 .sceneContainer {
   flex: 1;
   display: flex;
+  flex-direction: column;
   padding: 0px 16px;
   gap: 10px;
-  min-height: 0;
+  overflow: hidden;
 }
 
 .mainScene {
-  width: 75%;
+  flex:1;
+  display: flex;
   background: #f0f0f0;
   border-radius: 8px;
+  box-sizing: border-box;
 }
 
 .cameraContainer {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   background: #e2e2e2;
   border-radius: 8px;
 }
