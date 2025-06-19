@@ -56,7 +56,7 @@ export function CameraFeeds() {
               <span>No Signal!</span>
             </div>
           )}
-          <div className={styles.cameraLabel}>Camera ID {cameraId}</div>
+          <div className={styles.cameraLabel}>Camera {cameraId}</div>
         </div>
       ))}
     </div>
