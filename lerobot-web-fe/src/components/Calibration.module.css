@@ -1,14 +1,14 @@
 .container {
   background-color: #f9f9fb;
-  padding: 1rem 1.5rem;
+  padding: 16px 24px;
   border-radius: 8px;
 }
 
 .selectWrapper {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 12px;
+  margin-bottom: 16px;
 }
 
 .selectLabel {
@@ -20,7 +20,7 @@
   padding: 6px 12px;
   border: 1px solid #d5dce5;
   border-radius: 6px;
-  background-color: white;
+  background-color: #ffffff;
   cursor: pointer;
   color: #1D2123;
   display: flex;
@@ -61,17 +61,17 @@
 .progressIndicator {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
   color: #D5DCE5;
 }
 
 .loader {
   border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
+  border-top: 2px solid #D5DCE5;
+  border-right: 2px solid #D5DCE5;
   border-radius: 50%;
-  width: 0.9rem;
-  height: 0.9rem;
+  width: 16px;
+  height: 16px;
   animation: spin 0.8s linear infinite;
 }
 
