@@ -1,7 +1,7 @@
-import * as Tabs from '@radix-ui/react-tabs';
 import { useState } from 'react';
+import * as Tabs from '@radix-ui/react-tabs';
+import * as Select from '@radix-ui/react-select';
 import { ExclamationTriangleIcon, ChevronDownIcon } from '@radix-ui/react-icons';
-import { Select } from 'radix-ui';
 
 import styles from './Calibration.module.css';
 
