@@ -123,7 +123,7 @@ export default function Calibration() {
             const isActive = index === currentStep && !completed;
             const isDisabled = index !== currentStep;
 
-            const triggerClass = [styles.tabTrigger, isCompleted ? styles.completed : '', isActive ? styles.active : ''].join(' ');
+            const triggerClass = `${styles.tabTrigger} ${isCompleted ? styles.completed : ''} ${isActive ? styles.active : ''}`.trim();
 
             return (
               <div key={step.id} className={styles.tabItem}>
