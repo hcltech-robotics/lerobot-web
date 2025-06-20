@@ -67,8 +67,8 @@
 
 .loader {
   border: 2px solid transparent;
-  border-top: 2px solid;
-  border-right: 2px solid ;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
   border-radius: 50%;
   width: 0.9rem;
   height: 0.9rem;
