@@ -5,14 +5,14 @@ import { ExclamationTriangleIcon, ChevronDownIcon } from '@radix-ui/react-icons'
 
 import styles from './Calibration.module.css';
 
-type Step = {
+interface Step {
   id: string;
   label: string;
   content: string;
   activeLabel?: string;
   endpoint?: string;
   finalContent?: string;
-};
+}
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
