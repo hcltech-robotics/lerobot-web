@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState } from 'react';
 import { DrawerMenu } from './DrawerMenu';
 import Header from './Header';
 import styles from './Layout.module.css';
@@ -9,7 +9,7 @@ import AITraining from './AITraining';
 import { BrandLogo } from './BrandLogo';
 import { MainScene } from './MainScene';
 import Robot from './Robot';
-import { CameraFeeds } from './Camera';
+import { CameraStream } from './CameraStream';
 
 type PageConfig = {
   key: string;
@@ -49,7 +49,7 @@ export function Layout() {
             </div>
           </div>
           <div className={styles.cameraContainer}>
-            <CameraFeeds />
+            <CameraStream />
           </div>
         </div>
         <div className={styles.logoArea}>
