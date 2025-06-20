@@ -14,6 +14,8 @@ type Step = {
   finalContent?: string;
 };
 
+const API_BASE_URL = 'http://127.0.0.1:8000';
+
 const steps: Step[] = [
   {
     id: 'start',
@@ -27,7 +29,7 @@ const steps: Step[] = [
     activeLabel: 'Confirm step 1',
     content:
       'Move the arm forward and fully close the gripper. The moving part of the gripper should be on the left side of the arm. If the robot matches the 3D model, click Confirm step 1.',
-    endpoint: 'http://127.0.0.1:8000/step1',
+    endpoint: '`${API_BASE_URL}/step1`',
   },
   {
     id: 'step2',
@@ -35,7 +37,7 @@ const steps: Step[] = [
     activeLabel: 'Confirm step 2',
     content:
       'Fully extend the arm, rotate it to the left, and fully open the gripper. If the robot matches the 3D model, click Confirm step 2.',
-    endpoint: 'http://127.0.0.1:8000/step2',
+    endpoint: `${API_BASE_URL}/step2`,
   },
   {
     id: 'finish',
