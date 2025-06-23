@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
-import * as Select from '@radix-ui/react-select';
-import { ExclamationTriangleIcon, ChevronDownIcon } from '@radix-ui/react-icons';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+import Selector from './Selector';
 
 import styles from './Calibration.module.css';
 
@@ -88,27 +88,16 @@ export default function Calibration() {
   return (
     <div className={styles.container}>
       <div className={styles.selectWrapper}>
-        <label className={styles.selectLabel}>Select Robot ID:</label>
-        <Select.Root value={selectedId} onValueChange={(value) => setSelectedId(value as 'id_1' | 'id_2')} disabled={dropdownDisabled}>
-          <Select.Trigger className={styles.selectTrigger} aria-label="Robot ID">
-            <Select.Value placeholder="Select ID" />
-            <Select.Icon>
-              <ChevronDownIcon />
-            </Select.Icon>
-          </Select.Trigger>
-          <Select.Portal>
-            <Select.Content className={styles.selectContent} position="popper">
-              <Select.Viewport>
-                <Select.Item value="id_1" className={styles.selectItem}>
-                  <Select.ItemText>ID 1</Select.ItemText>
-                </Select.Item>
-                <Select.Item value="id_2" className={styles.selectItem}>
-                  <Select.ItemText>ID 2</Select.ItemText>
-                </Select.Item>
-              </Select.Viewport>
-            </Select.Content>
-          </Select.Portal>
-        </Select.Root>
+        <Selector
+          label="Select Robot ID"
+          value={selectedId}
+          onChange={(value) => setSelectedId(value as 'id_1' | 'id_2')}
+          disabled={dropdownDisabled}
+          options={[
+            { label: 'ID 1', value: 'id_1' },
+            { label: 'ID 2', value: 'id_2' },
+          ]}
+        />
         {dropdownDisabled && !completed && (
           <div className={styles.progressIndicator}>
             <p>Calibration in progress</p>
