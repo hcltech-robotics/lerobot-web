@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import Selector from './Selector';
+import CalibrationTabItem from './CalibrationTabItem';
 
 import styles from './Calibration.module.css';
 
@@ -9,7 +10,7 @@ interface Step {
   id: string;
   label: string;
   content: string;
-  activeLabel?: string;
+  activeLabel: string;
   endpoint?: string;
   finalContent?: string;
 }
@@ -29,7 +30,7 @@ const steps: Step[] = [
     activeLabel: 'Confirm step 1',
     content:
       'Move the arm forward and fully close the gripper. The moving part of the gripper should be on the left side of the arm. If the robot matches the 3D model, click Confirm step 1.',
-    endpoint: '`${API_BASE_URL}/step1`',
+    endpoint: `${API_BASE_URL}/step1`,
   },
   {
     id: 'step2',
@@ -73,6 +74,7 @@ export default function Calibration() {
     } else {
       setCompleted(true);
     }
+
     if (index === 0) {
       setDropdownDisabled(true);
     }
@@ -107,22 +109,19 @@ export default function Calibration() {
       </div>
       <Tabs.Root value={tabValue}>
         <Tabs.List className={styles.tabsList}>
-          {steps.map((step, index) => {
-            const isCompleted = index < currentStep || (completed && index <= currentStep);
-            const isActive = index === currentStep && !completed;
-            const isDisabled = index !== currentStep;
-
-            const triggerClass = `${styles.tabTrigger} ${isCompleted ? styles.completed : ''} ${isActive ? styles.active : ''}`.trim();
-
-            return (
-              <div key={step.id} className={styles.tabItem}>
-                <Tabs.Trigger value={step.id} onClick={() => handleTabClick(index)} disabled={isDisabled} className={triggerClass}>
-                  {isActive ? (step.activeLabel ?? step.label) : step.label}
-                </Tabs.Trigger>
-                {index < steps.length - 1 && <div className={`${styles.connector} ${isCompleted ? styles.connectorCompleted : ''}`} />}
-              </div>
-            );
-          })}
+          {steps.map((step, index) => (
+            <CalibrationTabItem
+              key={step.id}
+              stepId={step.id}
+              stepLabel={step.label}
+              activeLabel={step.activeLabel}
+              index={index}
+              currentStep={currentStep}
+              completed={completed}
+              totalSteps={steps.length}
+              onClick={() => handleTabClick(index)}
+            />
+          ))}
         </Tabs.List>
 
         {steps.map((step) => (
