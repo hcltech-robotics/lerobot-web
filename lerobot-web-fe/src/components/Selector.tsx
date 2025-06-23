@@ -15,7 +15,7 @@ interface SelectorProps {
   disabled?: boolean;
 }
 
-export default function RobotIdSelector({ label, value, options, onChange, disabled = false }: SelectorProps) {
+export default function Selector({ label, value, options, onChange, disabled = false }: SelectorProps) {
   return (
     <>
       <label className={styles.selectLabel}>{label}</label>
