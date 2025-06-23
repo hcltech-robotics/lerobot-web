@@ -20,7 +20,7 @@ export default function RobotIdSelector({ label, value, options, onChange, disab
     <>
       <label className={styles.selectLabel}>{label}</label>
       <Select.Root value={value} onValueChange={onChange} disabled={disabled}>
-        <Select.Trigger className={styles.selectTrigger} aria-label="Robot ID">
+        <Select.Trigger className={styles.selectTrigger}>
           <Select.Value />
           <Select.Icon>
             <ChevronDownIcon />
