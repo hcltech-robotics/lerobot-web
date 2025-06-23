@@ -33,7 +33,7 @@ export function CameraStream() {
           <div key={cameraId} className={styles.cameraWrapper}>
             {cameraIds && cameraIds.includes(cameraId) && !error ? (
               <div className={styles.cameraBox}>
-                <img src={`${API_BASE}/video/${cameraId}`} className={styles.cameraImage} alt={`Camera ${cameraId}`} />;
+                <img src={`${API_BASE}/video/${cameraId}`} className={styles.cameraImage} alt={`Camera ${cameraId}`} />
               </div>
             ) : (
               <div className={styles.noSignal}>
