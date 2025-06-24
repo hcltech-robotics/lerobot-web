@@ -1,11 +1,13 @@
 const FollowerArmIcon = () => (
   <svg
-    version="1.0"
     xmlns="http://www.w3.org/2000/svg"
+    xmlnsXlink="http://www.w3.org/1999/xlink"
     width={60}
     height={60}
     viewBox="0 0 1024.000000 1024.000000"
-    preserveAspectRatio="xMidYMid meet"
+    xmlSpace="preserve"
+    aria-hidden="true"
+    focusable="false"
   >
     <g transform="translate(0.000000,1024.000000) scale(0.100000,-0.100000)" stroke="none">
       <path
