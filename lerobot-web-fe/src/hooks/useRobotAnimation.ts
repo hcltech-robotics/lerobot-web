@@ -2,12 +2,16 @@ import { useEffect } from 'react';
 import * as THREE from 'three';
 import { JOINT_STATES_OFFSETS, jointStateNameList, type JointState } from '../models/robot.model';
 
-export function useRobotAnimation(jointState: JointState | null, robotRef: React.RefObject<THREE.Object3D>) {
+export function useRobotAnimation(jointState: JointState | null, robotRef: React.RefObject<THREE.Object3D | null>) {
   useEffect(() => {
-    if (!robotRef.current || !jointState) return;
+    if (!robotRef.current || !jointState) {
+      return;
+    }
+
+    const robot = robotRef.current;
 
     const getJoint = (name: string) => {
-      return robotRef.current.getObjectByName(name);
+      return robot.getObjectByName(name);
     };
 
     const joints = {
