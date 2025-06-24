@@ -27,6 +27,7 @@ export function Layout() {
   const [isOpen, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [robotStatus, setRobotStatus] = useState([false, false]);
+  const [isLive, setIsLive] = useState(false);
 
   const { component: SelectedPage, key } = pages[selectedIndex] as PageConfig;
 
@@ -41,9 +42,12 @@ export function Layout() {
               <SelectedPage key={key} />
             </div>
             <div className={styles.sceneContainer}>
+              <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
+                {isLive ? 'Online' : 'Offline'}
+              </button>
               <div className={styles.mainScene}>
                 <MainScene>
-                  <Robot />
+                  <Robot isLive={isLive} />
                 </MainScene>
               </div>
             </div>

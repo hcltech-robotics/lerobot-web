@@ -2,8 +2,12 @@ import { useEffect } from 'react';
 import { useJointPositions } from '../services/robot.service';
 import type { JointState } from '../models/robot.model';
 
-export function useJointStatePoller(id: number, setJointState: (state: JointState) => void) {
+export function useJointStatePoller(id: number, isLive: boolean, setJointState: (state: JointState) => void) {
   useEffect(() => {
+    if (!isLive) {
+      return;
+    }
+
     const fetchJointStates = async () => {
       try {
         const { angles } = await useJointPositions(id);
@@ -24,5 +28,5 @@ export function useJointStatePoller(id: number, setJointState: (state: JointStat
 
     const interval = setInterval(fetchJointStates, 100);
     return () => clearInterval(interval);
-  }, [setJointState]);
+  }, [isLive, setJointState]);
 }
