@@ -6,7 +6,6 @@ interface PopoverWrapperProps {
   trigger: ReactNode;
   title?: string;
   children: ReactNode;
-  sideOffset?: number;
 }
 
 export default function PopoverWrapper({ trigger, title, children }: PopoverWrapperProps) {
