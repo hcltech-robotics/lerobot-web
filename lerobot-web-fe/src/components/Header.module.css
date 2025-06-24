@@ -16,6 +16,7 @@
 
 .robotIcons {
   display: flex;
+  cursor: pointer;
   gap: 10px;
 }
 
@@ -25,4 +26,42 @@
 
 .robotIcon.active svg{
     fill:  #BEEBB4;
+}
+
+.robotRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+}
+
+.robotId {
+  font-weight: bold;
+}
+
+.leaderButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #B9C3D0;
+}
+
+.leaderButton:hover {
+  color: #A1E596;
+}
+
+.leaderActive {
+  color: #2DB26C
+}
+
+.robotDetail {
+  font-size: 16px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #A5AFBE;
+  margin: 2px 0;
+  opacity: 0.5;
 }
