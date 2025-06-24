@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useJointPositions } from '../services/robot.service';
+import { getJointPositions } from '../services/robot.service';
 import type { JointState } from '../models/robot.model';
 
 export function useJointStatePoller(id: number, isLive: boolean, setJointState: (state: JointState) => void) {
@@ -10,7 +10,7 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
 
     const fetchJointStates = async () => {
       try {
-        const { angles } = await useJointPositions(id);
+        const { angles } = await getJointPositions(id);
         if (angles && angles.length === 6) {
           setJointState({
             rotation: angles[0] ?? 0,
