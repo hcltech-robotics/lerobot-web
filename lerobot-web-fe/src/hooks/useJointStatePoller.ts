@@ -28,5 +28,5 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
 
     const interval = setInterval(fetchJointStates, 100);
     return () => clearInterval(interval);
-  }, [isLive, setJointState]);
+  }, [id, isLive, setJointState]);
 }
