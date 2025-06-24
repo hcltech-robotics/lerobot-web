@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import * as THREE from 'three';
-import { jointStateNameList, type JointState } from '../models/robot.model';
+import { JOINT_STATES_OFFSETS, jointStateNameList, type JointState } from '../models/robot.model';
 
 export function useRobotAnimation(jointState: JointState | null, robotRef: React.RefObject<THREE.Object3D>) {
   useEffect(() => {
@@ -27,8 +27,8 @@ export function useRobotAnimation(jointState: JointState | null, robotRef: React
     joints.rotation!.rotation.y = jointState.rotation;
     joints.pitch!.rotation.x = jointState.pitch;
     joints.elbow!.rotation.x = jointState.elbow;
-    joints.wristPitch!.rotation.x = jointState.wristPitch - 1.5;
-    joints.wristRoll!.rotation.y = jointState.wristRoll - 3.2;
-    joints.jaw!.rotation.z = jointState.jaw - 3.3;
+    joints.wristPitch!.rotation.x = jointState.wristPitch + JOINT_STATES_OFFSETS.WRIST_PITCH;
+    joints.wristRoll!.rotation.y = jointState.wristRoll + JOINT_STATES_OFFSETS.WRIST_ROLL;
+    joints.jaw!.rotation.z = jointState.jaw + JOINT_STATES_OFFSETS.JAW;
   }, [jointState, robotRef]);
 }

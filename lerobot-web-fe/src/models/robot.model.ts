@@ -34,3 +34,9 @@ export type jointStateNames = (typeof jointStateNameList)[keyof typeof jointStat
 export interface RobotProps {
   isLive: boolean;
 }
+
+export const JOINT_STATES_OFFSETS = {
+  WRIST_PITCH: -1.5,
+  WRIST_ROLL: -3.2,
+  JAW: -3.3,
+} as const;
