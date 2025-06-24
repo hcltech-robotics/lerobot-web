@@ -5,9 +5,9 @@ import URDFLoader from 'urdf-loader';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
 import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
-import type { JointState } from '../models/robot.model';
+import type { JointState, RobotProps } from '../models/robot.model';
 
-export default function Robot() {
+export function Robot({ isLive }: RobotProps) {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
   const [jointState, setJointState] = useState<JointState | null>(null);
@@ -42,7 +42,7 @@ export default function Robot() {
     });
   }, [scene]);
 
-  useJointStatePoller(0, setJointState);
+  useJointStatePoller(0, isLive, setJointState);
   useRobotAnimation(jointState, robotRef);
 
   return (

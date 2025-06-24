@@ -8,7 +8,7 @@ import Policies from './Policies';
 import AITraining from './AITraining';
 import { BrandLogo } from './BrandLogo';
 import { MainScene } from './MainScene';
-import Robot from './Robot';
+import { Robot } from './Robot';
 import { CameraStream } from './CameraStream';
 
 type PageConfig = {

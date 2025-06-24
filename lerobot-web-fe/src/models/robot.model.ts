@@ -30,3 +30,7 @@ export const jointStateNameList = {
 } as const;
 
 export type jointStateNames = (typeof jointStateNameList)[keyof typeof jointStateNameList];
+
+export interface RobotProps {
+  isLive: boolean;
+}
