@@ -17,7 +17,7 @@ export async function getJointPositions(id: number): Promise<JointStatesResponse
 
     return await res.json();
   } catch (error) {
-    console.error('Error in useJointPositions:', error);
+    console.error('Error in getJointPositions:', error);
     throw error;
   }
 }
