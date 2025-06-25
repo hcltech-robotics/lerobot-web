@@ -19,18 +19,18 @@ export default function Teleoperate() {
     setError(null);
 
     try {
-      let status: string;
+      let statusResponse: string;
 
       if (isRunning) {
         await stopTeleoperate();
         const response = await sleepPosition(robotIds.follower);
-        status = response.status;
+        statusResponse = response.status;
       } else {
         const response = await startTeleoperate({ leader: robotIds.leader, follower: robotIds.follower });
-        status = response.status;
+        statusResponse = response.status;
       }
 
-      setStatus(status === teleoperateStatusList.OK ? (isRunning ? teleoperateStatusList.READY : teleoperateStatusList.RUN) : status);
+      setStatus(statusResponse === teleoperateStatusList.OK ? (isRunning ? teleoperateStatusList.READY : teleoperateStatusList.RUN) : statusResponse);
     } catch (e) {
       setError((e as Error).message);
     } finally {
