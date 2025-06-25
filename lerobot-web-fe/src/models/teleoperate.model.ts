@@ -1,7 +1,7 @@
 export interface TeleoperateResponse {
   status: string;
   message: string;
-  additionalProp1: {};
+  additionalProp1?: Record<string, unknown>;
 }
 
 export const teleoperateStatusList = {

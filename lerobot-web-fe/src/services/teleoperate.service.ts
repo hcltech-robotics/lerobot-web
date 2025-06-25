@@ -1,8 +1,8 @@
-import type { TeleoperateResponse } from '../models/teleoperate.model';
+import type { RobotIds, TeleoperateResponse } from '../models/teleoperate.model';
 
 const API_BASE = 'http://127.0.0.1:80';
 
-export async function startTeleoperate({ leader, follower }: { leader: string; follower: string }): Promise<TeleoperateResponse> {
+export async function startTeleoperate({ leader, follower }: RobotIds): Promise<TeleoperateResponse> {
   try {
     const res = await fetch(`${API_BASE}/move/leader/start`, {
       method: 'POST',
