@@ -3,8 +3,8 @@ import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import URDFLoader from 'urdf-loader';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
-import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
+import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import type { JointState, RobotProps } from '../models/robot.model';
 
 export function Robot({ isLive }: RobotProps) {
