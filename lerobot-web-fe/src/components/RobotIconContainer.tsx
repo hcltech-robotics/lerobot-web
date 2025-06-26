@@ -48,10 +48,14 @@ export default function RobotIconContainer() {
           ))}
         </PopoverWrapper>
       ) : (
-        <div className={styles.robotIcon}>
-          <LeaderArmIcon />
-          <LeaderArmIcon />
-        </div>
+        <>
+          <div className={styles.robotIcon}>
+            <FollowerArmIcon />
+          </div>
+          <div className={styles.robotIcon}>
+            <FollowerArmIcon />
+          </div>
+        </>
       )}
     </>
   );
