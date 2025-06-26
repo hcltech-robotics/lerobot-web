@@ -16,7 +16,7 @@ interface StatusResponse {
   version_id: string;
 }
 
-export const API_BASE = 'http://127.0.0.1:8020';
+export const API_BASE = 'http://127.0.0.1:80';
 
 export async function getStatus(): Promise<StatusResponse> {
   const res = await fetch(`${API_BASE}/status`, {
