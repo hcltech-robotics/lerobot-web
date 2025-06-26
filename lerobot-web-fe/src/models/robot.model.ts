@@ -1,3 +1,5 @@
+export const ROBOT_NAME = 'so-100';
+
 export const unitList = {
   RAD: 'rad',
   MOTOR_UNITS: 'motor_units',
@@ -40,3 +42,9 @@ export const JOINT_STATES_OFFSETS = {
   WRIST_ROLL: -3.2,
   JAW: -3.3,
 } as const;
+
+export interface RobotStatus {
+  device_name: string;
+  name: string;
+  robot_type: string;
+}

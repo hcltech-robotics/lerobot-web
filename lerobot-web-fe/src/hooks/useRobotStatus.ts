@@ -1,25 +1,25 @@
 import { useEffect, useState } from 'react';
 import { getStatus } from '../services/status.service';
+import { type RobotStatus, ROBOT_NAME } from '../models/robot.model';
 
 export function useRobotStatus() {
-  const [robotStatus, setRobotStatus] = useState<{ device_name: string; name: string; robot_type: string }[]>([]);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [robotStatus, setRobotStatus] = useState<RobotStatus[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-          const { robot_status, leader_follower_status } = await getStatus();
-          //filter out the so-100 model because status response can contain other kind of models.
-          const filteredRobots = robot_status.filter((robot) => robot.name === 'so-100');
+        const { robot_status } = await getStatus();
+        //filter out the so-100 model because status response can contain other kind of models.
+        const filteredRobots = robot_status.filter((robot) => robot.name === ROBOT_NAME);
         setRobotStatus(filteredRobots);
-        setIsConnected(leader_follower_status);
       } catch (error) {
-        console.error("Failed to fetch robot status: ", error);
+        console.error('Failed to fetch robot status: ', error);
+        return;
       }
     };
 
     fetchData();
   }, []);
-  
-  return { robotStatus, isConnected };
+
+  return { robotStatus };
 }
