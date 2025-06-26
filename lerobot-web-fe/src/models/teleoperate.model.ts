@@ -1,6 +1,6 @@
 export interface TeleoperateResponse {
   status: string;
-  message: string;
+  message: string | null;
   additionalProp1?: Record<string, unknown>;
 }
 
