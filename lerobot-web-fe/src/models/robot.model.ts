@@ -1,4 +1,4 @@
-export const ROBOT_NAME = 'so-100';
+export const ROBOT_MODEL_SO_100 = 'so-100';
 
 export const unitList = {
   RAD: 'rad',

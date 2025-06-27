@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getStatus } from '../services/status.service';
-import { type RobotStatus, ROBOT_NAME } from '../models/robot.model';
+import { type RobotStatus, ROBOT_MODEL_SO_100 } from '../models/robot.model';
 
 export function useRobotStatus() {
   const [robotStatus, setRobotStatus] = useState<RobotStatus[]>([]);
@@ -10,7 +10,7 @@ export function useRobotStatus() {
       try {
         const { robot_status } = await getStatus();
         //filter out the so-100 model because status response can contain other kind of models.
-        const filteredRobots = robot_status.filter((robot) => robot.name === ROBOT_NAME);
+        const filteredRobots = robot_status.filter((robot) => robot.name === ROBOT_MODEL_SO_100);
         setRobotStatus(filteredRobots);
       } catch (error) {
         console.error('Failed to fetch robot status: ', error);
