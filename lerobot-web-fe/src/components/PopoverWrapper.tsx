@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 
 interface PopoverWrapperProps {
   trigger: ReactNode;
-  title?: string;
+  title: string;
   children: ReactNode;
 }
 
@@ -14,7 +14,7 @@ export default function PopoverWrapper({ trigger, title, children }: PopoverWrap
       <Popover.Trigger asChild>{trigger}</Popover.Trigger>
       <Popover.Portal>
         <Popover.Content className={styles.popoverContent} onOpenAutoFocus={(e) => e.preventDefault()}>
-          {title && <h3 className={styles.popoverTitle}>{title}</h3>}
+          <h3 className={styles.popoverTitle}>{title}</h3>
           {children}
           <Popover.Arrow className={styles.popoverArrow} />
         </Popover.Content>

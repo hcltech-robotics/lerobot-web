@@ -4,7 +4,7 @@ import PopoverWrapper from './PopoverWrapper';
 import LeaderArmIcon from './LeaderArmIcon';
 import { useRobotStatus } from '../hooks/useRobotStatus';
 import { HandIcon } from '@radix-ui/react-icons';
-import { ROBOT_NAME } from '../models/robot.model';
+import { type RobotStatus } from '../models/robot.model';
 import styles from './RobotIconContainer.module.css';
 
 export default function RobotIconContainer() {
@@ -15,26 +15,35 @@ export default function RobotIconContainer() {
     setLeaderIndex(index);
   };
 
-  const activeRobotIconsTrigger = (
-    <div className={styles.robotIcons} title="Click to view robot status">
-      {robotStatus.map((status, index) => (
-        <div key={index} className={`${styles.robotIcon} ${status.name === ROBOT_NAME ? styles.active : ''}`}>
-          {index === leaderIndex ? <LeaderArmIcon /> : <FollowerArmIcon />}
-        </div>
-      ))}
-    </div>
-  );
+  const DEFAULT_ROBOT_PLACEHOLDERS: Array<RobotStatus> = Array.from({ length: 2 });
+
+  const generateRobotIcons = (robotList: Array<RobotStatus>, setActive: boolean = false, leaderIndex: number | null = null) => {
+    const hasLeader = leaderIndex !== null;
+
+    return (
+      <div className={styles.robotIcons}>
+        {robotList.map((_, index) => (
+          <div key={index} className={`${styles.robotIcon} ${setActive ? styles.active : ''}`}>
+            {hasLeader && index === leaderIndex ? <LeaderArmIcon /> : <FollowerArmIcon />}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const connectedRobotIcons = generateRobotIcons(robotStatus, true, leaderIndex);
+  const disconnectedRobotIcons = generateRobotIcons(DEFAULT_ROBOT_PLACEHOLDERS, false);
 
   return (
     <>
       {robotStatus.length > 0 ? (
-        <PopoverWrapper title="Robot Info" trigger={activeRobotIconsTrigger}>
+        <PopoverWrapper title="Robot Info" trigger={connectedRobotIcons}>
           {robotStatus.map((robot, index) => (
             <div key={index} className={styles.robotDetail}>
               <div className={styles.robotRow}>
                 <span className={styles.robotId}>#{index}</span>
-                <span className={styles.robotType}>{robot.name}</span>
-                <span className={styles.robotDevice}>{robot.device_name}</span>
+                <span>{robot.name}</span>
+                <span>{robot.device_name}</span>
                 <button
                   className={`${styles.leaderButton} ${leaderIndex === index ? styles.leaderActive : ''}`}
                   onClick={() => handleSetLeader(index)}
@@ -48,14 +57,7 @@ export default function RobotIconContainer() {
           ))}
         </PopoverWrapper>
       ) : (
-        <>
-          <div className={styles.robotIcon}>
-            <FollowerArmIcon />
-          </div>
-          <div className={styles.robotIcon}>
-            <FollowerArmIcon />
-          </div>
-        </>
+        disconnectedRobotIcons
       )}
     </>
   );
