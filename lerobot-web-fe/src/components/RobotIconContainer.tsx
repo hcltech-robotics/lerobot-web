@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import FollowerArmIcon from './FollowerArmIcon';
-import PopoverWrapper from './PopoverWrapper';
-import LeaderArmIcon from './LeaderArmIcon';
 import { useRobotStatus } from '../hooks/useRobotStatus';
 import { HandIcon } from '@radix-ui/react-icons';
-import { type RobotStatus } from '../models/robot.model';
+import type { RobotStatus } from 'src/models/robot.model';
+import PopoverWrapper from './PopoverWrapper';
 import styles from './RobotIconContainer.module.css';
+import { RobotIcons } from './RobotIcons';
 
 export default function RobotIconContainer() {
   const { robotStatus } = useRobotStatus();
@@ -17,22 +16,8 @@ export default function RobotIconContainer() {
 
   const DEFAULT_ROBOT_PLACEHOLDERS: Array<RobotStatus> = Array.from({ length: 2 });
 
-  const generateRobotIcons = (robotList: Array<RobotStatus>, setActive: boolean = false, leaderIndex: number | null = null) => {
-    const hasLeader = leaderIndex !== null;
-
-    return (
-      <div className={styles.robotIcons}>
-        {robotList.map((_, index) => (
-          <div key={index} className={`${styles.robotIcon} ${setActive ? styles.active : ''}`}>
-            {hasLeader && index === leaderIndex ? <LeaderArmIcon /> : <FollowerArmIcon />}
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  const connectedRobotIcons = generateRobotIcons(robotStatus, true, leaderIndex);
-  const disconnectedRobotIcons = generateRobotIcons(DEFAULT_ROBOT_PLACEHOLDERS, false);
+  const connectedRobotIcons = <RobotIcons robotList={robotStatus} setActive={true} leaderIndex={leaderIndex} />;
+  const disconnectedRobotIcons = <RobotIcons robotList={DEFAULT_ROBOT_PLACEHOLDERS} />;
 
   return (
     <>

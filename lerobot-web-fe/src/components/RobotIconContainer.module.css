@@ -1,17 +1,3 @@
-.robotIcons {
-  display: flex;
-  cursor: pointer;
-  gap: 10px;
-}
-
-.robotIcon svg {
-  fill: #a5afbe;
-}
-
-.robotIcon.active svg {
-  fill: #beebb4;
-}
-
 .robotRow {
   display: flex;
   align-items: center;
