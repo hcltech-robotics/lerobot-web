@@ -26,7 +26,6 @@ const pages: readonly PageConfig[] = [
 export function Layout() {
   const [isOpen, setOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [robotStatus, setRobotStatus] = useState([false, false]);
   const [isLive, setIsLive] = useState(false);
 
   const { component: SelectedPage, key } = pages[selectedIndex] as PageConfig;
@@ -35,7 +34,7 @@ export function Layout() {
     <div className={styles.root}>
       <DrawerMenu isOpen={isOpen} setOpen={setOpen} selectedIndex={selectedIndex} setSelectedIndex={setSelectedIndex} />
       <div className={styles.mainArea}>
-        <Header isDrawerOpen={isOpen} robotStatus={robotStatus} />
+        <Header />
         <div className={styles.contentArea}>
           <div className={styles.leftArea}>
             <div className={styles.pageContainer}>

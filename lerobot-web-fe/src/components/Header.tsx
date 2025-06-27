@@ -1,22 +1,11 @@
 import styles from './Header.module.css';
-import RobotIcon from './RobotIcon';
+import RobotIconContainer from './RobotIconContainer';
 
-interface AppbarProps {
-  isDrawerOpen: boolean;
-  robotStatus: boolean[];
-}
-
-export default function Appbar({ robotStatus }: AppbarProps) {
+export default function Header() {
   return (
-    <header className={styles.appbar}>
+    <header className={styles.header}>
       <h1 className={styles.title}>Lerobot Robot Arm</h1>
-      <div className={styles.robotIcons}>
-        {robotStatus.map((isActive, index) => (
-          <div key={index} className={`${styles.robotIcon} ${isActive ? styles.active : ''}`}>
-            <RobotIcon />
-          </div>
-        ))}
-      </div>
+      <RobotIconContainer />
     </header>
   );
 }
