@@ -4,12 +4,12 @@
   gap: 10px;
 }
 
-.robotIcon svg{
-  fill: #A5AFBE;
+.robotIcon svg {
+  fill: #a5afbe;
 }
 
-.robotIcon.active svg{
-  fill:hsl(from color h s l);
+.robotIcon.active svg {
+  fill: #beebb4;
 }
 
 .robotRow {
@@ -28,15 +28,15 @@
   background: none;
   border: none;
   cursor: pointer;
-  color: #B9C3D0;
+  color: #b9c3d0;
 }
 
 .leaderButton:hover {
-  color: #A1E596;
+  color: #a1e596;
 }
 
 .leaderActive {
-  color: #2DB26C
+  color: #2db26c;
 }
 
 .robotDetail {
@@ -45,7 +45,7 @@
 
 .divider {
   height: 1px;
-  background-color: #A5AFBE;
+  background-color: #a5afbe;
   margin: 2px 0;
   opacity: 0.5;
 }
