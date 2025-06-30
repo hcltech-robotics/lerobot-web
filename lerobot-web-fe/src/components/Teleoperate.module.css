@@ -87,3 +87,15 @@
     transform: rotate(360deg);
   }
 }
+
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.selectWrapper label {
+  color: #555;
+  font-size: 14px;
+  font-weight: normal;
+}

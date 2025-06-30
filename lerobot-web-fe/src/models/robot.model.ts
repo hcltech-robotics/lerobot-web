@@ -26,8 +26,8 @@ export const jointStateNameList = {
   ROTATION: 'Rotation',
   PITCH: 'Pitch',
   ELBOW: 'Elbow',
-  WRIST_PITCH: 'Wrist Pitch',
-  WRIST_ROLL: 'Wrist Roll',
+  WRIST_PITCH: 'Wrist_Pitch',
+  WRIST_ROLL: 'Wrist_Roll',
   JAW: 'Jaw',
 } as const;
 
