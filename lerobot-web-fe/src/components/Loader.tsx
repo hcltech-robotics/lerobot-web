@@ -1,6 +1,6 @@
-import styles from './LoadingScreen.module.css';
+import styles from './Loader.module.css';
 
-export default function LoadingScreen() {
+export default function Loader() {
   return (
     <div className={styles.container}>
       <div className={styles.spinner}></div>

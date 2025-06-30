@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Layout from './components/Layout';
 import { lazy, Suspense } from 'react';
-import LoadingScreen from './components/LoadingScreen';
+import Loader from './components/Loader';
 
 const Teleoperate = lazy(() => import('./components/Teleoperate'));
 const Calibration = lazy(() => import('./components/Calibration'));
@@ -11,7 +11,7 @@ const AITraining = lazy(() => import('./components/AITraining'));
 export default function AppRouter() {
   return (
     <Router>
-      <Suspense fallback={<LoadingScreen />}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/teleoperate" />} />
