@@ -1,4 +1,5 @@
 export const ROBOT_MODEL_SO_100 = 'so-100';
+export const DEFAULT_ROBOT_COUNT = 2;
 
 export const unitList = {
   RAD: 'rad',

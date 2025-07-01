@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useRobotStatus } from '../hooks/useRobotStatus';
 import { HandIcon } from '@radix-ui/react-icons';
-import type { RobotStatus } from 'src/models/robot.model';
+import { useRobotStatus } from '../hooks/useRobotStatus';
+import { DEFAULT_ROBOT_COUNT } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
-import styles from './RobotIconContainer.module.css';
 import { RobotIcons } from './RobotIcons';
+
+import styles from './RobotIconContainer.module.css';
 
 export default function RobotIconContainer() {
   const { robotStatus } = useRobotStatus();
@@ -14,10 +15,8 @@ export default function RobotIconContainer() {
     setLeaderIndex(index);
   };
 
-  const DEFAULT_ROBOT_PLACEHOLDERS: Array<RobotStatus> = Array.from({ length: 2 });
-
-  const connectedRobotIcons = <RobotIcons robotList={robotStatus} setActive={true} leaderIndex={leaderIndex} />;
-  const disconnectedRobotIcons = <RobotIcons robotList={DEFAULT_ROBOT_PLACEHOLDERS} />;
+  const connectedRobotIcons = <RobotIcons robotCount={robotStatus.length} setActive={true} leaderIndex={leaderIndex} />;
+  const disconnectedRobotIcons = <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />;
 
   return (
     <>
