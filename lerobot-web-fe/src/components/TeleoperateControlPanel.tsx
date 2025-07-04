@@ -1,5 +1,6 @@
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
 import Selector from './Selector';
+import type { RobotIds } from '../models/teleoperate.model';
 
 import styles from './TeleoperateControlPanel.module.css';
 
@@ -8,7 +9,7 @@ type TeleoperateControlPanelProps = {
   loading: boolean;
   error: string | null;
   isRunning: boolean;
-  robotIds: { leader: string; follower: string };
+  robotIds: RobotIds;
   onChangeRobotId: (id: string) => void;
   onToggleTeleoperate: () => void;
 };
