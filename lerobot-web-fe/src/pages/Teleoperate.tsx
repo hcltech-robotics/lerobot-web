@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react';
-import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
 import { sleepPosition, startTeleoperate, stopTeleoperate } from '../services/teleoperate.service';
 import { teleoperateStatusList, type RobotIds } from '../models/teleoperate.model';
-import Selector from '../components/Selector';
-
-import styles from './Teleoperate.module.css';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 import { CameraStream } from '../components/CameraStream';
+import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
+
+import styles from './Teleoperate.module.css';
 
 export default function Teleoperate() {
   const [status, setStatus] = useState<string>(teleoperateStatusList.READY);
@@ -59,48 +58,15 @@ export default function Teleoperate() {
   return (
     <div className={styles.contentArea}>
       <div className={styles.leftArea}>
-        <div className={styles.controlPanel}>
-          <div className={styles.statusBox}>
-            <h2 className={styles.statusTitle}>Teleoperation Status</h2>
-            <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
-            {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
-            <div className={styles.selectWrapper}>
-              <Selector
-                label="Select a Leader Robot"
-                value={robotIds.leader}
-                onChange={handleRobotId}
-                disabled={isRunning}
-                options={[
-                  { label: 'ID 0', value: '0' },
-                  { label: 'ID 1', value: '1' },
-                ]}
-              />
-            </div>
-          </div>
-
-          <button
-            className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
-            onClick={handleTeleoperate}
-            disabled={loading}
-          >
-            {loading ? (
-              <>
-                <span className={styles.loader} />
-                Loading
-              </>
-            ) : isRunning ? (
-              <>
-                <StopIcon className={styles.icon} />
-                Stop
-              </>
-            ) : (
-              <>
-                <PlayIcon className={styles.icon} />
-                Start
-              </>
-            )}
-          </button>
-        </div>
+        <TeleoperateControlPanel
+          status={status}
+          loading={loading}
+          error={error}
+          isRunning={isRunning}
+          robotIds={robotIds}
+          onChangeRobotId={handleRobotId}
+          onToggleTeleoperate={handleTeleoperate}
+        />
         <div className={styles.sceneContainer}>
           <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
             {isLive ? 'Online' : 'Offline'}
