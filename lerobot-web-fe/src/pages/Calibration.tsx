@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import Selector from '../components/Selector';
 import CalibrationTabItem from '../components/CalibrationTabItem';
-
-import styles from './Calibration.module.css';
+import { RobotLeaderSelector } from '../components/RobotLeaderSelector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
+
+import styles from './Calibration.module.css';
 
 interface Step {
   id: string;
@@ -94,16 +94,7 @@ export default function Calibration() {
     <div className={styles.contentArea}>
       <div className={styles.controlPanel}>
         <div className={styles.selectWrapper}>
-          <Selector
-            label="Select Robot ID"
-            value={selectedId}
-            onChange={(value) => setSelectedId(value as 'id_1' | 'id_2')}
-            disabled={dropdownDisabled}
-            options={[
-              { label: 'ID 1', value: 'id_1' },
-              { label: 'ID 2', value: 'id_2' },
-            ]}
-          />
+          <RobotLeaderSelector label="Select Robot ID" disabled={dropdownDisabled} />
           {dropdownDisabled && !completed && (
             <div className={styles.progressIndicator}>
               <p>Calibration in progress</p>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { API_BASE, getStatus } from '../services/status.service';
+import { getStatus } from '../services/status.service';
+import { useStatusStore } from '../stores/status.store';
 
 import styles from './CameraStream.module.css';
 
@@ -8,6 +9,7 @@ export function CameraStream() {
   const [cameraIds, setCameraIds] = useState<number[]>();
   const [cameraIdsPlaceholder, setCameraIdsPlaceholder] = useState<number[]>();
   const [error, setError] = useState<string | null>('');
+  const { apiUrl } = useStatusStore();
 
   useEffect(() => {
     getCameraStatus();
@@ -33,7 +35,7 @@ export function CameraStream() {
           <div key={cameraId} className={styles.cameraWrapper}>
             {cameraIds && cameraIds.includes(cameraId) && !error ? (
               <div className={styles.cameraBox}>
-                <img src={`${API_BASE}/video/${cameraId}`} className={styles.cameraImage} alt={`Camera ${cameraId}`} />
+                <img src={`${apiUrl}/video/${cameraId}`} className={styles.cameraImage} alt={`Camera ${cameraId}`} />
               </div>
             ) : (
               <div className={styles.noSignal}>

@@ -1,9 +1,11 @@
-import { API_BASE } from './status.service';
+import { useStatusStore } from '../stores/status.store';
 import type { JointStatesResponse } from '../models/robot.model';
 
 export async function getJointPositions(id: number): Promise<JointStatesResponse> {
+  const { apiUrl } = useStatusStore();
+
   try {
-    const res = await fetch(`${API_BASE}/joints/read?robot_id=${id}`, {
+    const res = await fetch(`${apiUrl}/joints/read?robot_id=${id}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

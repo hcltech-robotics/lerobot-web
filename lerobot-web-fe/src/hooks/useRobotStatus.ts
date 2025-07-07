@@ -27,5 +27,5 @@ export function useRobotStatus() {
     fetchData();
   }, []);
 
-  return { robotStatus };
+  return { robotStatus, loading, error };
 }
