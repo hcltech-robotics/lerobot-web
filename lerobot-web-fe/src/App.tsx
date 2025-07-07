@@ -1,11 +1,5 @@
-import { Layout } from './components/Layout';
+import AppRouter from './routers/AppRouter';
 
-function App() {
-  return (
-    <>
-      <Layout />
-    </>
-  );
+export default function App() {
+  return <AppRouter />;
 }
-
-export default App;
