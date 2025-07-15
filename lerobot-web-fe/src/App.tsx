@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import AppRouter from './routers/AppRouter';
 import { useStatusStore } from './stores/status.store';
+import StatusPoller from './components/StatusPoller';
 
 export default function App() {
   useEffect(() => {
@@ -10,5 +11,10 @@ export default function App() {
     }
   }, []);
 
-  return <AppRouter />;
+  return (
+    <>
+      <StatusPoller />
+      <AppRouter />
+    </>
+  );
 }
