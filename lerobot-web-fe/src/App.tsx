@@ -7,7 +7,7 @@ export default function App() {
   useEffect(() => {
     const { apiUrl, setApiUrl } = useStatusStore.getState();
     if (!apiUrl) {
-      setApiUrl('http://192.168.0.46:80');
+      setApiUrl('http://127.0.0.1:8000');
     }
   }, []);
 
