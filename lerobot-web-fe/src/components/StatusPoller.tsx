@@ -7,7 +7,7 @@ export default function StatusPoller() {
 
     const interval = setInterval(() => {
       getStatus();
-    }, 20000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
