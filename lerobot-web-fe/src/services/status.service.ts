@@ -22,6 +22,8 @@ export async function getStatus(): Promise<StatusResponse> {
   const { apiUrl } = useStatusStore.getState();
   const setStatus = useStatusStore.getState().setStatus;
 
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
   try {
     const statusResponse = await fetch(`${apiUrl}/status`, {
       method: 'GET',
