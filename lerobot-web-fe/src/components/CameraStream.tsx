@@ -1,40 +1,27 @@
 import { useEffect, useState } from 'react';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { getStatus } from '../services/status.service';
 import { useStatusStore } from '../stores/status.store';
 
 import styles from './CameraStream.module.css';
 
 export function CameraStream() {
   const [cameraIds, setCameraIds] = useState<number[]>();
-  const [cameraIdsPlaceholder, setCameraIdsPlaceholder] = useState<number[]>();
-  const [error, setError] = useState<string | null>('');
-
   const apiUrl = useStatusStore((s) => s.apiUrl);
+  const status = useStatusStore((s) => s.status);
+  const cameraIdsPlaceholder = Array.from({ length: 3 }, (_, index) => index);
 
   useEffect(() => {
-    getCameraStatus();
-    const emptyPlaceholder = Array.from({ length: 3 }).map((_, index) => index);
-    setCameraIdsPlaceholder(emptyPlaceholder);
-  }, []);
-
-  const getCameraStatus = async () => {
-    setError(null);
-
-    try {
-      const { cameras } = await getStatus();
-      setCameraIds(cameras.video_cameras_ids);
-    } catch (e) {
-      setError((e as Error).message);
+    if (status?.cameras?.video_cameras_ids) {
+      setCameraIds(status.cameras.video_cameras_ids);
     }
-  };
+  }, [status]);
 
   return (
     <div className={styles.cameraStream}>
       {cameraIdsPlaceholder &&
         cameraIdsPlaceholder.map((cameraId) => (
           <div key={cameraId} className={styles.cameraWrapper}>
-            {cameraIds && cameraIds.includes(cameraId) && !error ? (
+            {cameraIds && cameraIds.includes(cameraId) ? (
               <div className={styles.cameraBox}>
                 <img src={`${apiUrl}/video/${cameraId}`} className={styles.cameraImage} alt={`Camera ${cameraId}`} />
               </div>
