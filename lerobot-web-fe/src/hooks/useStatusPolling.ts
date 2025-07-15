@@ -1,16 +1,14 @@
 import { useEffect } from 'react';
 import { getStatus } from '../services/status.service';
 
-export default function StatusPoller() {
+export function useStatusPolling(intervalMs = 5000) {
   useEffect(() => {
     getStatus();
 
     const interval = setInterval(() => {
       getStatus();
-    }, 5000);
+    }, intervalMs);
 
     return () => clearInterval(interval);
-  }, []);
-
-  return null;
+  }, [intervalMs]);
 }
