@@ -2,7 +2,7 @@ import { useStatusStore } from '../stores/status.store';
 import type { RobotIds, TeleoperateResponse } from '../models/teleoperate.model';
 
 export async function startTeleoperate({ leader, follower }: RobotIds): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore();
+  const { apiUrl } = useStatusStore.getState();
 
   try {
     const response = await fetch(`${apiUrl}/move/leader/start`, {
@@ -33,7 +33,7 @@ export async function startTeleoperate({ leader, follower }: RobotIds): Promise<
 }
 
 export async function stopTeleoperate(): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore();
+  const { apiUrl } = useStatusStore.getState();
 
   try {
     const response = await fetch(`${apiUrl}/move/leader/stop`, {
@@ -56,7 +56,7 @@ export async function stopTeleoperate(): Promise<TeleoperateResponse> {
 }
 
 export async function sleepPosition(id: string): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore();
+  const { apiUrl } = useStatusStore.getState();
 
   try {
     const response = await fetch(`${apiUrl}/move/sleep?robot_id=${id}`, {

@@ -19,7 +19,8 @@ export interface StatusResponse {
 }
 
 export async function getStatus(): Promise<StatusResponse> {
-  const { apiUrl, setStatus } = useStatusStore();
+  const { apiUrl } = useStatusStore.getState();
+  const setStatus = useStatusStore.getState().setStatus;
 
   try {
     const statusResponse = await fetch(`${apiUrl}/status`, {
