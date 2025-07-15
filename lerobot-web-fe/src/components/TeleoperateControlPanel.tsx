@@ -8,10 +8,18 @@ type TeleoperateControlPanelProps = {
   loading: boolean;
   error: string | null;
   isRunning: boolean;
+  isRobotAvailable: boolean;
   onToggleTeleoperate: () => void;
 };
 
-export function TeleoperateControlPanel({ status, loading, error, isRunning, onToggleTeleoperate }: TeleoperateControlPanelProps) {
+export function TeleoperateControlPanel({
+  status,
+  loading,
+  error,
+  isRunning,
+  isRobotAvailable,
+  onToggleTeleoperate,
+}: TeleoperateControlPanelProps) {
   return (
     <div className={styles.controlPanel}>
       <div className={styles.statusBox}>
@@ -26,7 +34,7 @@ export function TeleoperateControlPanel({ status, loading, error, isRunning, onT
       <button
         className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
         onClick={onToggleTeleoperate}
-        disabled={loading}
+        disabled={!isRobotAvailable || loading}
       >
         {loading ? (
           <>
