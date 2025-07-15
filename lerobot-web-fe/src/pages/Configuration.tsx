@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form } from 'radix-ui';
+import * as Form from '@radix-ui/react-form';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 
 import styles from './Configuration.module.css';
