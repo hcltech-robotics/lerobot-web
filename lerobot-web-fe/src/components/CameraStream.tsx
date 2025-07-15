@@ -9,7 +9,8 @@ export function CameraStream() {
   const [cameraIds, setCameraIds] = useState<number[]>();
   const [cameraIdsPlaceholder, setCameraIdsPlaceholder] = useState<number[]>();
   const [error, setError] = useState<string | null>('');
-  const { apiUrl } = useStatusStore();
+
+  const apiUrl = useStatusStore((s) => s.apiUrl);
 
   useEffect(() => {
     getCameraStatus();

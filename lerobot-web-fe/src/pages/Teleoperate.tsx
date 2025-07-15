@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { sleepPosition, startTeleoperate, stopTeleoperate } from '../services/teleoperate.service';
 import { teleoperateStatusList } from '../models/teleoperate.model';
 import { MainScene } from '../components/MainScene';
@@ -6,7 +6,6 @@ import { Robot } from '../components/Robot';
 import { CameraStream } from '../components/CameraStream';
 import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
 import { useStatusStore } from '../stores/status.store';
-import { getStatus } from '../services/status.service';
 
 import styles from './Teleoperate.module.css';
 
@@ -15,8 +14,8 @@ export default function Teleoperate() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
-  const { selectedLeader } = useStatusStore();
 
+  const selectedLeader = useStatusStore((s) => s.selectedLeader);
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
 
   const handleTeleoperate = async () => {

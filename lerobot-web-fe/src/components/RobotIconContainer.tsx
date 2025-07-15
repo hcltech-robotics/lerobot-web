@@ -7,7 +7,9 @@ import { useStatusStore } from '../stores/status.store';
 import styles from './RobotIconContainer.module.css';
 
 export default function RobotIconContainer() {
-  const { status, selectedLeader, setSelectedLeader } = useStatusStore();
+  const status = useStatusStore((s) => s.status);
+  const selectedLeader = useStatusStore((s) => s.selectedLeader);
+  const setSelectedLeader = useStatusStore((s) => s.setSelectedLeader);
   const selectedLeaderIndex = selectedLeader ? Number(selectedLeader) : null;
 
   if (!status) {

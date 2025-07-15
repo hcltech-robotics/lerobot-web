@@ -8,7 +8,9 @@ interface RobotLeaderSelectorProps {
 }
 
 export function RobotLeaderSelector({ label = 'Select a Leader Robot', disabled = false }: RobotLeaderSelectorProps) {
-  const { status, selectedLeader, setSelectedLeader } = useStatusStore();
+  const status = useStatusStore((s) => s.status);
+  const selectedLeader = useStatusStore((s) => s.selectedLeader);
+  const setSelectedLeader = useStatusStore((s) => s.setSelectedLeader);
 
   const getRobotIndex = (deviceName: string) => {
     return status?.robot_status.findIndex((robot) => robot.device_name === deviceName).toString() || EMPTY_ROBOT_INDEX;
