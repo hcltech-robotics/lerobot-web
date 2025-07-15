@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { StatusResponse } from '../services/status.service';
+import type { StatusResponse } from '../models/status.model';
 
 export interface StatusState {
   status: StatusResponse | null;
