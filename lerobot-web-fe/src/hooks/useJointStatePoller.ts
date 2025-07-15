@@ -6,11 +6,11 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
   const isCancelled = useRef(false);
 
   useEffect(() => {
-    isCancelled.current = false;
-
     if (!isLive) {
       return;
     }
+
+    isCancelled.current = false;
 
     const getJointStateAPICalls = async () => {
       while (!isCancelled.current) {
@@ -31,9 +31,8 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
           console.error('Failed to fetch joint states:', error);
         }
 
-        if (!isCancelled.current) {
-          await new Promise((resolve) => setTimeout(resolve, 100));
-        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        if (isCancelled.current) break;
       }
     };
 
@@ -42,5 +41,5 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
     return () => {
       isCancelled.current = true;
     };
-  }, [id, isLive, setJointState]);
+  }, [id, isLive]);
 }
