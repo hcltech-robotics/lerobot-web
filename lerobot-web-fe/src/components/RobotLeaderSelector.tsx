@@ -22,7 +22,7 @@ export function RobotLeaderSelector({ label = 'Select a Leader Robot', disabled 
 
   return (
     <>
-      {robotList ? (
+      {robotList && robotList.length > 0 ? (
         <Selector label={label} value={selectedLeader || ''} onChange={setSelectedLeader} disabled={disabled} options={robotList} />
       ) : (
         <p>There is no robot list.</p>
