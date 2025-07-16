@@ -1,10 +1,13 @@
+import { useStatusStore } from '../stores/status.store';
 import type { RobotIds, TeleoperateResponse } from '../models/teleoperate.model';
 
-const API_BASE = 'http://127.0.0.1:80';
-
 export async function startTeleoperate({ leader, follower }: RobotIds): Promise<TeleoperateResponse> {
+  const { apiUrl } = useStatusStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
   try {
-    const res = await fetch(`${API_BASE}/move/leader/start`, {
+    const response = await fetch(`${apiUrl}/move/leader/start`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -20,11 +23,11 @@ export async function startTeleoperate({ leader, follower }: RobotIds): Promise<
       }),
     });
 
-    if (!res.ok) {
-      throw new Error(`Teleoperate start failed: ${res.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Teleoperate start failed: ${response.statusText}`);
     }
 
-    return res.json();
+    return response.json();
   } catch (error) {
     console.error('Error starting Teleoperation:', error);
     throw error;
@@ -32,8 +35,12 @@ export async function startTeleoperate({ leader, follower }: RobotIds): Promise<
 }
 
 export async function stopTeleoperate(): Promise<TeleoperateResponse> {
+  const { apiUrl } = useStatusStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
   try {
-    const res = await fetch(`${API_BASE}/move/leader/stop`, {
+    const response = await fetch(`${apiUrl}/move/leader/stop`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -41,11 +48,11 @@ export async function stopTeleoperate(): Promise<TeleoperateResponse> {
       },
     });
 
-    if (!res.ok) {
-      throw new Error(`Teleoperate stop failed: ${res.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Teleoperate stop failed: ${response.statusText}`);
     }
 
-    return res.json();
+    return response.json();
   } catch (error) {
     console.error('Error stoping Teleoperation:', error);
     throw error;
@@ -53,8 +60,12 @@ export async function stopTeleoperate(): Promise<TeleoperateResponse> {
 }
 
 export async function sleepPosition(id: string): Promise<TeleoperateResponse> {
+  const { apiUrl } = useStatusStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
   try {
-    const res = await fetch(`${API_BASE}/move/sleep?robot_id=${id}`, {
+    const response = await fetch(`${apiUrl}/move/sleep?robot_id=${id}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -62,11 +73,11 @@ export async function sleepPosition(id: string): Promise<TeleoperateResponse> {
       },
     });
 
-    if (!res.ok) {
-      throw new Error(`Move to sleep failed: ${res.statusText}`);
+    if (!response.ok) {
+      throw new Error(`Move to sleep failed: ${response.statusText}`);
     }
 
-    return res.json();
+    return response.json();
   } catch (error) {
     console.error('Error moving Sleep position:', error);
     throw error;

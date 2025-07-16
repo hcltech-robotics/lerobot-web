@@ -1,35 +1,26 @@
-interface StatusResponse {
-  ai_running_status: string;
-  cameras: {
-    cameras_status: { camera_id: number; camera_type: string; fps: number; height: number; is_active: boolean; width: number }[];
-    is_stereo_camera_available: boolean;
-    realsense_available: boolean;
-    video_cameras_ids: number[];
-  };
-  is_recording: boolean;
-  leader_follower_status: boolean;
-  name: string;
-  robot_status: { device_name: string; name: string; robot_type: string }[];
-  robots: string[];
-  server_ip: string;
-  status: string;
-  version_id: string;
-}
-
-export const API_BASE = 'http://127.0.0.1:80';
+import { useStatusStore } from '../stores/status.store';
+import type { StatusResponse } from '../models/status.model';
 
 export async function getStatus(): Promise<StatusResponse> {
-  const res = await fetch(`${API_BASE}/status`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-  });
+  const { apiUrl } = useStatusStore.getState();
+  const setStatus = useStatusStore.getState().setStatus;
 
-  if (!res.ok) {
-    throw new Error(`Status api call failed: ${res.statusText}`);
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  try {
+    const statusResponse = await fetch(`${apiUrl}/status`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const response = await statusResponse.json();
+    setStatus(response);
+    return response;
+  } catch (error) {
+    console.error('Error fetching status:', error);
+    throw error;
   }
-
-  return res.json();
 }
