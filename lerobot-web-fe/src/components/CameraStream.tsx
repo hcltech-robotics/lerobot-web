@@ -21,7 +21,7 @@ export function CameraStream() {
       {cameraIdsPlaceholder &&
         cameraIdsPlaceholder.map((cameraId) => (
           <div key={cameraId} className={styles.cameraWrapper}>
-            {cameraIds && cameraIds.includes(cameraId) ? (
+            {apiUrl && cameraIds && cameraIds.includes(cameraId) ? (
               <div className={styles.cameraBox}>
                 <img src={`${apiUrl}/video/${cameraId}`} className={styles.cameraImage} alt={`Camera ${cameraId}`} />
               </div>
