@@ -41,5 +41,5 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
     return () => {
       isCancelled.current = true;
     };
-  }, [id, isLive]);
+  }, [id, isLive, setJointState]);
 }
