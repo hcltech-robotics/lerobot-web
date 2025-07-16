@@ -20,7 +20,7 @@ export async function getStatus(): Promise<StatusResponse> {
     setStatus(response);
     return response;
   } catch (error) {
-    console.error('Status lekérdezési hiba:', error);
+    console.error('Error fetching status:', error);
     throw error;
   }
 }
