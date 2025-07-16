@@ -1,5 +1,5 @@
 import { HandIcon } from '@radix-ui/react-icons';
-import { DEFAULT_ROBOT_COUNT, ROBOT_MODEL_SO_100 } from '../models/robot.model';
+import { DEFAULT_ROBOT_COUNT } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
 import { RobotIcons } from './RobotIcons';
 import { useStatusStore } from '../stores/status.store';
@@ -16,16 +16,18 @@ export default function RobotIconContainer() {
     return;
   }
 
-  const filteredRobots = status.robot_status.filter((robot) => robot.name === ROBOT_MODEL_SO_100);
-
-  const connectedRobotIcons = <RobotIcons robotCount={filteredRobots.length} setActive={true} leaderIndex={selectedLeaderIndex} />;
+  const connectedRobotIcons = (
+    <div tabIndex={0} role="button">
+      <RobotIcons robotCount={status.robot_status.length} setActive={true} leaderIndex={selectedLeaderIndex} />
+    </div>
+  );
   const disconnectedRobotIcons = <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />;
 
   return (
     <>
-      {filteredRobots.length > 0 ? (
+      {status.robot_status.length > 0 ? (
         <PopoverWrapper title="Robot Info" trigger={connectedRobotIcons}>
-          {filteredRobots.map((robot, index) => (
+          {status.robot_status.map((robot, index) => (
             <div key={index} className={styles.robotDetail}>
               <div className={styles.robotRow}>
                 <span className={styles.robotId}>#{index}</span>
@@ -39,7 +41,7 @@ export default function RobotIconContainer() {
                   <HandIcon />
                 </button>
               </div>
-              {index < filteredRobots.length - 1 && <div className={styles.divider} />}
+              {index < status.robot_status.length - 1 && <div className={styles.divider} />}
             </div>
           ))}
         </PopoverWrapper>
