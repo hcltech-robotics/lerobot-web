@@ -17,7 +17,7 @@ export default function Teleoperate() {
 
   const selectedLeader = useStatusStore((s) => s.selectedLeader);
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
-  const isRobotAvailable = !!selectedLeader;
+  const isLeaderSelected = !!selectedLeader;
 
   const handleTeleoperate = async () => {
     setLoading(true);
@@ -59,7 +59,7 @@ export default function Teleoperate() {
           loading={loading}
           error={error}
           isRunning={isRunning}
-          isRobotAvailable={isRobotAvailable}
+          isLeaderSelected={isLeaderSelected}
           onToggleTeleoperate={handleTeleoperate}
         />
         <div className={styles.sceneContainer}>
