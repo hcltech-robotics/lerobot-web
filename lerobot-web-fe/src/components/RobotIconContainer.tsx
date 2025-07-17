@@ -1,42 +1,47 @@
-import { useState } from 'react';
 import { HandIcon } from '@radix-ui/react-icons';
-import { useRobotStatus } from '../hooks/useRobotStatus';
 import { DEFAULT_ROBOT_COUNT } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
 import { RobotIcons } from './RobotIcons';
+import { useStatusStore } from '../stores/status.store';
 
 import styles from './RobotIconContainer.module.css';
 
 export default function RobotIconContainer() {
-  const { robotStatus } = useRobotStatus();
-  const [leaderIndex, setLeaderIndex] = useState<number | null>(null);
+  const status = useStatusStore((s) => s.status);
+  const selectedLeader = useStatusStore((s) => s.selectedLeader);
+  const setSelectedLeader = useStatusStore((s) => s.setSelectedLeader);
+  const selectedLeaderIndex = selectedLeader ? Number(selectedLeader) : null;
 
-  const handleSetLeader = (index: number) => {
-    setLeaderIndex(index);
-  };
+  if (!status) {
+    return;
+  }
 
-  const connectedRobotIcons = <RobotIcons robotCount={robotStatus.length} setActive={true} leaderIndex={leaderIndex} />;
+  const connectedRobotIcons = (
+    <div tabIndex={0} role="button">
+      <RobotIcons robotCount={status.robot_status.length} setActive={true} leaderIndex={selectedLeaderIndex} />
+    </div>
+  );
   const disconnectedRobotIcons = <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />;
 
   return (
     <>
-      {robotStatus.length > 0 ? (
+      {status.robot_status.length > 0 ? (
         <PopoverWrapper title="Robot Info" trigger={connectedRobotIcons}>
-          {robotStatus.map((robot, index) => (
+          {status.robot_status.map((robot, index) => (
             <div key={index} className={styles.robotDetail}>
               <div className={styles.robotRow}>
                 <span className={styles.robotId}>#{index}</span>
                 <span>{robot.name}</span>
                 <span>{robot.device_name}</span>
                 <button
-                  className={`${styles.leaderButton} ${leaderIndex === index ? styles.leaderActive : ''}`}
-                  onClick={() => handleSetLeader(index)}
+                  className={`${styles.leaderButton} ${selectedLeaderIndex === index ? styles.leaderActive : ''}`}
+                  onClick={() => setSelectedLeader(index.toString())}
                   title="Set as Leader"
                 >
                   <HandIcon />
                 </button>
               </div>
-              {index < robotStatus.length - 1 && <div className={styles.divider} />}
+              {index < status.robot_status.length - 1 && <div className={styles.divider} />}
             </div>
           ))}
         </PopoverWrapper>
