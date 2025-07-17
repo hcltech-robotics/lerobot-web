@@ -1,5 +1,5 @@
 import * as Collapsible from '@radix-ui/react-collapsible';
-import { GearIcon, LightningBoltIcon, RocketIcon, LayersIcon } from '@radix-ui/react-icons';
+import { GearIcon, LightningBoltIcon, RocketIcon, LayersIcon, MixerVerticalIcon } from '@radix-ui/react-icons';
 import { Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import styles from './DrawerMenu.module.css';
@@ -14,6 +14,7 @@ const pages = [
   { label: 'Calibration', path: '/calibration', icon: <GearIcon /> },
   { label: 'Policies', path: '/policies', icon: <LightningBoltIcon /> },
   { label: 'AI Training', path: '/ai-training', icon: <LayersIcon /> },
+  { label: 'Configuration', path: '/configuration', icon: <MixerVerticalIcon /> },
 ];
 
 export function DrawerMenu({ isOpen, setOpen }: DrawerProps) {
