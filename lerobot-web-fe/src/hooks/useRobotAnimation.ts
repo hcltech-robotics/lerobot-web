@@ -10,7 +10,7 @@ export function useRobotAnimation(
   robotModelLoaded: boolean = false,
 ) {
   const currentState = useRef<JointState | null>(null);
-  const animationFrame = useRef<number>(null);
+  const animationFrame = useRef<number | null>(null);
 
   useEffect(() => {
     if (!robotRef.current || !jointState || !robotModelLoaded) {
