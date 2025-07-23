@@ -3,7 +3,7 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 
 import CalibrationTabItem from '../components/CalibrationTabItem';
-import { RobotLeaderSelector } from '../components/RobotLeaderSelector';
+import Selector from '../components/Selector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
@@ -52,14 +52,21 @@ export default function Calibration() {
     <div className={styles.contentArea}>
       <div className={styles.controlPanel}>
         <div className={styles.selectWrapper}>
-          <RobotLeaderSelector label="Select Robot ID" disabled={dropdownDisabled} />
-          {dropdownDisabled && !completed && (
+          <Selector
+            label="Select robot arm to calibrate"
+            options={robotOptions}
+            value={selectedRobotIndex}
+            onChange={setSelectedRobotIndex}
+            disabled={currentStep !== 0 || completed}
+          />
+          {currentStep > 0 && !completed && (
             <div className={styles.progressIndicator}>
               <p>Calibration in progress</p>
               <span className={styles.loader} />
             </div>
           )}
         </div>
+
         <Tabs.Root value={tabValue}>
           <Tabs.List className={styles.tabsList}>
             {steps.map((step, index) => {
