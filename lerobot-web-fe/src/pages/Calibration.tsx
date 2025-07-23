@@ -7,17 +7,16 @@ import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
 import { calibrationSteps as steps } from '../constants/calibration';
+import { useCalibration } from '../hooks/useCalibration';
 import type { Step } from '../models/calibration.model';
 import styles from './Calibration.module.css';
 
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
+  const { currentStep, tabValue, completed, goToNextStep, resetCalibration } = useCalibration();
 
 
 export default function Calibration() {
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [tabValue, setTabValue] = useState<string>((steps[0] as Step).id);
-  const [completed, setCompleted] = useState<boolean>(false);
   const [selectedId, setSelectedId] = useState<'id_1' | 'id_2'>('id_1');
   const [dropdownDisabled, setDropdownDisabled] = useState<boolean>(false);
   const [isLive, setIsLive] = useState(false);
@@ -27,32 +26,18 @@ export default function Calibration() {
 
     const step = steps[index] as Step;
 
-    if (step.endpoint) {
-      try {
-        await fetch(`${step.endpoint}?id=${selectedId}`, { method: 'POST' });
-      } catch (error) {
-        console.error('Failed to call backend for', step.id, error);
+    try {
+      if (step.step) {
+        await performCalibrationStep(selectedRobotIndex);
       }
-    }
 
-    if (index < steps.length - 1) {
-      setCurrentStep(index + 1);
-      setTabValue((steps[index + 1] as Step).id);
-    } else {
-      setCompleted(true);
-    }
-
-    if (index === 0) {
-      setDropdownDisabled(true);
+      goToNextStep();
+    } catch (error) {
+      console.error('Calibration API call failed', error);
+      return;
     }
   };
 
-  const reset = () => {
-    setCurrentStep(0);
-    setTabValue((steps[0] as Step).id);
-    setCompleted(false);
-    setDropdownDisabled(false);
-  };
 
   return (
     <div className={styles.contentArea}>
