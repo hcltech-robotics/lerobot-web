@@ -17,7 +17,7 @@ export function useCalibration() {
     }
   };
 
-  const resetCalibration = () => {
+  const restartCalibration = () => {
     setCurrentStep(0);
     setTabValue((calibrationSteps[0] as Step).id);
     setCompleted(false);
@@ -31,6 +31,6 @@ export function useCalibration() {
     completed,
     setCompleted,
     goToNextStep,
-    resetCalibration,
+    restartCalibration,
   };
 }

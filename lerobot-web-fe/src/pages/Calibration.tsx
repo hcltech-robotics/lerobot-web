@@ -19,7 +19,7 @@ export default function Calibration() {
   const [isLive, setIsLive] = useState(false);
   const [selectedRobotIndex, setSelectedRobotIndex] = useState('0');
 
-  const { currentStep, tabValue, completed, goToNextStep, resetCalibration } = useCalibration();
+  const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
   const status = useStatusStore((s) => s.status);
   const robotOptions =
@@ -102,10 +102,11 @@ export default function Calibration() {
           ))}
         </Tabs.Root>
 
-        <button className={styles.resetButton} onClick={reset}>
-          Reset Calibration
+        <button className={styles.restartButton} onClick={restartCalibration} disabled={!completed}>
+          Restart Calibration
         </button>
       </div>
+
       <div className={styles.sceneContainer}>
         <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
           {isLive ? 'Online' : 'Offline'}
