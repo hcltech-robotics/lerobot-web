@@ -68,19 +68,24 @@ export default function Calibration() {
         </div>
         <Tabs.Root value={tabValue}>
           <Tabs.List className={styles.tabsList}>
-            {steps.map((step, index) => (
-              <CalibrationTabItem
-                key={step.id}
-                stepId={step.id}
-                stepLabel={step.label}
-                activeLabel={step.activeLabel}
-                index={index}
-                currentStep={currentStep}
-                completed={completed}
-                totalSteps={steps.length}
-                onClick={() => handleTabClick(index)}
-              />
-            ))}
+            {steps.map((step, index) => {
+              const isFirst = index === 0;
+              const disabled = isFirst && (!selectedRobotIndex || robotOptions.length === 0);
+              return (
+                <CalibrationTabItem
+                  key={step.id}
+                  stepId={step.id}
+                  stepLabel={step.label}
+                  activeLabel={step.activeLabel}
+                  index={index}
+                  currentStep={currentStep}
+                  completed={completed}
+                  totalSteps={steps.length}
+                  onClick={() => handleTabClick(index)}
+                  disabled={disabled}
+                />
+              );
+            })}
           </Tabs.List>
 
           {steps.map((step) => (

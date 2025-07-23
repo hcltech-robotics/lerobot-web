@@ -10,6 +10,7 @@ interface CalibrationTabItemProps {
   completed: boolean;
   totalSteps: number;
   onClick: () => void;
+  disabled: boolean;
 }
 
 export default function CalibrationTabItem({
@@ -21,10 +22,11 @@ export default function CalibrationTabItem({
   completed,
   totalSteps,
   onClick,
+  disabled,
 }: CalibrationTabItemProps) {
   const isCompleted = index < currentStep || (completed && index <= currentStep);
   const isActive = index === currentStep && !completed;
-  const isDisabled = index !== currentStep;
+  const isDisabled = disabled || index !== currentStep;
 
   const triggerClass = [styles.tabTrigger, isCompleted && styles.completed, isActive && styles.active].filter(Boolean).join(' ');
 
