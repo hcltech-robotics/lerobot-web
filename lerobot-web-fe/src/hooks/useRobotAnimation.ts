@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { JOINT_STATES_OFFSETS, jointStateNameList, type JointState } from '../models/robot.model';
-import { lerp, lerpAngle, isNearlyEqualState } from '../utils/robotAnimationMath';
+import { lerp, lerpAngle, isNearlyEqualState, safeCancelAnimationFrame } from '../utils/robotAnimationMath';
 
 export function useRobotAnimation(
   jointState: JointState | null | undefined,
@@ -75,19 +75,19 @@ export function useRobotAnimation(
         isNearlyEqualState(nextState.wristRoll, jointState.wristRoll) &&
         isNearlyEqualState(nextState.jaw, jointState.jaw);
       if (!done && smooth) {
-        cancelAnimationFrame(animationFrame.current!);
+        safeCancelAnimationFrame(animationFrame.current);
         animationFrame.current = requestAnimationFrame(animate);
       } else {
         currentState.current = jointState;
       }
     };
 
-    cancelAnimationFrame(animationFrame.current!);
+    safeCancelAnimationFrame(animationFrame.current);
     if (smooth) {
       animationFrame.current = requestAnimationFrame(animate);
     } else {
       animate();
     }
-    return () => cancelAnimationFrame(animationFrame.current!);
+    return () => safeCancelAnimationFrame(animationFrame.current);
   }, [jointState, robotRef, smooth, robotModelLoaded]);
 }

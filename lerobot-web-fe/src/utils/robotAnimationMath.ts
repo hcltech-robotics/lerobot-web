@@ -10,3 +10,9 @@ export function lerpAngle(a: number, b: number, t: number) {
   if (delta < -Math.PI) delta += 2 * Math.PI;
   return a + delta * t;
 }
+
+export const safeCancelAnimationFrame = (frame: number | null | undefined) => {
+  if (frame != null) {
+    cancelAnimationFrame(frame);
+  }
+};
