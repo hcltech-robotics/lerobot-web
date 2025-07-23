@@ -6,49 +6,13 @@ import { RobotLeaderSelector } from '../components/RobotLeaderSelector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
+import { calibrationSteps as steps } from '../constants/calibration';
+import type { Step } from '../models/calibration.model';
 import styles from './Calibration.module.css';
 
-interface Step {
-  id: string;
-  label: string;
-  content: string;
-  activeLabel: string;
-  endpoint?: string;
-  finalContent?: string;
-}
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
-const steps: Step[] = [
-  {
-    id: 'start',
-    label: 'Start',
-    activeLabel: 'Start calibration',
-    content: 'Click "Start calibration" to begin the calibration process.',
-  },
-  {
-    id: 'step1',
-    label: 'Step 1',
-    activeLabel: 'Confirm step 1',
-    content:
-      'Move the arm forward and fully close the gripper. The moving part of the gripper should be on the left side of the arm. If the robot matches the 3D model, click Confirm step 1.',
-    endpoint: `${API_BASE_URL}/step1`,
-  },
-  {
-    id: 'step2',
-    label: 'Step 2',
-    activeLabel: 'Confirm step 2',
-    content:
-      'Fully extend the arm, rotate it to the left, and fully open the gripper. If the robot matches the 3D model, click Confirm step 2.',
-    endpoint: `${API_BASE_URL}/step2`,
-  },
-  {
-    id: 'finish',
-    label: 'Finish',
-    activeLabel: 'Finish calibration',
-    content: 'Return the arms to the resting position, then click Finish to complete the calibration.',
-  },
-];
 
 export default function Calibration() {
   const [currentStep, setCurrentStep] = useState<number>(0);
