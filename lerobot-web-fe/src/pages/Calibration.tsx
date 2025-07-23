@@ -7,6 +7,7 @@ import Selector from '../components/Selector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
+import { calibrationFirstStepJointStates, calibrationSecondStepJointStates, startPositionJointState } from '../constants/robotoPositions';
 import { calibrationSteps as steps } from '../constants/calibration';
 import { performCalibrationStep } from '../services/calibration.service';
 import { useStatusStore } from '../stores/status.store';
@@ -47,6 +48,8 @@ export default function Calibration() {
     }
   };
 
+  const calibrationJointState =
+    currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? calibrationSecondStepJointStates : startPositionJointState;
 
   return (
     <div className={styles.contentArea}>
@@ -113,7 +116,7 @@ export default function Calibration() {
         </button>
         <div className={styles.mainScene}>
           <MainScene>
-            <Robot isLive={isLive} />
+            <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
           </MainScene>
         </div>
       </div>

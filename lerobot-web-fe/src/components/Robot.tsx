@@ -7,10 +7,13 @@ import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import type { JointState, RobotProps } from '../models/robot.model';
 
-export function Robot({ isLive }: RobotProps) {
+export function Robot({ isLive, calibrationJointState }: RobotProps) {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
-  const [jointState, setJointState] = useState<JointState | null>(null);
+  const [robotModelLoaded, setRobotModelLoaded] = useState(false); // ← NEW
+  const [liveJointState, setLiveJointState] = useState<JointState | null>(null);
+
+  const activeJointState = isLive ? liveJointState : calibrationJointState;
 
   useEffect(() => {
     const manager = new THREE.LoadingManager();
@@ -39,11 +42,12 @@ export function Robot({ isLive }: RobotProps) {
       robot.rotation.x = -Math.PI / 2;
       scene.add(robot);
       robotRef.current = robot;
+      setRobotModelLoaded(true);
     });
   }, [scene]);
 
-  useJointStatePoller(0, isLive, setJointState);
-  useRobotAnimation(jointState, robotRef);
+  useJointStatePoller(0, isLive, setLiveJointState);
+  useRobotAnimation(activeJointState, robotRef, !isLive, robotModelLoaded);
 
   return (
     <>
