@@ -1,28 +1,37 @@
 import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
+
 import CalibrationTabItem from '../components/CalibrationTabItem';
 import { RobotLeaderSelector } from '../components/RobotLeaderSelector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
 import { calibrationSteps as steps } from '../constants/calibration';
+import { performCalibrationStep } from '../services/calibration.service';
+import { useStatusStore } from '../stores/status.store';
 import { useCalibration } from '../hooks/useCalibration';
 import type { Step } from '../models/calibration.model';
+
 import styles from './Calibration.module.css';
 
+export default function Calibration() {
+  const [isLive, setIsLive] = useState(false);
+  const [selectedRobotIndex, setSelectedRobotIndex] = useState('0');
 
-const API_BASE_URL = 'http://127.0.0.1:8000';
   const { currentStep, tabValue, completed, goToNextStep, resetCalibration } = useCalibration();
 
+  const status = useStatusStore((s) => s.status);
+  const robotOptions =
+    status?.robot_status?.map((robot, index) => ({
+      label: `${robot.device_name}`,
+      value: index.toString(),
+    })) || [];
 
-export default function Calibration() {
-  const [selectedId, setSelectedId] = useState<'id_1' | 'id_2'>('id_1');
-  const [dropdownDisabled, setDropdownDisabled] = useState<boolean>(false);
-  const [isLive, setIsLive] = useState(false);
+  const selectedRobot = status?.robot_status?.[parseInt(selectedRobotIndex)] ?? null;
 
   const handleTabClick = async (index: number) => {
-    if (index !== currentStep) return;
+    if (index !== currentStep || !selectedRobot) return;
 
     const step = steps[index] as Step;
 
