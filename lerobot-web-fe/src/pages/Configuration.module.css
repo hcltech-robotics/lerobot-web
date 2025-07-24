@@ -60,6 +60,13 @@
   background-color: #1f78e0;
 }
 
+.SubmitButton:disabled {  
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: #cccccc;
+  color: #666666;
+}
+
 .MessageContainer {
   display: flex;
   align-items: baseline;
