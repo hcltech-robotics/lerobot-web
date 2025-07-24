@@ -35,12 +35,10 @@ export default function Configuration() {
         <Form.Field className={styles.Field} name="url">
           <div className={styles.MessageContainer}>
             <Form.Label className={styles.Label}>Backend Url</Form.Label>
-
-            {urlTouched && !isUrlValid && <div className={styles.ErrorMessage}>Please provide a valid URL.</div>}
           </div>
 
           <Form.Control
-            className={styles.Input}
+            className={`${styles.Input} ${urlTouched && !isUrlValid ? styles.InputError : ''}`}
             type="url"
             required
             name="url"
@@ -48,6 +46,7 @@ export default function Configuration() {
             onChange={(e) => setUrl(e.target.value)}
             onBlur={() => setUrlTouched(true)}
           />
+          {urlTouched && !isUrlValid && <div className={styles.ErrorMessage}>Please provide a valid URL.</div>}
         </Form.Field>
 
         <Form.Field className={styles.Field} name="token">
