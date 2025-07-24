@@ -7,12 +7,14 @@ export interface StatusState {
   status: StatusResponse | null;
   selectedLeader: string | null;
   apiUrl: string | null;
+  token: string | null;
 }
 
 export interface StatusActions {
   setStatus: (status: StatusResponse) => void;
   setSelectedLeader: (leaderId: string) => void;
   setApiUrl: (url: string) => void;
+  setToken: (token: string) => void;
 }
 
 export const useStatusStore = create<StatusState & StatusActions>()(
@@ -21,6 +23,7 @@ export const useStatusStore = create<StatusState & StatusActions>()(
       status: null,
       selectedLeader: null,
       apiUrl: null,
+      token: null,
       setStatus: (status: StatusResponse) =>
         set((state) => {
           state.status = status;
@@ -33,6 +36,10 @@ export const useStatusStore = create<StatusState & StatusActions>()(
         set((state) => {
           state.apiUrl = url;
         }),
+      setToken: (token: string) =>
+        set((state) => {
+          state.token = token;
+        }),
     })),
     {
       name: 'status-storage',
@@ -41,6 +48,7 @@ export const useStatusStore = create<StatusState & StatusActions>()(
         status: state.status,
         selectedLeader: state.selectedLeader,
         apiUrl: state.apiUrl,
+        token: state.token,
       }),
     },
   ),
