@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { calibrationSteps } from '../constants/calibration';
+import { calibrationSteps } from '../models/calibration.model';
 import type { CalibrationStep } from '../models/calibration.model';
 
 export function useCalibration() {

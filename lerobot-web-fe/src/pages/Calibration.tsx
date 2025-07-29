@@ -7,8 +7,8 @@ import Selector from '../components/Selector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
-import { calibrationFirstStepJointStates, startPositionJointState } from '../constants/robotPositions';
-import { calibrationSteps } from '../constants/calibration';
+import { calibrationFirstStepJointStates, startPositionJointState } from '../models/calibration.model';
+import { calibrationSteps } from '../models/calibration.model';
 import { useCalibration } from '../hooks/useCalibration';
 import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { CalibrationStep } from '../models/calibration.model';
