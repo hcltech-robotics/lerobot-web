@@ -2,8 +2,8 @@ import * as Tabs from '@radix-ui/react-tabs';
 import styles from './CalibrationTabItem.module.css';
 
 interface CalibrationTabItemProps {
-  stepId: string;
-  stepLabel: string;
+  id: string;
+  label: string;
   activeLabel?: string;
   index: number;
   currentStep: number;
@@ -14,8 +14,8 @@ interface CalibrationTabItemProps {
 }
 
 export default function CalibrationTabItem({
-  stepId,
-  stepLabel,
+  id,
+  label,
   activeLabel,
   index,
   currentStep,
@@ -32,8 +32,8 @@ export default function CalibrationTabItem({
 
   return (
     <div className={styles.tabItem}>
-      <Tabs.Trigger value={stepId} onClick={onClick} disabled={isDisabled} className={triggerClass}>
-        {isActive ? (activeLabel ?? stepLabel) : stepLabel}
+      <Tabs.Trigger value={id} onClick={onClick} disabled={isDisabled} className={triggerClass}>
+        {isActive ? (activeLabel ?? label) : label}
       </Tabs.Trigger>
       {index < totalSteps - 1 && <div className={`${styles.connector} ${isCompleted ? styles.connectorCompleted : ''}`} />}
     </div>
