@@ -76,8 +76,8 @@ export default function Calibration() {
               return (
                 <CalibrationTabItem
                   key={step.id}
-                  stepId={step.id}
-                  stepLabel={step.label}
+                  id={step.id}
+                  label={step.label}
                   activeLabel={step.activeLabel}
                   index={index}
                   currentStep={currentStep}
