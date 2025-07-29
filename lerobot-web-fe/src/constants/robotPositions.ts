@@ -1,4 +1,4 @@
-import type { JointState } from 'src/models/robot.model';
+import type { JointState } from '../models/robot.model';
 
 export const startPositionJointState: JointState = {
   rotation: 0,

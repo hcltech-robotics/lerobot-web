@@ -10,7 +10,7 @@ import type { JointState, RobotProps } from '../models/robot.model';
 export function Robot({ isLive, calibrationJointState }: RobotProps) {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
-  const [robotModelLoaded, setRobotModelLoaded] = useState(false); // ← NEW
+  const [robotModelLoaded, setRobotModelLoaded] = useState(false);
   const [liveJointState, setLiveJointState] = useState<JointState | null>(null);
 
   const activeJointState = isLive ? liveJointState : calibrationJointState;
