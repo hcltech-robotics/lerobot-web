@@ -10,6 +10,7 @@ import { Robot } from '../components/Robot';
 import { calibrationFirstStepJointStates, startPositionJointState } from '../constants/robotPositions';
 import { calibrationSteps as steps } from '../constants/calibration';
 import { useCalibration } from '../hooks/useCalibration';
+import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { Step } from '../models/calibration.model';
 
 import styles from './Calibration.module.css';
@@ -43,7 +44,10 @@ export default function Calibration() {
     }
   };
 
-  const calibrationJointState = currentStep === 1 ? calibrationFirstStepJointStates : startPositionJointState;
+  const secondStepActive = currentStep === 2;
+  const secondStepAnimationState = useSecondStepAnimation(secondStepActive);
+  const calibrationJointState =
+    currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? secondStepAnimationState : startPositionJointState;
 
   return (
     <div className={styles.contentArea}>
