@@ -29,6 +29,7 @@
   font-size: 13px;
   color: #ff0000;
   opacity: 0.8;
+  margin-top: 4px;
 }
 
 .Input {
@@ -38,6 +39,10 @@
   border: 1px solid #333;
   border-radius: 8px;
   color: #333;
+}
+
+.InputError {
+  border-color: #ff0000;
 }
 
 .Input:focus-visible {
@@ -58,6 +63,12 @@
 
 .SubmitButton:hover {
   background-color: #1f78e0;
+}
+
+.SubmitButton:disabled {  
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .MessageContainer {
