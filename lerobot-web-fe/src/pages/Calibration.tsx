@@ -8,7 +8,7 @@ import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
 import { calibrationFirstStepJointStates, startPositionJointState } from '../constants/robotPositions';
-import { calibrationSteps as steps } from '../constants/calibration';
+import { calibrationSteps } from '../constants/calibration';
 import { useCalibration } from '../hooks/useCalibration';
 import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { Step } from '../models/calibration.model';
@@ -30,7 +30,7 @@ export default function Calibration() {
   const handleTabClick = async (index: number) => {
     if (index !== currentStep || !selectedRobot) return;
 
-    const step = steps[index] as Step;
+    const step = calibrationSteps[index] as Step;
 
     try {
       if (step.step) {
@@ -70,7 +70,7 @@ export default function Calibration() {
 
         <Tabs.Root value={tabValue}>
           <Tabs.List className={styles.tabsList}>
-            {steps.map((step, index) => {
+            {calibrationSteps.map((step, index) => {
               const isFirst = index === 0;
               const disabled = isFirst && (!selectedRobotIndex || robotOptions.length === 0);
               return (
@@ -82,7 +82,7 @@ export default function Calibration() {
                   index={index}
                   currentStep={currentStep}
                   completed={completed}
-                  totalSteps={steps.length}
+                  totalSteps={calibrationSteps.length}
                   onClick={() => handleTabClick(index)}
                   disabled={disabled}
                 />
@@ -90,7 +90,7 @@ export default function Calibration() {
             })}
           </Tabs.List>
 
-          {steps.map((step) => (
+          {calibrationSteps.map((step) => (
             <Tabs.Content key={step.id} value={step.id} className={styles.tabContent}>
               {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration</p>}
               {step.id === 'start' && (
