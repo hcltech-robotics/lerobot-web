@@ -7,7 +7,7 @@ import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import type { JointState, RobotProps } from '../models/robot.model';
 
-export function Robot({ isLive, calibrationJointState }: RobotProps) {
+export function Robot({ isLive, calibrationJointState = null }: RobotProps) {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
   const [robotModelLoaded, setRobotModelLoaded] = useState(false);

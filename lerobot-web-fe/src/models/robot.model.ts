@@ -38,7 +38,7 @@ export type jointStateNames = (typeof jointStateNameList)[keyof typeof jointStat
 
 export interface RobotProps {
   isLive: boolean;
-  calibrationJointState?: JointState;
+  calibrationJointState?: JointState | null;
 }
 
 export const JOINT_STATES_OFFSETS = {

@@ -4,7 +4,7 @@ import { JOINT_STATES_OFFSETS, jointStateNameList, type JointState } from '../mo
 import { lerp, lerpAngle, isNearlyEqualState, safeCancelAnimationFrame } from '../utils/robotAnimationMath';
 
 export function useRobotAnimation(
-  jointState: JointState | null | undefined,
+  jointState: JointState | null,
   robotRef: React.RefObject<THREE.Object3D | null>,
   smooth: boolean = false,
   robotModelLoaded: boolean = false,
