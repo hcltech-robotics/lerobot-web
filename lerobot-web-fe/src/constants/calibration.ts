@@ -1,6 +1,6 @@
-import type { Step } from '../models/calibration.model';
+import type { CalibrationStep } from '../models/calibration.model';
 
-export const calibrationSteps: Step[] = [
+export const calibrationSteps: CalibrationStep[] = [
   {
     id: 'start',
     label: 'Start',

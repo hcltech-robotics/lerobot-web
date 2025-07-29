@@ -1,4 +1,4 @@
-export interface Step {
+export interface CalibrationStep {
   id: string;
   label: string;
   content: string;

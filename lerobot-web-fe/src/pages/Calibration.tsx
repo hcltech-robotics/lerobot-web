@@ -11,7 +11,7 @@ import { calibrationFirstStepJointStates, startPositionJointState } from '../con
 import { calibrationSteps } from '../constants/calibration';
 import { useCalibration } from '../hooks/useCalibration';
 import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
-import type { Step } from '../models/calibration.model';
+import type { CalibrationStep } from '../models/calibration.model';
 
 import styles from './Calibration.module.css';
 
@@ -30,7 +30,7 @@ export default function Calibration() {
   const handleTabClick = async (index: number) => {
     if (index !== currentStep || !selectedRobot) return;
 
-    const step = calibrationSteps[index] as Step;
+    const step = calibrationSteps[index] as CalibrationStep;
 
     try {
       if (step.step) {
