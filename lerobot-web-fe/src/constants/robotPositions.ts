@@ -9,15 +9,6 @@ export const calibrationFirstStepJointStates: JointState = {
   jaw: 0,
 };
 
-export const calibrationSecondStepJointStates: JointState = {
-  rotation: 1.6,
-  pitch: 1.6,
-  elbow: -1.6,
-  wristPitch: -1.7,
-  wristRoll: 1.6,
-  jaw: 2,
-};
-
 export const startPositionJointState: JointState = {
   rotation: 0,
   pitch: -1.7,

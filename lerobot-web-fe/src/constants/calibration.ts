@@ -13,15 +13,14 @@ export const calibrationSteps: Step[] = [
     label: 'Step 1',
     activeLabel: 'Confirm step 1',
     content:
-      'Move the arm forward and fully close the gripper. The moving part of the gripper should be on the left side of the arm. If the robot matches the 3D model, click Confirm step 1.',
+      'Move the arm forward and fully close the gripper. The moving part of the gripper should be on the top. If the robot matches the 3D model, click Confirm step 1.',
     step: '1',
   },
   {
     id: 'step2',
     label: 'Step 2',
     activeLabel: 'Confirm step 2',
-    content:
-      'Fully extend the arm, rotate it to the left, and fully open the gripper. If the robot matches the 3D model, click Confirm step 2.',
+    content: 'Move each joint through its full range of motion',
     step: '2',
   },
   {

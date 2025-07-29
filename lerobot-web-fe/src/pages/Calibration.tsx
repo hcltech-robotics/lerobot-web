@@ -7,29 +7,24 @@ import Selector from '../components/Selector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 
-import { calibrationFirstStepJointStates, calibrationSecondStepJointStates, startPositionJointState } from '../constants/robotoPositions';
+import { calibrationFirstStepJointStates, startPositionJointState } from '../constants/robotPositions';
 import { calibrationSteps as steps } from '../constants/calibration';
-import { performCalibrationStep } from '../services/calibration.service';
-import { useStatusStore } from '../stores/status.store';
 import { useCalibration } from '../hooks/useCalibration';
 import type { Step } from '../models/calibration.model';
 
 import styles from './Calibration.module.css';
 
 export default function Calibration() {
-  const [isLive, setIsLive] = useState(false);
   const [selectedRobotIndex, setSelectedRobotIndex] = useState('0');
 
   const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
-  const status = useStatusStore((s) => s.status);
-  const robotOptions =
-    status?.robot_status?.map((robot, index) => ({
-      label: `${robot.device_name}`,
-      value: index.toString(),
-    })) || [];
+  const robotOptions = [
+    { label: 'Robot Arm 1', value: '0' },
+    { label: 'Robot Arm 2', value: '1' },
+  ];
 
-  const selectedRobot = status?.robot_status?.[parseInt(selectedRobotIndex)] ?? null;
+  const selectedRobot = robotOptions[parseInt(selectedRobotIndex)];
 
   const handleTabClick = async (index: number) => {
     if (index !== currentStep || !selectedRobot) return;
@@ -38,7 +33,7 @@ export default function Calibration() {
 
     try {
       if (step.step) {
-        await performCalibrationStep(selectedRobotIndex);
+        await new Promise((res) => setTimeout(res, 1000));
       }
 
       goToNextStep();
@@ -48,8 +43,7 @@ export default function Calibration() {
     }
   };
 
-  const calibrationJointState =
-    currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? calibrationSecondStepJointStates : startPositionJointState;
+  const calibrationJointState = currentStep === 1 ? calibrationFirstStepJointStates : startPositionJointState;
 
   return (
     <div className={styles.contentArea}>
@@ -111,12 +105,9 @@ export default function Calibration() {
       </div>
 
       <div className={styles.sceneContainer}>
-        <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
-          {isLive ? 'Online' : 'Offline'}
-        </button>
         <div className={styles.mainScene}>
           <MainScene>
-            <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
+            <Robot isLive={false} calibrationJointState={calibrationJointState} />
           </MainScene>
         </div>
       </div>
