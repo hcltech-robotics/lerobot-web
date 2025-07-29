@@ -28,7 +28,33 @@ Install a virtual display:
 sudo api install xvfb
 ```
 
-## Run
+## Clone the `lerobot` repository into the root directory:
+
+```bash
+git clone https://github.com/huggingface/lerobot
+```
+
+## Navigate into the `lerobot` folder and install the package:
+
+```bash
+cd lerobot
+pip install -e .
+```
+
+## Verify the installation from the root directory:
+
+```bash
+python -c "import lerobot; print(lerobot.__file__)"
+```
+
+## If necessary, install the following additional packages:
+
+```bash
+pip install feetech-servo-sdk
+pip install placo
+```
+
+## Start the app:
 
 Run the application itself:
 
@@ -38,6 +64,6 @@ uvicorn app.main:app --reload
 
 Then, you can check it in the browser, just open: http://127.0.0.1:8000
 
-## Interactive API docs
+## Interactive API docs:
 
 There is an auto generated swagger ui for the available api point, just open: http://127.0.0.1:8000/docs#/

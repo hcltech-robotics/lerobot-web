@@ -1,32 +1,60 @@
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field
-from typing import Optional
-from ..utilities import (
-    start_teleoperate_process,
-    stop_teleoperate_process,
-    get_teleoperate_status
-)
+import logging
+import time
+
+from fastapi import APIRouter
+
+from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
+from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
+from lerobot.utils.robot_utils import busy_wait
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
-class TeleoperateControlParams(BaseModel):
-    mode: str = Field(..., pattern="^(start|stop|status)$")
-    fps: Optional[int] = Field(30, ge=1, le=60)
-    pid: Optional[int] = Field(0, ge=0)
 
-class TeleoperateControlResponse(BaseModel):
-    status: str
-    pid: int
-    message: str
+@router.get("/teleoperate")
+def teleoperate():
+    # get port: python -m lerobot.find_port
+    leader_config = SO100LeaderConfig(
+        port="/dev/tty.usbmodem5A4B0491371"
+    )  # you can add id param as well if you set it during calibration
+    follower_config = SO100FollowerConfig(
+        port="/dev/tty.usbmodem58FA1019351"
+    )  # you can add id param as well if you set it during calibration
 
-@router.post("/teleoperate", response_model=TeleoperateControlResponse, tags=["control"])
-async def control_teleoperate(params: TeleoperateControlParams):
+    leader_arm = SO100Leader(leader_config)
+    follower_arm = SO100Follower(follower_config)
+
     try:
-        if params.mode == "status":
-            return get_teleoperate_status()
-        elif params.mode == "stop":
-            return stop_teleoperate_process(params.pid)
-        elif params.mode == "start":
-            return start_teleoperate_process(params.fps)
+        leader_arm.connect(calibrate=False)
+        follower_arm.connect(calibrate=False)
+
+        if not leader_arm.is_connected or not follower_arm.is_connected:
+            raise RuntimeError("Leader or follower arm failed to connect.")
+
+        logger.info("Teleoperation started...")
+
+        FPS = 30
+        DURATION_SEC = 120  # Run for 120 seconds for now
+        end_time = time.time() + DURATION_SEC
+
+        while time.time() < end_time:
+            t0 = time.perf_counter()
+
+            action = leader_arm.get_action()
+            follower_arm.send_action(action)
+
+            busy_wait(max(1.0 / FPS - (time.perf_counter() - t0), 0.0))
+
+        logger.info("Teleoperation ended normally.")
+
+        return {"status": "Teleoperation completed"}
+
     except Exception as e:
-        return {"status": "error", "pid": 0, "message": str(e)}
+        logger.error(f"Teleoperation failed: {e}")
+        raise
+
+    finally:
+        if leader_arm.is_connected:
+            leader_arm.disconnect()
+        if follower_arm.is_connected:
+            follower_arm.disconnect()
