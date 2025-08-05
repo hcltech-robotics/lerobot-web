@@ -1,14 +1,13 @@
 import logging
-import time
 import threading
-
-from fastapi import APIRouter
-from pydantic import BaseModel, Field, validator
+import time
 from typing import Optional
 
+from fastapi import APIRouter
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
 from lerobot.utils.robot_utils import busy_wait
+from pydantic import BaseModel, Field
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -16,18 +15,23 @@ logger = logging.getLogger(__name__)
 teleop_thread = None
 stop_flag = threading.Event()
 
+
 class TeleoperateControlParams(BaseModel):
     mode: str = Field(..., pattern="^(start|stop)$")
+    leader_id: Optional[str] = None
+    follower_id: Optional[str] = None
     fps: Optional[int] = Field(30, ge=1, le=60)
+
 
 class TeleoperateControlResponse(BaseModel):
     status: str
     message: str
 
-def teleoperate_worker(fps: int):
+
+def teleoperate_worker(fps: int, leader_id: str, follower_id: str):
     try:
-        leader_config = SO100LeaderConfig(port="/dev/tty.usbmodem5A4B0491371")
-        follower_config = SO100FollowerConfig(port="/dev/tty.usbmodem58FA1019351")
+        leader_config = SO100LeaderConfig(port=f"/dev/tty.usbmodem{leader_id}")
+        follower_config = SO100FollowerConfig(port=f"/dev/tty.usbmodem{follower_id}")
 
         leader_arm = SO100Leader(leader_config)
         follower_arm = SO100Follower(follower_config)
@@ -60,23 +64,33 @@ def teleoperate_worker(fps: int):
             follower_arm.disconnect()
         logger.info("Teleoperation thread cleanup done.")
 
-@router.post("/teleoperate", response_model=TeleoperateControlResponse, tags=["control"])
+
+@router.post(
+    "/teleoperate", response_model=TeleoperateControlResponse, tags=["control"]
+)
 def teleoperate(params: TeleoperateControlParams):
     global teleop_thread, stop_flag
 
     if params.mode == "start":
+        if not params.leader_id or not params.follower_id:
+            return {"status": "error", "message": "Missing leader_id or follower_id"}
+
         if teleop_thread and teleop_thread.is_alive():
             return {"status": "Teleoperation already running"}
 
         stop_flag.clear()
-        teleop_thread = threading.Thread(target=teleoperate_worker, args=(params.fps))
+        teleop_thread = threading.Thread(
+            target=teleoperate_worker,
+            args=(params.fps, params.leader_id, params.follower_id),
+        )
         teleop_thread.start()
-        return {"status": "Teleoperation started"}
+
+        return {"status": "ok", "message": "Teleoperation started"}
 
     elif params.mode == "stop":
         if teleop_thread and teleop_thread.is_alive():
             stop_flag.set()
             teleop_thread.join()
-            return {"status": "Teleoperation stopped"}
+            return {"status": "ok", "message": "Teleoperation stopped"}
         else:
-            return {"status": "Teleoperation not running"}
+            return {"status": "error", "message": "Teleoperation not running"}
