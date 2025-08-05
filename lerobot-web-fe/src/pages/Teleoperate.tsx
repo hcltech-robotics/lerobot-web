@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
-import { sleepPosition, startTeleoperate, stopTeleoperate } from '../services/teleoperate.service';
+import { sleepPosition, toggleTeleoperate } from '../services/teleoperate.service';
 import { teleoperateStatusList } from '../models/teleoperate.model';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 import { CameraStream } from '../components/CameraStream';
 import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
-import { useStatusStore } from '../stores/status.store';
 
 import styles from './Teleoperate.module.css';
 
@@ -15,7 +14,8 @@ export default function Teleoperate() {
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
 
-  const selectedLeader = useStatusStore((s) => s.selectedLeader);
+  const selectedLeader = '5A4B0491371';
+  const follower = '58FA1019351';
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
   const isLeaderSelected = !!selectedLeader;
 
@@ -23,27 +23,13 @@ export default function Teleoperate() {
     setLoading(true);
     setError(null);
 
-    const followerIndex = selectedLeader === '0' ? '1' : '0';
-
     try {
-      let statusResponse: string;
+      const response = await toggleTeleoperate(isRunning ? 'stop' : 'start', { leader: selectedLeader, follower });
 
+      setTeleoperateStatus(response.message?.toLowerCase().includes('started') ? teleoperateStatusList.RUN : teleoperateStatusList.READY);
       if (isRunning) {
-        await stopTeleoperate();
-        const response = await sleepPosition(followerIndex);
-        statusResponse = response.status;
-      } else {
-        const response = await startTeleoperate({ leader: selectedLeader || '0', follower: followerIndex });
-        statusResponse = response.status;
+        await sleepPosition(follower);
       }
-
-      setTeleoperateStatus(
-        statusResponse === teleoperateStatusList.OK
-          ? isRunning
-            ? teleoperateStatusList.READY
-            : teleoperateStatusList.RUN
-          : statusResponse,
-      );
     } catch (e) {
       setError((e as Error).message);
     } finally {
