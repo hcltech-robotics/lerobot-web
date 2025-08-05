@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
 import AppRouter from './routers/AppRouter';
-import { useStatusStore } from './stores/status.store';
-import { useStatusPolling } from './hooks/useStatusPolling';
-import { getCameraList } from './services/status.service';
+import { getCameraList } from './services/camera.service';
+import { useConfigStore } from './stores/config.store';
 
 export default function App() {
-  const apiUrl = useStatusStore((store) => store.apiUrl);
-  const setApiUrl = useStatusStore((store) => store.setApiUrl);
+  const apiUrl = useConfigStore((store) => store.apiUrl);
+  const setApiUrl = useConfigStore((store) => store.setApiUrl);
 
   useEffect(() => {
     if (!apiUrl) {
@@ -14,8 +13,6 @@ export default function App() {
       getCameraList();
     }
   }, []);
-
-  useStatusPolling();
 
   return (
     <>

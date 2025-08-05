@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { createCameraWebSocket } from '../services/status.service';
+import { createCameraWebSocket } from '../services/camera.service';
 
 export function useCameraStream(id: number, url: string) {
   const [frame, setFrame] = useState<string | null>(null);

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getStatus } from '../services/status.service';
+import { getStatus } from '../services/camera.service';
 
 export function useStatusPolling(intervalMs = 5000) {
   useEffect(() => {

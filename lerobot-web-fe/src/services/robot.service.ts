@@ -1,8 +1,8 @@
-import { useStatusStore } from '../stores/status.store';
 import type { JointStatesResponse } from '../models/robot.model';
+import { useConfigStore } from '../stores/config.store';
 
 export async function getJointPositions(id: number): Promise<JointStatesResponse> {
-  const { apiUrl } = useStatusStore.getState();
+  const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 

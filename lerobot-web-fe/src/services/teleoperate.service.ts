@@ -1,8 +1,8 @@
-import { useStatusStore } from '../stores/status.store';
 import type { RobotIds, TeleoperateResponse } from '../models/teleoperate.model';
+import { useConfigStore } from '../stores/config.store';
 
 export async function toggleTeleoperate(mode: 'start' | 'stop', { leader, follower }: RobotIds): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore.getState();
+  const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 

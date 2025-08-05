@@ -1,5 +1,5 @@
 import { EMPTY_ROBOT_INDEX } from '../models/robot.model';
-import { useStatusStore } from '../stores/status.store';
+import { useRobotStore, useStatusStore } from '../stores/robot.store';
 import Selector from './Selector';
 
 interface RobotLeaderSelectorProps {
@@ -9,8 +9,8 @@ interface RobotLeaderSelectorProps {
 
 export function RobotLeaderSelector({ label = 'Select a Leader Robot', disabled = false }: RobotLeaderSelectorProps) {
   const status = useStatusStore((s) => s.status);
-  const selectedLeader = useStatusStore((s) => s.selectedLeader);
-  const setSelectedLeader = useStatusStore((s) => s.setSelectedLeader);
+  const selectedLeader = useRobotStore((store) => store.selectedLeader);
+  const setSelectedLeader = useRobotStore((store) => store.setSelectedLeader);
 
   const getRobotIndex = (deviceName: string) => {
     return status?.robot_status.findIndex((robot) => robot.device_name === deviceName).toString() || EMPTY_ROBOT_INDEX;
