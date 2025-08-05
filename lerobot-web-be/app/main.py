@@ -1,8 +1,7 @@
+from app.routers import camera, joint_state, move_to_sleep, robots, teleoperate
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-
-from app.routers import joint_state, move_to_sleep, teleoperate, camera
 
 app = FastAPI(
     title="LeRobot Backend",
@@ -20,11 +19,13 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
+
 
 class BackendStatusResponse(BaseModel):
     message: str
+
 
 @app.get("/", response_model=BackendStatusResponse, tags=["status"])
 def root():
@@ -35,3 +36,4 @@ app.include_router(joint_state.router)
 app.include_router(move_to_sleep.router)
 app.include_router(teleoperate.router)
 app.include_router(camera.router)
+app.include_router(robots.router)
