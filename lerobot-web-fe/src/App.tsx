@@ -5,11 +5,9 @@ import { useConfigStore } from './stores/config.store';
 
 export default function App() {
   const apiUrl = useConfigStore((store) => store.apiUrl);
-  const setApiUrl = useConfigStore((store) => store.setApiUrl);
 
   useEffect(() => {
-    if (!apiUrl) {
-      setApiUrl('http://127.0.0.1:8000');
+    if (apiUrl) {
       getCameraList();
     }
   }, []);
