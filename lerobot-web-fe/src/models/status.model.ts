@@ -17,3 +17,7 @@ export interface StatusResponse {
   status: string;
   version_id: string;
 }
+
+export interface CamraListResponse {
+  cameras: number[];
+}
