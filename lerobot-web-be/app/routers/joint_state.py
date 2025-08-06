@@ -7,6 +7,25 @@ from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 router = APIRouter()
 
 
+def remap_joint_state_keys_for_client(
+    raw_joint_states: dict[str, float],
+) -> dict[str, float]:
+    JOINT_NAME_MAP = {
+        "shoulder_pan.pos": "rotation",
+        "shoulder_lift.pos": "pitch",
+        "elbow_flex.pos": "elbow",
+        "wrist_flex.pos": "wristPitch",
+        "wrist_roll.pos": "wristRoll",
+        "gripper.pos": "jaw",
+    }
+
+    return {
+        frontend_key: raw_joint_states[backend_key]
+        for backend_key, frontend_key in JOINT_NAME_MAP.items()
+        if backend_key in raw_joint_states
+    }
+
+
 # get the current state once from robot arm and print the values
 @router.get("/joint_state", tags=["status"])
 def get_state(follower_id: str):
@@ -25,9 +44,7 @@ def get_state(follower_id: str):
 
     obs = robot.get_observation()
 
-    joint_states = {
-        k.removesuffix(".pos"): v for k, v in obs.items() if k.endswith(".pos")
-    }
+    joint_states = remap_joint_state_keys_for_client(obs)
 
     print("Joint state:")
     for name, value in joint_states.items():
@@ -60,9 +77,7 @@ async def websocket_joint_state(websocket: WebSocket, follower_id: str = Query(.
             start_time = time.perf_counter()
 
             obs = robot.get_observation()
-            joint_states = {
-                k.removesuffix(".pos"): v for k, v in obs.items() if k.endswith(".pos")
-            }
+            joint_states = remap_joint_state_keys_for_client(obs)
 
             await websocket.send_json(
                 {"timestamp": time.time(), "joint_states": joint_states}
