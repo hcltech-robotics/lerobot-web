@@ -10,8 +10,7 @@ export const unitList = {
 export type unitlistName = (typeof unitList)[keyof typeof unitList];
 
 export interface JointStatesResponse {
-  angles: number[];
-  unit: unitlistName;
+  jointState: JointState;
 }
 
 export interface JointState {

@@ -4,6 +4,7 @@ import type { JointState } from '../models/robot.model';
 
 export function useJointStatePoller(id: number, isLive: boolean, setJointState: (state: JointState) => void) {
   const isCancelled = useRef(false);
+  const follower = '58FA1019351'; // temporary const
 
   useEffect(() => {
     if (!isLive) {
@@ -15,17 +16,10 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
     const getJointStateAPICalls = async () => {
       while (!isCancelled.current) {
         try {
-          const { angles } = await getJointPositions(id);
+          const { jointState } = await getJointPositions(follower);
 
-          if (angles && angles.length === 6) {
-            setJointState({
-              rotation: angles[0] ?? 0,
-              pitch: angles[1] ?? 0,
-              elbow: angles[2] ?? 0,
-              wristPitch: angles[3] ?? 0,
-              wristRoll: angles[4] ?? 0,
-              jaw: angles[5] ?? 0,
-            });
+          if (jointState && Object.keys(jointState).length === 6) {
+            setJointState(jointState);
           }
         } catch (error) {
           console.error('Failed to fetch joint states:', error);
