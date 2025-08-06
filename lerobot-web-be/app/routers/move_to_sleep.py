@@ -15,6 +15,8 @@ class MoveToSleepRequest(BaseModel):
 
 @router.post("/move_to_sleep")
 def move_to_sleep(params: MoveToSleepRequest):
+    robot = None
+
     try:
 
         config = SO100FollowerConfig(
