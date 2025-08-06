@@ -1,0 +1,51 @@
+
+.SwitchWrapper {
+  display: flex;
+  justify-content: space-between;
+  line-height: 45px;
+}
+
+.SwitchContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.Switch {  
+  width: 45px;
+  background-color: #fff;
+  border-radius: 50px;
+  position: relative;
+  border: 1px solid #0f5fdc;
+  cursor: pointer;
+
+  &[data-state='checked'] {
+    background-color: #0f5fdc;
+  }
+  
+  &[data-disabled] {
+    background-color: #aaa;
+    border: 1px solid #aaa;
+    cursor: not-allowed;
+  }
+}
+
+.SwitchThumb {
+  display: block;
+  width: 21px;
+  height: 21px;
+  background-color: #0f5fdc;
+  border-radius: 50px;
+  transition: transform 100ms;
+  transform: translateX(-5px);
+  will-change: transform;
+
+  &[data-state='checked'] {
+    transform: translateX(15px);
+    background-color: #fff;
+  }
+
+  &[data-disabled] {
+    background-color: #eee;
+  }
+}

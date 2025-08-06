@@ -1,12 +1,12 @@
+import { useEffect } from 'react';
 import { HandIcon } from '@radix-ui/react-icons';
 import { DEFAULT_ROBOT_COUNT } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
 import { RobotIcons } from './RobotIcons';
 import { useRobotStore } from '../stores/robot.store';
+import ToggleSwitch, { type ToggleSwitchChange } from './ToggleSwitch';
 
 import styles from './RobotIconContainer.module.css';
-import { Switch } from 'radix-ui';
-import { useEffect } from 'react';
 
 export default function RobotIconContainer() {
   const setSelectedLeader = useRobotStore((store) => store.setSelectedLeader);
@@ -31,36 +31,38 @@ export default function RobotIconContainer() {
   );
   const disconnectedRobotIcons = <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />;
 
-  const handleSwitchChange = (checked: boolean) => {
-    setIsBimanualMode(checked);
+  const onModeChange = ({ change }: ToggleSwitchChange) => {
+    setIsBimanualMode(change);
+  };
+
+  const onArmChange = ({ change, id }: ToggleSwitchChange) => {
+    console.log('onArmChange: ', id, change);
   };
 
   return (
     <>
       {robotList.length > 0 ? (
         <PopoverWrapper title="Robot Info" trigger={connectedRobotIcons}>
-          <div className={styles.SwitchWrapper}>
-            <label>Hand mode</label>
-            <div className={styles.SwitchContainer}>
-              <label>Manual</label>
-              <Switch.Root
-                className={styles.Switch}
-                checked={isBimanualMode}
-                disabled={robotList.length < 4}
-                onCheckedChange={handleSwitchChange}
-              >
-                <Switch.Thumb className={styles.SwitchThumb} />
-              </Switch.Root>
-              <label>Bimanual</label>
-            </div>
-          </div>
+          <ToggleSwitch
+            title="Hand mode"
+            labels={['Manual', 'Bimanual']}
+            checked={isBimanualMode}
+            disabled={robotList.length < 4}
+            onChange={onModeChange}
+          />
           <div className={styles.divider} />
-          {robotList.map((_, index) => (
+          {robotList.map((robot, index) => (
             <div key={index} className={styles.robotDetail}>
               <div className={styles.robotRow}>
                 <span className={styles.robotId}>#{index}</span>
-                <span>robot.name</span>
-                <span>robot.device_name</span>
+                <span>{robot}</span>
+                <ToggleSwitch
+                  id={robot}
+                  labels={['Left', 'Right']}
+                  checked={!!(index % 2)}
+                  disabled={!isBimanualMode}
+                  onChange={onArmChange}
+                />
                 <button
                   className={`${styles.leaderButton} ${null === index ? styles.leaderActive : ''}`}
                   onClick={() => setSelectedLeader(index.toString())}
