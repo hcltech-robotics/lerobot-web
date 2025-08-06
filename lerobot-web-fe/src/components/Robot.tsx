@@ -11,6 +11,7 @@ export function Robot({ isLive }: RobotProps) {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
   const [jointState, setJointState] = useState<JointState | null>(null);
+  const followerId = '58FA1019351'; // temporary const
 
   useEffect(() => {
     const manager = new THREE.LoadingManager();
@@ -42,7 +43,7 @@ export function Robot({ isLive }: RobotProps) {
     });
   }, [scene]);
 
-  useJointStatePoller(0, isLive, setJointState);
+  useJointStatePoller(followerId, isLive, setJointState);
   useRobotAnimation(jointState, robotRef);
 
   return (

@@ -1,10 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { getJointPositions } from '../services/robot.service';
+import { getJointPositions, createJointPositionsWebSocket } from '../services/robot.service';
 import type { JointState } from '../models/robot.model';
 
-export function useJointStatePoller(id: number, isLive: boolean, setJointState: (state: JointState) => void) {
+export function useJointStatePoller(followerId: string, isLive: boolean, setJointState: (state: JointState) => void) {
   const isCancelled = useRef(false);
-  const follower = '58FA1019351'; // temporary const
 
   useEffect(() => {
     if (!isLive) {
@@ -16,7 +15,7 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
     const getJointStateAPICalls = async () => {
       while (!isCancelled.current) {
         try {
-          const { jointState } = await getJointPositions(follower);
+          const { jointState } = await getJointPositions(followerId);
 
           if (jointState && Object.keys(jointState).length === 6) {
             setJointState(jointState);
@@ -35,5 +34,23 @@ export function useJointStatePoller(id: number, isLive: boolean, setJointState: 
     return () => {
       isCancelled.current = true;
     };
-  }, [id, isLive, setJointState]);
+  }, [followerId, isLive, setJointState]);
+}
+
+export function useJointStatePollerWebSocket(followerId: string, isLive: boolean, setJointState: (state: JointState) => void) {
+  const websocket = useRef<WebSocket | null>(null);
+
+  useEffect(() => {
+    if (!isLive) {
+      return;
+    }
+
+    websocket.current = createJointPositionsWebSocket(followerId, (jointState) => {
+      setJointState(jointState);
+    });
+
+    return () => {
+      websocket.current?.close();
+    };
+  }, [followerId, isLive, setJointState]);
 }
