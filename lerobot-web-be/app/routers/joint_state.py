@@ -3,8 +3,18 @@ import time
 
 from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
+from pydantic import BaseModel
 
 router = APIRouter()
+
+
+class JointState(BaseModel):
+    rotation: float
+    pitch: float
+    elbow: float
+    wristPitch: float
+    wristRoll: float
+    jaw: float
 
 
 def remap_joint_state_keys_for_client(
@@ -27,7 +37,7 @@ def remap_joint_state_keys_for_client(
 
 
 # get the current state once from robot arm and print the values
-@router.get("/joint_state", tags=["status"])
+@router.get("/joint_state", response_model=JointState, tags=["status"])
 def get_state(follower_id: str):
     config = SO100FollowerConfig(
         port=f"/dev/tty.usbmodem{follower_id}", use_degrees=True
