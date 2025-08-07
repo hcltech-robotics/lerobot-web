@@ -33,6 +33,20 @@ export const jointStateNameList = {
 
 export type jointStateNames = (typeof jointStateNameList)[keyof typeof jointStateNameList];
 
+export const robotSideList = {
+  LEFT: 'left',
+  RIGHT: 'right',
+} as const;
+
+export type RobotSides = (typeof robotSideList)[keyof typeof robotSideList];
+
+export const robotRoleList = {
+  LEADER: 'leader',
+  FOLLOWER: 'follower',
+} as const;
+
+export type RobotRoles = (typeof robotRoleList)[keyof typeof robotRoleList];
+
 export interface RobotProps {
   isLive: boolean;
 }
@@ -43,8 +57,8 @@ export const JOINT_STATES_OFFSETS = {
   JAW: -3.3,
 } as const;
 
-export interface RobotStatus {
-  device_name: string | null;
-  name: string;
-  robot_type: string;
+export interface RobotItem {
+  id: string;
+  side: RobotSides;
+  role: RobotRoles;
 }
