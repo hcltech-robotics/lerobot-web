@@ -1,14 +1,14 @@
-from fastapi import FastAPI, WebSocket, APIRouter
-from typing import List
-from pydantic import BaseModel
-import cv2
-import base64
 import asyncio
-import time
+import base64
+from typing import List
 
+import cv2
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from lerobot.find_cameras import find_all_opencv_cameras
+from pydantic import BaseModel
 
 router = APIRouter()
+
 
 async def generate_frames(camera_id: int):
     cap = cv2.VideoCapture(camera_id)
@@ -20,8 +20,8 @@ async def generate_frames(camera_id: int):
             ret, frame = cap.read()
             if not ret:
                 continue
-            _, buffer = cv2.imencode('.jpg', frame)
-            frame_data = base64.b64encode(buffer).decode('utf-8')
+            _, buffer = cv2.imencode(".jpg", frame)
+            frame_data = base64.b64encode(buffer).decode("utf-8")
             yield frame_data
             await asyncio.sleep(0.03)  # ~30 FPS
     finally:
@@ -42,6 +42,7 @@ async def video_stream(websocket: WebSocket, camera_id: int):
     except Exception as e:
         await websocket.send_text(f"ERROR: Unexpected server error: {str(e)}")
 
+
 def detect_cameras(max_devices=10):
     available = []
     for i in range(max_devices):
@@ -51,13 +52,16 @@ def detect_cameras(max_devices=10):
         cap.release()
     return available
 
+
 class ListCamerasResponse(BaseModel):
     cameras: List[int]
+
 
 @router.get("/list-cameras", response_model=ListCamerasResponse, tags=["status"])
 def list_cameras():
     return {"cameras": detect_cameras()}
 
+
 @router.get("/list-cameras2", tags=["status"])
-def list_cameras():
-   return find_all_opencv_cameras()
+def list_opencv_cameras():
+    return find_all_opencv_cameras()
