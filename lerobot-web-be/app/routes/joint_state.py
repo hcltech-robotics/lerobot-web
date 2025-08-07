@@ -3,37 +3,11 @@ import time
 
 from fastapi import APIRouter, Query, WebSocket, WebSocketDisconnect
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
-from pydantic import BaseModel
+
+from ..models.joint_state import JointState
+from ..utils.joint_state import remap_joint_state_keys_for_client
 
 router = APIRouter()
-
-
-class JointState(BaseModel):
-    rotation: float
-    pitch: float
-    elbow: float
-    wristPitch: float
-    wristRoll: float
-    jaw: float
-
-
-def remap_joint_state_keys_for_client(
-    raw_joint_states: dict[str, float],
-) -> dict[str, float]:
-    JOINT_NAME_MAP = {
-        "shoulder_pan.pos": "rotation",
-        "shoulder_lift.pos": "pitch",
-        "elbow_flex.pos": "elbow",
-        "wrist_flex.pos": "wristPitch",
-        "wrist_roll.pos": "wristRoll",
-        "gripper.pos": "jaw",
-    }
-
-    return {
-        frontend_key: raw_joint_states[backend_key]
-        for backend_key, frontend_key in JOINT_NAME_MAP.items()
-        if backend_key in raw_joint_states
-    }
 
 
 # get the current state once from robot arm and print the values
