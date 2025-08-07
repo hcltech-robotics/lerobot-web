@@ -98,6 +98,8 @@ export function createJointPositionsWebSocket(
   };
 
   return websocket;
+}
+
 export async function getRobotList(): Promise<string[]> {
   const { apiUrl } = useConfigStore.getState();
   const { setRobotList, setRobots } = useRobotStore.getState();
