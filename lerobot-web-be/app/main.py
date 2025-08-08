@@ -1,4 +1,10 @@
-from app.routers import camera, joint_state, move_to_sleep, robots, teleoperate
+from app.routes import (
+    camera,
+    joint_state,
+    move_to_sleep,
+    robots,
+    teleoperate,
+)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
