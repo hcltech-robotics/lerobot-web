@@ -2,9 +2,10 @@ import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import CalibrationTabItem from '../components/CalibrationTabItem';
-import { RobotLeaderSelector } from '../components/RobotLeaderSelector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
+import { startCalibration, sendCalibrationStep } from '../services/calibration.service';
+import Selector from '../components/Selector';
 
 import styles from './Calibration.module.css';
 
@@ -16,8 +17,6 @@ interface Step {
   endpoint?: string;
   finalContent?: string;
 }
-
-const API_BASE_URL = 'http://127.0.0.1:8000';
 
 const steps: Step[] = [
   {
@@ -32,7 +31,6 @@ const steps: Step[] = [
     activeLabel: 'Confirm step 1',
     content:
       'Move the arm forward and fully close the gripper. The moving part of the gripper should be on the left side of the arm. If the robot matches the 3D model, click Confirm step 1.',
-    endpoint: `${API_BASE_URL}/step1`,
   },
   {
     id: 'step2',
@@ -40,7 +38,6 @@ const steps: Step[] = [
     activeLabel: 'Confirm step 2',
     content:
       'Fully extend the arm, rotate it to the left, and fully open the gripper. If the robot matches the 3D model, click Confirm step 2.',
-    endpoint: `${API_BASE_URL}/step2`,
   },
   {
     id: 'finish',
@@ -54,18 +51,26 @@ export default function Calibration() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [tabValue, setTabValue] = useState<string>((steps[0] as Step).id);
   const [completed, setCompleted] = useState<boolean>(false);
-  const [selectedId, setSelectedId] = useState<'id_1' | 'id_2'>('id_1');
+  const [selectedId, setSelectedId] = useState<string>('');
   const [dropdownDisabled, setDropdownDisabled] = useState<boolean>(false);
   const [isLive, setIsLive] = useState(false);
+
+  const robotKind = 'follower';
 
   const handleTabClick = async (index: number) => {
     if (index !== currentStep) return;
 
     const step = steps[index] as Step;
 
-    if (step.endpoint) {
+    if (step.id === 'start') {
       try {
-        await fetch(`${step.endpoint}?id=${selectedId}`, { method: 'POST' });
+        await startCalibration(selectedId, robotKind, 'c');
+      } catch (error) {
+        console.error('Failed to call backend for', step.id, error);
+      }
+    } else if (step.id !== 'finish') {
+      try {
+        await sendCalibrationStep(selectedId, robotKind, '');
       } catch (error) {
         console.error('Failed to call backend for', step.id, error);
       }
@@ -90,11 +95,22 @@ export default function Calibration() {
     setDropdownDisabled(false);
   };
 
+  const robotList = [
+    {
+      label: 'follower',
+      value: '58FA1019351',
+    },
+    {
+      label: 'leader',
+      value: '5A4B0491371',
+    },
+  ];
+
   return (
     <div className={styles.contentArea}>
       <div className={styles.controlPanel}>
         <div className={styles.selectWrapper}>
-          <RobotLeaderSelector label="Select Robot ID" disabled={dropdownDisabled} />
+          <Selector label="Select Robot ID" value={selectedId} options={robotList} onChange={setSelectedId} disabled={dropdownDisabled} />
           {dropdownDisabled && !completed && (
             <div className={styles.progressIndicator}>
               <p>Calibration in progress</p>
