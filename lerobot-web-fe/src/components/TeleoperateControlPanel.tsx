@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
 import { RobotLeaderSelector } from './RobotLeaderSelector';
+import { useRobotStore } from '../stores/robot.store';
+import { robotSideList } from '../models/robot.model';
+import { getLeaderBySide } from '../services/robot.service';
 
 import styles from './TeleoperateControlPanel.module.css';
 
@@ -20,6 +24,21 @@ export function TeleoperateControlPanel({
   isLeaderSelected,
   onToggleTeleoperate,
 }: TeleoperateControlPanelProps) {
+  const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
+  const robotlist = useRobotStore((store) => store.robots);
+  const [leftOptions, setLeftOptions] = useState<string[]>([]);
+  const [rightOptions, setRightOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (robotlist) {
+      const left = getLeaderBySide(robotlist, robotSideList.LEFT);
+      const right = getLeaderBySide(robotlist, robotSideList.RIGHT);
+
+      setLeftOptions(left);
+      setRightOptions(right);
+    }
+  }, [isBimanualMode, robotlist]);
+
   return (
     <div className={styles.controlPanel}>
       <div className={styles.statusBox}>
@@ -27,7 +46,12 @@ export function TeleoperateControlPanel({
         <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
         {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
         <div className={styles.selectWrapper}>
-          <RobotLeaderSelector disabled={isRunning} />
+          <RobotLeaderSelector
+            robotList={leftOptions}
+            label={isBimanualMode ? 'Select a leader for left' : 'Select a leader'}
+            disabled={isRunning}
+          />
+          {isBimanualMode && <RobotLeaderSelector robotList={rightOptions} label="Select a leader for right" disabled={isRunning} />}
         </div>
       </div>
 

@@ -32,7 +32,7 @@ export async function toggleTeleoperate(mode: 'start' | 'stop', { leader, follow
 }
 
 export async function sleepPosition(follower_id: string): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore.getState();
+  const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 

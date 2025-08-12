@@ -1,29 +1,34 @@
+import { useEffect, useState } from 'react';
 import { EMPTY_ROBOT_INDEX } from '../models/robot.model';
-import { useRobotStore, useStatusStore } from '../stores/robot.store';
 import Selector from './Selector';
 
 interface RobotLeaderSelectorProps {
+  robotList: string[];
   label?: string;
   disabled?: boolean;
 }
 
-export function RobotLeaderSelector({ label = 'Select a Leader Robot', disabled = false }: RobotLeaderSelectorProps) {
-  const status = useStatusStore((s) => s.status);
-  const selectedLeader = useRobotStore((store) => store.selectedLeader);
-  const setSelectedLeader = useRobotStore((store) => store.setSelectedLeader);
+export function RobotLeaderSelector({ robotList, label = 'Select a Leader Robot', disabled = false }: RobotLeaderSelectorProps) {
+  const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
 
-  const getRobotIndex = (deviceName: string) => {
-    return status?.robot_status.findIndex((robot) => robot.device_name === deviceName).toString() || EMPTY_ROBOT_INDEX;
+  useEffect(() => {
+    if (robotList) {
+      const robotOptions = robotList.map((robot) => ({
+        label: robot,
+        value: robot,
+      }));
+      setOptions(robotOptions);
+    }
+  }, [robotList]);
+
+  const setSelectedLeader = (value: string) => {
+    console.log('selected. ', value);
   };
-
-  const robotList = status?.robot_status
-    .filter((robot) => robot.device_name)
-    .map((robot) => ({ label: `${robot.name} (${robot.device_name})`, value: getRobotIndex(robot.device_name as string) }));
 
   return (
     <>
-      {robotList && robotList.length > 0 ? (
-        <Selector label={label} value={selectedLeader || ''} onChange={setSelectedLeader} disabled={disabled} options={robotList} />
+      {options.length > 0 ? (
+        <Selector label={label} value={EMPTY_ROBOT_INDEX} onChange={setSelectedLeader} disabled={disabled} options={options} />
       ) : (
         <p>There is no robot list.</p>
       )}

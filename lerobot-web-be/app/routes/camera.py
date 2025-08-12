@@ -25,8 +25,3 @@ async def video_stream(websocket: WebSocket, camera_id: int):
 @router.get("/list-cameras", response_model=ListCamerasResponse, tags=["status"])
 def list_cameras():
     return {"cameras": detect_cameras()}
-
-
-@router.get("/list-cameras2", tags=["status"])
-def list_opencv_cameras():
-    return find_all_opencv_cameras()

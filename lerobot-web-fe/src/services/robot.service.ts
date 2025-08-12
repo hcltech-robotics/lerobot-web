@@ -1,4 +1,11 @@
-import { robotRoleList, robotSideList, type JointState, type JointStatesResponse, type RobotItem } from '../models/robot.model';
+import {
+  robotRoleList,
+  robotSideList,
+  type JointState,
+  type JointStatesResponse,
+  type RobotItem,
+  type RobotSides,
+} from '../models/robot.model';
 import { useConfigStore } from '../stores/config.store';
 import { useRobotStore } from '../stores/robot.store';
 
@@ -134,3 +141,11 @@ export async function getRobotList(): Promise<string[]> {
     throw error;
   }
 }
+
+export const getLeaderBySide = (robotList: RobotItem[], side: RobotSides) => {
+  return robotList
+    .map((robot) => {
+      return robot.side === side && robot.role === robotRoleList.LEADER ? robot.id : null;
+    })
+    .filter((robot) => robot) as string[];
+};
