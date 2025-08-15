@@ -23,13 +23,13 @@ export const startCalibration = async (robotId: string, robotKind: RobotRoles) =
 };
 
 export const confirmCalibrationStart = async () => {
-  const res = await fetch(`${apiUrl}/calibrate/confirm-calibration-start`, { method: 'POST' });
+  const res = await fetch(`${apiUrl}/calibrate/confirm_calibration_start`, { method: 'POST' });
   const data = await res.json();
   console.log(data.message);
 };
 
 export const confirmCalibrationStep = async () => {
-  const res = await fetch(`${apiUrl}/calibrate/confirm-calibration-step`, { method: 'POST' });
+  const res = await fetch(`${apiUrl}/calibrate/confirm_calibration_step`, { method: 'POST' });
   const data = await res.json();
   console.log(data.message);
 };
