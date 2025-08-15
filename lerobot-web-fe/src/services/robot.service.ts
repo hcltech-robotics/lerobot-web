@@ -43,7 +43,7 @@ export const setRobotRole = (id: string, robots: RobotItem[]) => {
   return updatedRobotList;
 };
 
-export async function getJointPositions(follower_id: string): Promise<JointStatesResponse> {
+export async function getJointPositions(follower_id: RobotItem): Promise<JointStatesResponse> {
   const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
