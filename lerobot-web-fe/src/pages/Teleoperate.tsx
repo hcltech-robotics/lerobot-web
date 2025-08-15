@@ -7,13 +7,14 @@ import { CameraStream } from '../components/CameraStream';
 import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
 
 import styles from './Teleoperate.module.css';
+import { useRobotStore } from '../stores/robot.store';
 
 export default function Teleoperate() {
   const [teleoperateStatus, setTeleoperateStatus] = useState<string>(teleoperateStatusList.READY);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
-
+  const robots = useRobotStore((store) => store.robots);
   const selectedLeader = '5A4B0491371';
   const follower = '58FA1019351';
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
@@ -24,7 +25,7 @@ export default function Teleoperate() {
     setError(null);
 
     try {
-      const response = await toggleTeleoperate(isRunning ? 'stop' : 'start', { leader: selectedLeader, follower });
+      const response = await toggleTeleoperate(isRunning ? 'stop' : 'start', robots!);
 
       setTeleoperateStatus(response.message?.toLowerCase().includes('started') ? teleoperateStatusList.RUN : teleoperateStatusList.READY);
       if (isRunning) {
