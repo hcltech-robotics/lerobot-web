@@ -1,4 +1,5 @@
 from app.routes import (
+    ai_control,
     calibrate,
     camera,
     joint_state,
@@ -45,3 +46,4 @@ app.include_router(teleoperate.router)
 app.include_router(camera.router)
 app.include_router(robots.router)
 app.include_router(calibrate.router)
+app.include_router(ai_control.router)
