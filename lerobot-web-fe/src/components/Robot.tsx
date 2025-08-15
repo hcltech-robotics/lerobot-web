@@ -5,13 +5,18 @@ import URDFLoader from 'urdf-loader';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePoller } from '../hooks/useJointStatePoller';
-import type { JointState, RobotProps } from '../models/robot.model';
+import { robotRoleList, type JointState, type RobotItem, type RobotProps } from '../models/robot.model';
+import { useRobotStore } from '../stores/robot.store';
 
-export function Robot({ isLive }: RobotProps) {
+export function Robot({ isLive, calibrationJointState = null }: RobotProps) {
   const { scene } = useThree();
   const robotRef = useRef<THREE.Object3D | null>(null);
-  const [jointState, setJointState] = useState<JointState | null>(null);
-  const followerId = '58FA1019351'; // temporary const
+  const [robotModelLoaded, setRobotModelLoaded] = useState(false);
+  const [liveJointState, setLiveJointState] = useState<JointState | null>(null);
+  const robots = useRobotStore((store) => store.robots);
+  const followerId = robots?.find((robot) => robot.role === robotRoleList.FOLLOWER) as RobotItem;
+
+  const activeJointState = isLive ? liveJointState : calibrationJointState;
 
   useEffect(() => {
     const manager = new THREE.LoadingManager();
@@ -40,11 +45,12 @@ export function Robot({ isLive }: RobotProps) {
       robot.rotation.x = -Math.PI / 2;
       scene.add(robot);
       robotRef.current = robot;
+      setRobotModelLoaded(true);
     });
   }, [scene]);
 
-  useJointStatePoller(followerId, isLive, setJointState);
-  useRobotAnimation(jointState, robotRef);
+  useJointStatePoller(followerId, isLive, setLiveJointState);
+  useRobotAnimation(activeJointState, robotRef, !isLive, robotModelLoaded);
 
   return (
     <>

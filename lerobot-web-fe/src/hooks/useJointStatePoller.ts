@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { getJointPositions, createJointPositionsWebSocket } from '../services/robot.service';
-import type { JointState } from '../models/robot.model';
+import type { JointState, RobotItem } from '../models/robot.model';
 
-export function useJointStatePoller(followerId: string, isLive: boolean, setJointState: (state: JointState) => void) {
+export function useJointStatePoller(followerId: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
   const isCancelled = useRef(false);
 
   useEffect(() => {

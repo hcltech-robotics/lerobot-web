@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from ..models.calibrate import CalibrationParams
-from ..services.calibrate import calibration_step, start_calibration
+from ..services.calibrate import confirm_enter, confirm_start, start_calibration
 
 router = APIRouter()
 
@@ -11,6 +11,11 @@ def start(params: CalibrationParams):
     return start_calibration(params)
 
 
-@router.post("/calibrate/step")
-def step(params: CalibrationParams):
-    return calibration_step(params)
+@router.post("calibrate/confirm-calibration-start")
+async def confirm_calibration_start():
+    return confirm_start()
+
+
+@router.post("calibrate/confirm-calibration-step")
+async def confirm_calibration_step():
+    return confirm_enter()

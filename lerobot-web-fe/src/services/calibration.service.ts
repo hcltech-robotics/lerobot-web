@@ -1,14 +1,16 @@
-const API_BASE = 'http://localhost:8000';
+import { useConfigStore } from '../stores/config.store';
+import type { RobotRoles } from '../models/robot.model';
 
-export const startCalibration = async (robotId: string, robotKind: string, firstInput: string = '') => {
+const { apiUrl } = useConfigStore.getState();
+
+export const startCalibration = async (robotId: string, robotKind: RobotRoles) => {
   try {
-    const res = await fetch(`${API_BASE}/calibrate-thread/start`, {
+    const res = await fetch(`${apiUrl}/calibrate/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         robot_id: robotId,
         robot_kind: robotKind,
-        user_input: firstInput,
       }),
     });
 
@@ -20,22 +22,14 @@ export const startCalibration = async (robotId: string, robotKind: string, first
   }
 };
 
-export const sendCalibrationStep = async (robotId: string, robotKind: string, input: string) => {
-  try {
-    const res = await fetch(`${API_BASE}/calibrate-thread/step`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        robot_id: robotId,
-        robot_kind: robotKind,
-        user_input: input,
-      }),
-    });
+export const confirmCalibrationStart = async () => {
+  const res = await fetch(`${apiUrl}/calibrate/confirm-calibration-start`, { method: 'POST' });
+  const data = await res.json();
+  console.log(data.message);
+};
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  } catch (err) {
-    console.error('Calibration step error:', err);
-    throw err;
-  }
+export const confirmCalibrationStep = async () => {
+  const res = await fetch(`${apiUrl}/calibrate/confirm-calibration-step`, { method: 'POST' });
+  const data = await res.json();
+  console.log(data.message);
 };

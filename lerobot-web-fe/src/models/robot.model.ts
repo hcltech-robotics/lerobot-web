@@ -49,6 +49,7 @@ export type RobotRoles = (typeof robotRoleList)[keyof typeof robotRoleList];
 
 export interface RobotProps {
   isLive: boolean;
+  calibrationJointState?: JointState | null;
 }
 
 export const JOINT_STATES_OFFSETS = {
