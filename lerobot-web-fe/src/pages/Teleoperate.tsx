@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
 import { sleepPosition, toggleTeleoperate } from '../services/teleoperate.service';
-import { teleoperateStatusList } from '../models/teleoperate.model';
+import { robotLayout, teleoperateStatusList } from '../models/teleoperate.model';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 import { CameraStream } from '../components/CameraStream';
 import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
+import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
+import { useRobotStore } from '../stores/robot.store';
 
 import styles from './Teleoperate.module.css';
-import { useRobotStore } from '../stores/robot.store';
 
 export default function Teleoperate() {
   const [teleoperateStatus, setTeleoperateStatus] = useState<string>(teleoperateStatusList.READY);
@@ -19,6 +20,7 @@ export default function Teleoperate() {
   const follower = '58FA1019351';
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
   const isLeaderSelected = !!selectedLeader;
+  const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
 
   const handleTeleoperate = async () => {
     setLoading(true);
@@ -38,6 +40,27 @@ export default function Teleoperate() {
     }
   };
 
+  const followers = useMemo(() => {
+    if (!robots) return [];
+
+    const allFollowers = robots.filter((r) => r.role === robotRoleList.FOLLOWER);
+
+    if (isBimanualMode) {
+      const left = allFollowers.find((f) => f.side === robotSideList.LEFT);
+      const right = allFollowers.find((f) => f.side === robotSideList.RIGHT);
+      return [left, right].filter(Boolean) as RobotItem[];
+    }
+
+    const left = allFollowers.find((f) => f.side === robotSideList.LEFT);
+    return left ? [left] : [];
+  }, [robots, isBimanualMode]);
+
+  const renderRobots = followers.map((follower) => {
+    const layout = isBimanualMode ? robotLayout[follower.side] : robotLayout.single;
+
+    return <Robot key={follower.id} isLive={isLive} position={layout.position} rotation={layout.rotation} robotLabel={follower.id} />;
+  });
+
   return (
     <div className={styles.contentArea}>
       <div className={styles.leftArea}>
@@ -54,9 +77,7 @@ export default function Teleoperate() {
             {isLive ? 'Online' : 'Offline'}
           </button>
           <div className={styles.mainScene}>
-            <MainScene>
-              <Robot isLive={isLive} />
-            </MainScene>
+            <MainScene>{renderRobots}</MainScene>
           </div>
         </div>
       </div>

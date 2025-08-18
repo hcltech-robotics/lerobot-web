@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import URDFLoader from 'urdf-loader';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
+import { Html } from '@react-three/drei';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import { robotRoleList, type JointState, type RobotItem, type RobotProps } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
 
-export function Robot({ isLive, calibrationJointState = null }: RobotProps) {
-  const { scene } = useThree();
+import styles from './PopoverWrapper.module.css';
+
+export function Robot({ isLive, calibrationJointState = null, position = [0, 0, 0], rotation = [0, 0, 0], robotLabel }: RobotProps) {
   const robotRef = useRef<THREE.Object3D | null>(null);
+  const [robotModel, setRobotModel] = useState<THREE.Object3D | null>(null);
   const [robotModelLoaded, setRobotModelLoaded] = useState(false);
   const [liveJointState, setLiveJointState] = useState<JointState | null>(null);
   const robots = useRobotStore((store) => store.robots);
@@ -28,8 +30,7 @@ export function Robot({ isLive, calibrationJointState = null }: RobotProps) {
         new STLLoader(manager).load(
           path,
           (geometry) => {
-            const material = new THREE.MeshStandardMaterial({ color: 0x999999 });
-            const mesh = new THREE.Mesh(geometry, material);
+            const mesh = new THREE.Mesh(geometry);
             done(mesh);
           },
           undefined,
@@ -42,22 +43,27 @@ export function Robot({ isLive, calibrationJointState = null }: RobotProps) {
     };
 
     loader.load('/assets/so-100/urdf/so-100.urdf', (robot) => {
-      robot.rotation.x = -Math.PI / 2;
-      scene.add(robot);
       robotRef.current = robot;
+      setRobotModel(robot);
       setRobotModelLoaded(true);
     });
-  }, [scene]);
+  }, []);
 
   useJointStatePoller(followerId, isLive, setLiveJointState);
   useRobotAnimation(activeJointState, robotRef, !isLive, robotModelLoaded);
 
   return (
     <>
-      <mesh position={[0, 0, 0]} visible={false}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshBasicMaterial transparent opacity={0} />
-      </mesh>
+      {robotModel && (
+        <>
+          <primitive object={robotModel} ref={robotRef} position={position} rotation={rotation} />
+          {robotLabel && (
+            <Html position={[position[0], position[1] - 0.05, position[2]]} center>
+              <div className={styles.robotLabel}>{robotLabel}</div>
+            </Html>
+          )}
+        </>
+      )}
     </>
   );
 }

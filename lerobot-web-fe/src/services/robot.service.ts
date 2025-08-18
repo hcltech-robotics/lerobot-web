@@ -147,5 +147,5 @@ export const getLeaderBySide = (robotList: RobotItem[], side: RobotSides) => {
     .map((robot) => {
       return robot.side === side && robot.role === robotRoleList.LEADER ? robot.id : null;
     })
-    .filter((robot) => robot) as string[];
+    .filter(Boolean) as string[];
 };
