@@ -4,11 +4,19 @@ import Selector from './Selector';
 
 interface RobotLeaderSelectorProps {
   robotList: string[];
+  selectedRobot: string;
   label?: string;
   disabled?: boolean;
+  onChange: (change: string) => void;
 }
 
-export function RobotLeaderSelector({ robotList, label = 'Select a Leader Robot', disabled = false }: RobotLeaderSelectorProps) {
+export function RobotLeaderSelector({
+  robotList,
+  selectedRobot,
+  label = 'Select a Leader Robot',
+  disabled = false,
+  onChange,
+}: RobotLeaderSelectorProps) {
   const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
 
   useEffect(() => {
@@ -21,14 +29,10 @@ export function RobotLeaderSelector({ robotList, label = 'Select a Leader Robot'
     }
   }, [robotList]);
 
-  const setSelectedLeader = (value: string) => {
-    console.log('selected. ', value);
-  };
-
   return (
     <>
       {options.length > 0 ? (
-        <Selector label={label} value={EMPTY_ROBOT_INDEX} onChange={setSelectedLeader} disabled={disabled} options={options} />
+        <Selector label={label} value={selectedRobot} disabled={disabled} options={options} onChange={onChange} />
       ) : (
         <p>There is no robot list.</p>
       )}

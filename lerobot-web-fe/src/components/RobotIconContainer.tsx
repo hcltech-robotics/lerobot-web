@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { HandIcon } from '@radix-ui/react-icons';
 import { DEFAULT_ROBOT_COUNT, robotRoleList, robotSideList } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
@@ -15,6 +15,7 @@ export default function RobotIconContainer() {
   const robotList = useRobotStore((store) => store.robotList);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
   const setIsBimanualMode = useRobotStore((store) => store.setIsBimanualMode);
+  const [leaderIndexes, setLeaderIndexes] = useState<number[] | null>(null);
 
   if (!robotList) {
     return;
@@ -26,9 +27,25 @@ export default function RobotIconContainer() {
     }
   }, [robotList]);
 
+  useEffect(() => {
+    if (!robots || !robots.length) {
+      setLeaderIndexes(null);
+      return;
+    }
+
+    const indexes = robots.reduce<number[]>((acc, robot, index) => {
+      if (robot.role === robotRoleList.LEADER) {
+        acc.push(index);
+      }
+      return acc;
+    }, []);
+
+    setLeaderIndexes(indexes);
+  }, [robots]);
+
   const connectedRobotIcons = (
     <div tabIndex={0} role="button">
-      <RobotIcons robotCount={robotList.length} setActive={true} leaderIndex={null} />
+      <RobotIcons robotCount={robotList.length} setActive={true} leaderIndex={leaderIndexes} />
     </div>
   );
   const disconnectedRobotIcons = <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />;

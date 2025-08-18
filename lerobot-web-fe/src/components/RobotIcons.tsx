@@ -5,7 +5,7 @@ import styles from './RobotIcons.module.css';
 interface RobotIconsProps {
   robotCount: number;
   setActive?: boolean;
-  leaderIndex?: number | null;
+  leaderIndex?: number[] | null;
 }
 
 export const RobotIcons = ({ robotCount, setActive = false, leaderIndex = null }: RobotIconsProps) => {
@@ -15,7 +15,7 @@ export const RobotIcons = ({ robotCount, setActive = false, leaderIndex = null }
     <div className={styles.robotIcons}>
       {Array.from({ length: robotCount }).map((_, index) => (
         <div key={index} className={`${styles.robotIcon} ${setActive ? styles.active : ''}`}>
-          {hasLeader && index === leaderIndex ? <LeaderArmIcon /> : <FollowerArmIcon />}
+          {hasLeader && leaderIndex.includes(index) ? <LeaderArmIcon /> : <FollowerArmIcon />}
         </div>
       ))}
     </div>

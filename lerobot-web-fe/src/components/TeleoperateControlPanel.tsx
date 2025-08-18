@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
 import { RobotLeaderSelector } from './RobotLeaderSelector';
 import { useRobotStore } from '../stores/robot.store';
-import { robotSideList } from '../models/robot.model';
+import { robotSideList, type RobotSides } from '../models/robot.model';
 import { getLeaderBySide } from '../services/robot.service';
 
 import styles from './TeleoperateControlPanel.module.css';
@@ -28,6 +28,8 @@ export function TeleoperateControlPanel({
   const robotlist = useRobotStore((store) => store.robots);
   const [leftOptions, setLeftOptions] = useState<string[]>([]);
   const [rightOptions, setRightOptions] = useState<string[]>([]);
+  const [selectedLeft, setSelectedLeft] = useState<string>('');
+  const [selectedRight, setSelectedRight] = useState<string>('');
 
   useEffect(() => {
     if (robotlist) {
@@ -39,6 +41,14 @@ export function TeleoperateControlPanel({
     }
   }, [isBimanualMode, robotlist]);
 
+  const onLeaderChange = (value: string, side: RobotSides) => {
+    if (side === robotSideList.LEFT) {
+      setSelectedLeft(value);
+    } else {
+      setSelectedRight(value);
+    }
+  };
+
   return (
     <div className={styles.controlPanel}>
       <div className={styles.statusBox}>
@@ -48,10 +58,20 @@ export function TeleoperateControlPanel({
         <div className={styles.selectWrapper}>
           <RobotLeaderSelector
             robotList={leftOptions}
+            selectedRobot={selectedLeft}
             label={isBimanualMode ? 'Select a leader for left' : 'Select a leader'}
             disabled={isRunning}
+            onChange={(value) => onLeaderChange(value, robotSideList.LEFT)}
           />
-          {isBimanualMode && <RobotLeaderSelector robotList={rightOptions} label="Select a leader for right" disabled={isRunning} />}
+          {isBimanualMode && (
+            <RobotLeaderSelector
+              selectedRobot={selectedRight}
+              robotList={rightOptions}
+              label="Select a leader for right"
+              disabled={isRunning}
+              onChange={(value) => onLeaderChange(value, robotSideList.RIGHT)}
+            />
+          )}
         </div>
       </div>
 
