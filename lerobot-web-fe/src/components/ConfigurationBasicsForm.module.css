@@ -1,0 +1,74 @@
+.field {
+  display: grid;
+  margin-bottom: 10px;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 35px;
+  color: #333;
+}
+
+.errorMessage {
+  font-size: 13px;
+  color: #ff0000;
+  opacity: 0.8;
+}
+
+.input {
+  padding: 0 10px;
+  height: 35px;
+  line-height: 1;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #333;
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.submitButton {
+  background-color: #3c91ff;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+.submitButton:hover {
+  background-color: #1f78e0;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.tokenWrapper {
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.tokenInput.input {
+  width: calc(100% - 55px);
+  border: unset;
+}
+
+.tokenInput:hover {
+  box-shadow: unset;
+}
+
+.tokenIconButton {
+  height: 35px;
+  width: 35px;
+  border-radius: 0 8px 8px 0;
+  border: unset;
+  cursor: pointer;
+}

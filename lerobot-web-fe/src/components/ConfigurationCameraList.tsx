@@ -1,16 +1,16 @@
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-import { useConfigStore } from '../stores/config.store';
 import { useCameraStore } from '../stores/camera.store';
+import { useConfigStore } from '../stores/config.store';
 import { CameraBox } from './CameraBox';
 
-import styles from './CameraStream.module.css';
+import styles from './ConfigurationCameraList.module.css';
 
-export function CameraStream() {
+export default function ConfigurationCameraList() {
   const apiUrl = useConfigStore((state) => state.apiUrl);
   const cameraIds = useCameraStore((state) => state.cameraList?.cameras);
 
   return (
-    <div className={styles.cameraStream}>
+    <section>
       {cameraIds && cameraIds.length > 0 && apiUrl ? (
         cameraIds.map((cameraId) => (
           <div key={cameraId} className={styles.cameraWrapper}>
@@ -23,6 +23,6 @@ export function CameraStream() {
           <span>No Signal!</span>
         </div>
       )}
-    </div>
+    </section>
   );
 }

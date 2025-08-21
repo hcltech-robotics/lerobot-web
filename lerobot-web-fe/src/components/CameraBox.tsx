@@ -10,8 +10,11 @@ export function CameraBox({ apiUrl, id }: { apiUrl: string; id: number }) {
   }
 
   return (
-    <div className={styles.cameraBox}>
-      <img src={frame} className={styles.cameraImage} alt={`Camera ${id}`} />
+    <div key={id} className={styles.cameraBoxWrapper}>
+      <div className={styles.cameraBox}>
+        <img src={frame} className={styles.cameraImage} alt={`Camera ${id}`} />
+      </div>
+      <div className={styles.cameraLabel}>Camera {id}</div>
     </div>
   );
 }

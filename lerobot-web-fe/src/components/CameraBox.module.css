@@ -15,3 +15,45 @@
   height: 100%;
   object-fit: fill;
 }
+
+.cameraBoxWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.noSignal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  background: #f0f2f8;
+  font-weight: bold;
+  font-size: 18px;
+  flex-direction: column;
+  border-radius: 12px;
+  gap: 6px;
+}
+
+.noSignalIcon {
+  width: 32px;
+  height: 32px;
+  color: #444;
+  margin-bottom: 8px;
+}
+
+.cameraLabel {
+  position: absolute;
+  font-weight: bold;
+  color: #8291a0;
+  background-color: #e6ebf5;
+  border-radius: 0px 10px;
+  left: 0;
+  bottom: 0;
+  font-size: 12px;
+  padding: 2px 14px;
+  letter-spacing: 1px;
+  opacity: 0.75;
+}

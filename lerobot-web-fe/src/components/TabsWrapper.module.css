@@ -1,0 +1,25 @@
+.trigger {
+  all: unset;
+  padding: 10px 15px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-size: 15px;
+
+  &:hover {
+    color: #0f5fdc;
+  }
+
+  &[data-state='active'] {
+    color: #0f5fdc;
+    border-bottom: 1px solid #0f5fdc;
+  }
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.list {
+    border-bottom: 1px solid #ccc;
+}
