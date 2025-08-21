@@ -20,7 +20,7 @@ export default function ConfigurationCameraList() {
       ) : (
         <div className={styles.noSignal}>
           <ExclamationTriangleIcon className={styles.noSignalIcon} />
-          <span>No Signal!</span>
+          <span>No camera available</span>
         </div>
       )}
     </section>

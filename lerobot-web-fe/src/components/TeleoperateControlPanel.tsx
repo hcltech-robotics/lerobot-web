@@ -73,30 +73,30 @@ export function TeleoperateControlPanel({
             />
           )}
         </div>
-      </div>
 
-      <button
-        className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
-        onClick={onToggleTeleoperate}
-        disabled={!isLeaderSelected || loading}
-      >
-        {loading ? (
-          <>
-            <span className={styles.loader} />
-            Loading
-          </>
-        ) : isRunning ? (
-          <>
-            <StopIcon className={styles.icon} />
-            Stop
-          </>
-        ) : (
-          <>
-            <PlayIcon className={styles.icon} />
-            Start
-          </>
-        )}
-      </button>
+        <button
+          className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
+          onClick={onToggleTeleoperate}
+          disabled={!isLeaderSelected || loading}
+        >
+          {loading ? (
+            <>
+              <span className={styles.loader} />
+              Loading
+            </>
+          ) : isRunning ? (
+            <>
+              <StopIcon className={styles.icon} />
+              Stop
+            </>
+          ) : (
+            <>
+              <PlayIcon className={styles.icon} />
+              Start
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

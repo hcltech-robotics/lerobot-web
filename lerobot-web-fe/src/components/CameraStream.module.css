@@ -2,10 +2,30 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  background: #e2e2e2;
+  background: #f0f0f0;
   gap: 16px;
   padding: 12px;
   border-radius: 8px;
   min-height: 0;
   min-width: 0;
+}
+
+.noSignal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #444;
+  font-weight: bold;
+  font-size: 18px;
+  flex-direction: column;
+  border-radius: 12px;
+  gap: 6px;
+}
+
+.noSignalIcon {
+  width: 32px;
+  height: 32px;
+  color: #444;
+  margin-bottom: 8px;
 }
