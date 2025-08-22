@@ -3,6 +3,7 @@
   display: flex;
   justify-content: space-between;
   line-height: 45px;
+  font-size: 14px;
 }
 
 .SwitchContainer {
@@ -12,7 +13,7 @@
 }
 
 .Switch {  
-  width: 45px;
+  width: 40px;
   background-color: #fff;
   border-radius: 50px;
   position: relative;
@@ -32,8 +33,8 @@
 
 .SwitchThumb {
   display: block;
-  width: 21px;
-  height: 21px;
+  width: 16px;
+  height: 16px;
   background-color: #0f5fdc;
   border-radius: 50px;
   transition: transform 100ms;

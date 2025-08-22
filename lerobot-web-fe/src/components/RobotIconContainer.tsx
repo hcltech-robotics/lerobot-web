@@ -89,7 +89,7 @@ export default function RobotIconContainer() {
               <div key={index} className={styles.robotDetail}>
                 <div className={styles.robotRow}>
                   <span className={styles.robotId}>#{index}</span>
-                  <span>{robot.id}</span>
+                  <span className={styles.robotName} title={robot.id}>{robot.id}</span>
                   <ToggleSwitch
                     id={robot.id}
                     labels={[capitalizeFirstLetter(robotSideList.LEFT), capitalizeFirstLetter(robotSideList.RIGHT)]}
