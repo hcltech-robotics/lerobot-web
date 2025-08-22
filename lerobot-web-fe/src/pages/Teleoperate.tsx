@@ -16,10 +16,8 @@ export default function Teleoperate() {
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
   const robots = useRobotStore((store) => store.robots);
-  const selectedLeader = '5A4B0491371';
   const follower = '58FA1019351';
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
-  const isLeaderSelected = !!selectedLeader;
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
 
   const handleTeleoperate = async () => {
@@ -43,15 +41,15 @@ export default function Teleoperate() {
   const followers = useMemo(() => {
     if (!robots) return [];
 
-    const allFollowers = robots.filter((r) => r.role === robotRoleList.FOLLOWER);
+    const allFollowers = robots.filter((robot) => robot.role === robotRoleList.FOLLOWER);
 
     if (isBimanualMode) {
-      const left = allFollowers.find((f) => f.side === robotSideList.LEFT);
-      const right = allFollowers.find((f) => f.side === robotSideList.RIGHT);
+      const left = allFollowers.find((follower) => follower.side === robotSideList.LEFT);
+      const right = allFollowers.find((follower) => follower.side === robotSideList.RIGHT);
       return [left, right].filter(Boolean) as RobotItem[];
     }
 
-    const left = allFollowers.find((f) => f.side === robotSideList.LEFT);
+    const left = allFollowers.find((follower) => follower.side === robotSideList.LEFT);
     return left ? [left] : [];
   }, [robots, isBimanualMode]);
 
@@ -69,7 +67,6 @@ export default function Teleoperate() {
           loading={loading}
           error={error}
           isRunning={isRunning}
-          isLeaderSelected={isLeaderSelected}
           onToggleTeleoperate={handleTeleoperate}
         />
         <div className={styles.sceneContainer}>

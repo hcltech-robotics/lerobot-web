@@ -7,10 +7,17 @@ import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePoller } from '../hooks/useJointStatePoller';
 import { robotRoleList, type JointState, type RobotItem, type RobotProps } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
+import { robotLayout } from '../models/teleoperate.model';
 
 import styles from './PopoverWrapper.module.css';
 
-export function Robot({ isLive, calibrationJointState = null, position = [0, 0, 0], rotation = [0, 0, 0], robotLabel }: RobotProps) {
+export function Robot({
+  isLive,
+  calibrationJointState = null,
+  position = robotLayout.single.position,
+  rotation = robotLayout.single.rotation,
+  robotLabel,
+}: RobotProps) {
   const robotRef = useRef<THREE.Object3D | null>(null);
   const [robotModel, setRobotModel] = useState<THREE.Object3D | null>(null);
   const [robotModelLoaded, setRobotModelLoaded] = useState(false);

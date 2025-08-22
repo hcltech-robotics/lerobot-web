@@ -12,7 +12,6 @@ type TeleoperateControlPanelProps = {
   loading: boolean;
   error: string | null;
   isRunning: boolean;
-  isLeaderSelected: boolean;
   onToggleTeleoperate: () => void;
 };
 
@@ -21,7 +20,6 @@ export function TeleoperateControlPanel({
   loading,
   error,
   isRunning,
-  isLeaderSelected,
   onToggleTeleoperate,
 }: TeleoperateControlPanelProps) {
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
@@ -30,6 +28,7 @@ export function TeleoperateControlPanel({
   const [rightOptions, setRightOptions] = useState<string[]>([]);
   const [selectedLeft, setSelectedLeft] = useState<string>('');
   const [selectedRight, setSelectedRight] = useState<string>('');
+  const [isSelectedLeader, setIsSelectedLeader] = useState<boolean>(false);
 
   useEffect(() => {
     if (robotlist) {
@@ -38,6 +37,8 @@ export function TeleoperateControlPanel({
 
       setLeftOptions(left);
       setRightOptions(right);
+    } else {
+      setIsSelectedLeader(false);
     }
   }, [isBimanualMode, robotlist]);
 
@@ -48,6 +49,14 @@ export function TeleoperateControlPanel({
       setSelectedRight(value);
     }
   };
+
+  useEffect(() => {
+    if (isBimanualMode) {
+      setIsSelectedLeader(!(selectedLeft && selectedRight));
+    } else {
+      setIsSelectedLeader(!selectedLeft);
+    }
+  }, [selectedLeft, selectedRight, isBimanualMode]);
 
   return (
     <div className={styles.controlPanel}>
@@ -77,7 +86,7 @@ export function TeleoperateControlPanel({
         <button
           className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
           onClick={onToggleTeleoperate}
-          disabled={!isLeaderSelected || loading}
+          disabled={isSelectedLeader || loading}
         >
           {loading ? (
             <>
