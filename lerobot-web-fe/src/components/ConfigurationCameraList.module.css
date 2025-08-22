@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #444;
+  color: #333;
   font-weight: bold;
   font-size: 18px;
   flex-direction: column;
@@ -23,6 +23,6 @@
 .noSignalIcon {
   width: 32px;
   height: 32px;
-  color: #444;
+  color: #333;
   margin-bottom: 8px;
 }

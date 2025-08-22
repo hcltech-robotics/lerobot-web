@@ -1,6 +1,6 @@
 .popoverContent {
-  background: #e6ebf5;
-  color: #5b666d;
+  background: #f0f0f0;
+  color: #555;
   padding: 12px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -12,13 +12,15 @@
 }
 
 .popoverArrow {
-  fill: #e6ebf5;
+  fill: #f0f0f0;
   height: 15px;
   width: 15px;
 }
 
 .popoverTitle {
+  color: #333;
   margin: 6px;
+  margin-left: 0;
   font-weight: bold;
 }
 

@@ -1,4 +1,4 @@
-.cameraBox {
+.camera {
   flex: 1;
   display: flex;
   align-items: center;
@@ -16,7 +16,7 @@
   object-fit: fill;
 }
 
-.cameraBoxWrapper {
+.cameraBox {
   position: relative;
   display: flex;
   flex-direction: column;
