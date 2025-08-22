@@ -10,10 +10,10 @@ export default function ConfigurationCameraList() {
   const cameraIds = useCameraStore((state) => state.cameraList?.cameras);
 
   return (
-    <section>
+    <div className={styles.cameraListWrapper}>
       {cameraIds && cameraIds.length > 0 && apiUrl ? (
         cameraIds.map((cameraId) => (
-          <div key={cameraId} className={styles.cameraWrapper}>
+          <div key={cameraId} className={styles.cameraBoxWrapper}>
             <CameraBox apiUrl={apiUrl} id={cameraId} />
           </div>
         ))
@@ -23,6 +23,6 @@ export default function ConfigurationCameraList() {
           <span>No camera available</span>
         </div>
       )}
-    </section>
+    </div>
   );
 }

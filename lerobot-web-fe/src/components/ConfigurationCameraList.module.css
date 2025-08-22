@@ -1,4 +1,9 @@
-.cameraWrapper {
+.cameraListWrapper {
+    display: flex;
+    gap: 10px;
+}
+
+.cameraBoxWrapper {
     width: 250px;
 }
 
