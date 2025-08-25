@@ -14,8 +14,7 @@ interface SelectorProps {
   onChange: (value: string) => void;
   disabled?: boolean;
 }
-
-export default function Selector({ label, value, options, onChange, disabled = false }: SelectorProps) {
+export function Selector({ label, value, options, onChange, disabled = false }: SelectorProps) {
   return (
     <>
       <label className={styles.selectLabel}>{label}</label>

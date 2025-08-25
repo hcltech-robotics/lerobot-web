@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EMPTY_ROBOT_INDEX } from '../models/robot.model';
-import Selector from './Selector';
+import { Selector, type SelectOption } from './Selector';
 
 interface RobotLeaderSelectorProps {
   robotList: string[];
@@ -17,7 +16,7 @@ export function RobotLeaderSelector({
   disabled = false,
   onChange,
 }: RobotLeaderSelectorProps) {
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
+  const [options, setOptions] = useState<SelectOption[]>([]);
 
   useEffect(() => {
     if (robotList) {
