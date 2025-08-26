@@ -6,8 +6,8 @@ import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
-import { Selector } from '../components/Selector';
 import { CameraStream } from '../components/CameraStream';
+import { Selector } from '../components/Selector';
 
 import styles from './ModelPlayback.module.css';
 
@@ -15,16 +15,7 @@ export default function Policies() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
-  const [options, setOptions] = useState([
-    {
-      label: 'model1',
-      value: 'model1',
-    },
-    {
-      label: 'model2',
-      value: 'model2',
-    },
-  ]);
+  const [options, setOptions] = useState<string[]>(['model1', 'model2']);
   const robots = useRobotStore((store) => store.robots);
   const isRunning = false;
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
@@ -59,7 +50,7 @@ export default function Policies() {
       <div className={styles.control}>
         <div className={styles.statusBox}>
           <h2 className={styles.title}>Select a pre-trained model</h2>
-          <Selector label="Select a model" options={options} onChange={onModelChange} value="" />
+          <Selector label="Select a model" options={options} selected={''} onChange={onModelChange} />
           <button className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`} disabled={true}>
             {isRunning ? (
               <>

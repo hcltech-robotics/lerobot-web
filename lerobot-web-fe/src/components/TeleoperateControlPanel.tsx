@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
-import { RobotLeaderSelector } from './RobotLeaderSelector';
 import { useRobotStore } from '../stores/robot.store';
 import { robotSideList, type RobotSides } from '../models/robot.model';
 import { getLeaderBySide } from '../services/robot.service';
+import { Selector } from './Selector';
 
 import styles from './TeleoperateControlPanel.module.css';
 
@@ -15,13 +15,7 @@ type TeleoperateControlPanelProps = {
   onToggleTeleoperate: () => void;
 };
 
-export function TeleoperateControlPanel({
-  status,
-  loading,
-  error,
-  isRunning,
-  onToggleTeleoperate,
-}: TeleoperateControlPanelProps) {
+export function TeleoperateControlPanel({ status, loading, error, isRunning, onToggleTeleoperate }: TeleoperateControlPanelProps) {
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
   const robotlist = useRobotStore((store) => store.robots);
   const [leftOptions, setLeftOptions] = useState<string[]>([]);
@@ -64,25 +58,22 @@ export function TeleoperateControlPanel({
         <h2 className={styles.statusTitle}>Teleoperation Status</h2>
         <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
         {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
-        <div className={styles.selectWrapper}>
-          <RobotLeaderSelector
-            robotList={leftOptions}
-            selectedRobot={selectedLeft}
-            label={isBimanualMode ? 'Select a leader for left' : 'Select a leader'}
+        <Selector
+          options={leftOptions}
+          selected={selectedLeft}
+          label={isBimanualMode ? 'Select a leader for left' : 'Select a leader'}
+          disabled={isRunning}
+          onChange={(value) => onLeaderChange(value, robotSideList.LEFT)}
+        />
+        {isBimanualMode && (
+          <Selector
+            selected={selectedRight}
+            options={rightOptions}
+            label="Select a leader for right"
             disabled={isRunning}
-            onChange={(value) => onLeaderChange(value, robotSideList.LEFT)}
+            onChange={(value) => onLeaderChange(value, robotSideList.RIGHT)}
           />
-          {isBimanualMode && (
-            <RobotLeaderSelector
-              selectedRobot={selectedRight}
-              robotList={rightOptions}
-              label="Select a leader for right"
-              disabled={isRunning}
-              onChange={(value) => onLeaderChange(value, robotSideList.RIGHT)}
-            />
-          )}
-        </div>
-
+        )}
         <button
           className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
           onClick={onToggleTeleoperate}
