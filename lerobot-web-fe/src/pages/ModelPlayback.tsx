@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StopIcon } from '@radix-ui/react-icons';
 import { PlayIcon } from 'lucide-react';
 import { robotLayout } from '../models/teleoperate.model';
@@ -8,6 +8,8 @@ import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.mo
 import { useRobotStore } from '../stores/robot.store';
 import { CameraStream } from '../components/CameraStream';
 import { Selector } from '../components/Selector';
+import { fetchAIControl } from '../services/modelPlayback.service';
+import { controlStatus } from '../models/general.model';
 
 import styles from './ModelPlayback.module.css';
 
@@ -15,10 +17,33 @@ export default function Policies() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
-  const [options, setOptions] = useState<string[]>(['model1', 'model2']);
+  const [options, setOptions] = useState<string[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [isRunning, setIsRunning] = useState(false);
   const robots = useRobotStore((store) => store.robots);
-  const isRunning = false;
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
+
+  useEffect(() => {
+    setOptions(['model1', 'model2']);
+  }, []);
+
+  const fetchModel = () => {
+    if (!isBimanualMode) {
+      const followerId = followers[0]?.id || '';
+      const modelStatus = isRunning ? controlStatus.STOP : controlStatus.START;
+
+      setLoading(true);
+
+      fetchAIControl(selectedModel, followerId, modelStatus)
+        .then((response) => {
+          if (response.status === 'ok') {
+            setIsRunning(!isRunning);
+          }
+        })
+        .catch((error) => setError(error.message))
+        .finally(() => setLoading(false));
+    }
+  };
 
   const followers = useMemo(() => {
     if (!robots) return [];
@@ -41,18 +66,29 @@ export default function Policies() {
     return <Robot key={follower.id} isLive={isLive} position={layout.position} rotation={layout.rotation} robotLabel={follower.id} />;
   });
 
-  const onModelChange = () => {
-    console.log('changed');
-  };
-
   return (
     <div className={styles.contentArea}>
       <div className={styles.control}>
         <div className={styles.statusBox}>
           <h2 className={styles.title}>Select a pre-trained model</h2>
-          <Selector label="Select a model" options={options} selected={''} onChange={onModelChange} />
-          <button className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`} disabled={true}>
-            {isRunning ? (
+          <Selector
+            label="Select a model"
+            options={options}
+            selected={selectedModel}
+            onChange={(model: string) => setSelectedModel(model)}
+            disabled={isRunning}
+          />
+          <button
+            className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
+            disabled={!selectedModel || followers.length === 0}
+            onClick={fetchModel}
+          >
+            {loading ? (
+              <>
+                <span className={styles.loader} />
+                Loading
+              </>
+            ) : isRunning ? (
               <>
                 <StopIcon className={styles.icon} />
                 Stop
@@ -64,6 +100,7 @@ export default function Policies() {
               </>
             )}
           </button>
+          {error && <p className={styles.errorMessage}>Error: {error} </p>}
         </div>
         <div className={styles.sceneContainer}>
           <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>

@@ -7,6 +7,7 @@ import { CameraStream } from '../components/CameraStream';
 import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
+import { controlStatus } from '../models/general.model';
 
 import styles from './Teleoperate.module.css';
 
@@ -25,7 +26,7 @@ export default function Teleoperate() {
     setError(null);
 
     try {
-      const response = await toggleTeleoperate(isRunning ? 'stop' : 'start', robots!);
+      const response = await toggleTeleoperate(isRunning ? controlStatus.STOP : controlStatus.START, robots!);
 
       setTeleoperateStatus(response.message?.toLowerCase().includes('started') ? teleoperateStatusList.RUN : teleoperateStatusList.READY);
       if (isRunning) {

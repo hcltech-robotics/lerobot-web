@@ -87,6 +87,7 @@
   background-color: #f0f0f0;
   padding: 1rem 1.5rem;
   border-radius: 8px;
+  color: #555;
 }
 
 .controlButton {
@@ -146,4 +147,10 @@
   flex: 2;
   gap: 16px;
   min-width: 0;
+}
+
+.errorMessage {
+  font-size: 13px;
+  color: #ff0000;
+  opacity: 0.8;
 }

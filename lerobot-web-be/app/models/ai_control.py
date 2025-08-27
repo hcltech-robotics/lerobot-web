@@ -14,7 +14,6 @@ class AIControlParams(BaseModel):
     robot_id: str
     fps: int = 30
 
-
 class AIControlResponse(BaseModel):
     status: str
     message: str
