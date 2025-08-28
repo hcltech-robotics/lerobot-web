@@ -94,7 +94,7 @@ export default function RobotIconContainer() {
                     id={robot.id}
                     labels={[capitalizeFirstLetter(robotSideList.LEFT), capitalizeFirstLetter(robotSideList.RIGHT)]}
                     checked={getCheckedSwitch(robot.id, robots)}
-                    disabled={false}
+                    disabled={robotList.length < 4}
                     onChange={onArmChange}
                   />
                   <button

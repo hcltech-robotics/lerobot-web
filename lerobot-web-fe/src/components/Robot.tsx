@@ -9,7 +9,7 @@ import { robotRoleList, type JointState, type RobotItem, type RobotProps } from 
 import { useRobotStore } from '../stores/robot.store';
 import { robotLayout } from '../models/teleoperate.model';
 
-import styles from './PopoverWrapper.module.css';
+import styles from './Robot.module.css';
 
 export function Robot({
   isLive,
