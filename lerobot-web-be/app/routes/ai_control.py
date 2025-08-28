@@ -1,9 +1,11 @@
 import logging
 import threading
+import requests
 
 from fastapi import APIRouter
+from huggingface_hub import HfApi
 
-from ..models.ai_control import AIControlParams, AIControlResponse
+from ..models.ai_control import AIControlParams, AIControlResponse, UserModelsRequest, UserModelsResponse
 from ..services.ai_control import policy_worker
 
 router = APIRouter()
@@ -29,3 +31,14 @@ def control_policy(params: AIControlParams):
             policy_thread.join()
             return {"status": "ok", "message": "Policy stopped"}
         return {"status": "error", "message": "Policy is not running"}
+
+
+@router.post("/get-user-models", response_model=UserModelsResponse, tags=["status"])
+def list_user_models(req: UserModelsRequest):
+    try:
+        hf_api = HfApi(token=req.api_key)
+        models_list = hf_api.list_models(author=req.user_id)
+        models = [{"modelId": m.modelId, "id": m._id, "private": m.private, "createdAt": m.created_at} for m in models_list]
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    return {"models": models}
