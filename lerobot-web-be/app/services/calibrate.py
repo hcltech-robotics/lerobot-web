@@ -27,11 +27,7 @@ def start_calibration(params: CalibrationParams):
         robot.connect(calibrate=False)
         t = threading.Thread(target=robot.calibrate, daemon=True)
         t.start()
-        return JSONResponse(
-            content={
-                "message": "Calibration started and waiting for 'c' input and enter"
-            }
-        )
+        return {"message": "Calibration started and waiting for 'c' input and enter"}
 
     except Exception as e:
         print(f"[CALIBRATION FAILED] {e}")
@@ -41,11 +37,8 @@ def start_calibration(params: CalibrationParams):
 
 def confirm_start():
     os.write(primary_file_descriptor, b"c\n")
-    return JSONResponse(
-        content={"message": "Calibration first step, waiting for enter"}
-    )
-
+    return {"message": "Calibration first step, waiting for enter"}
 
 def confirm_enter():
     os.write(primary_file_descriptor, b"\n")
-    return JSONResponse(content={"message": "Enter sent to stdin, for confirm step"})
+    return {"message": "Enter sent to stdin, for confirm step"}
