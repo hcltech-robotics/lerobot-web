@@ -5,7 +5,8 @@ import CalibrationTabItem from '../components/CalibrationTabItem';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 import { confirmCalibrationStart, confirmCalibrationStep, startCalibration } from '../services/calibration.service';
-import Selector, { type SelectOption } from '../components/Selector';
+import { BaseSelector } from '../components/BaseSelector';
+import { type SelectOption } from '../components/BaseSelector';
 
 import styles from './Calibration.module.css';
 import { calibrationFirstStepJointStates, startPositionJointState } from '../models/calibration.model';
@@ -30,6 +31,11 @@ export default function Calibration() {
   const robotKind = robots!.find((robot) => robot.id === selectedId)?.role;
 
   const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
+
+  const secondStepActive = currentStep === 2;
+  const secondStepAnimationState = useSecondStepAnimation(secondStepActive);
+  const calibrationJointState =
+    currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? secondStepAnimationState : startPositionJointState;
 
   const handleTabClick = async (index: number) => {
     if (index !== currentStep || !selectedId) return;
@@ -58,83 +64,77 @@ export default function Calibration() {
       goToNextStep();
     } catch (error) {
       console.error('Calibration API call failed', error);
-      return;
     }
+  };
 
-    const secondStepActive = currentStep === 2;
-    const secondStepAnimationState = useSecondStepAnimation(secondStepActive);
-    const calibrationJointState =
-      currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? secondStepAnimationState : startPositionJointState;
-
-    return (
-      <div className={styles.contentArea}>
-        <div className={styles.controlPanel}>
-          <div className={styles.selectWrapper}>
-            <Selector
-              label="Select Robot ID"
-              value={selectedId}
-              options={robotList}
-              onChange={setSelectedId}
-              disabled={currentStep !== 0 || completed}
-            />
-            {currentStep > 0 && !completed && (
-              <div className={styles.progressIndicator}>
-                <p>Calibration in progress</p>
-                <span className={styles.loader} />
-              </div>
-            )}
-          </div>
-
-          <Tabs.Root value={tabValue}>
-            <Tabs.List className={styles.tabsList}>
-              {calibrationSteps.map((step, index) => {
-                const isFirst = index === 0;
-                const disabled = isFirst && (!selectedId || robots!.length === 0);
-                return (
-                  <CalibrationTabItem
-                    key={step.id}
-                    id={step.id}
-                    label={step.label}
-                    activeLabel={step.activeLabel}
-                    index={index}
-                    currentStep={currentStep}
-                    completed={completed}
-                    totalSteps={calibrationSteps.length}
-                    onClick={() => handleTabClick(index)}
-                    disabled={disabled}
-                  />
-                );
-              })}
-            </Tabs.List>
-
-            {calibrationSteps.map((step) => (
-              <Tabs.Content key={step.id} value={step.id} className={styles.tabContent}>
-                {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration</p>}
-                {step.id === 'start' && (
-                  <div className={styles.alert}>
-                    <ExclamationTriangleIcon className={styles.alertIcon} />
-                    <span>Make sure you can safely support the robot. Torques will be disabled during calibration.</span>
-                  </div>
-                )}
-              </Tabs.Content>
-            ))}
-          </Tabs.Root>
-
-          <button className={styles.restartButton} onClick={restartCalibration} disabled={!completed}>
-            Reset Calibration
-          </button>
+  return (
+    <div className={styles.contentArea}>
+      <div className={styles.controlPanel}>
+        <div className={styles.selectWrapper}>
+          <BaseSelector
+            label="Select Robot ID"
+            value={selectedId}
+            options={robotList}
+            onChange={setSelectedId}
+            disabled={currentStep !== 0 || completed}
+          />
+          {currentStep > 0 && !completed && (
+            <div className={styles.progressIndicator}>
+              <p>Calibration in progress</p>
+              <span className={styles.loader} />
+            </div>
+          )}
         </div>
-        <div className={styles.sceneContainer}>
-          <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
-            {isLive ? 'Online' : 'Offline'}
-          </button>
-          <div className={styles.mainScene}>
-            <MainScene>
-              <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
-            </MainScene>
-          </div>
+
+        <Tabs.Root value={tabValue}>
+          <Tabs.List className={styles.tabsList}>
+            {calibrationSteps.map((step, index) => {
+              const isFirst = index === 0;
+              const disabled = isFirst && (!selectedId || robots!.length === 0);
+              return (
+                <CalibrationTabItem
+                  key={step.id}
+                  id={step.id}
+                  label={step.label}
+                  activeLabel={step.activeLabel}
+                  index={index}
+                  currentStep={currentStep}
+                  completed={completed}
+                  totalSteps={calibrationSteps.length}
+                  onClick={() => handleTabClick(index)}
+                  disabled={disabled}
+                />
+              );
+            })}
+          </Tabs.List>
+
+          {calibrationSteps.map((step) => (
+            <Tabs.Content key={step.id} value={step.id} className={styles.tabContent}>
+              {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration</p>}
+              {step.id === 'start' && (
+                <div className={styles.alert}>
+                  <ExclamationTriangleIcon className={styles.alertIcon} />
+                  <span>Make sure you can safely support the robot. Torques will be disabled during calibration.</span>
+                </div>
+              )}
+            </Tabs.Content>
+          ))}
+        </Tabs.Root>
+
+        <button className={styles.restartButton} onClick={restartCalibration} disabled={!completed}>
+          Reset Calibration
+        </button>
+      </div>
+      <div className={styles.sceneContainer}>
+        <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
+          {isLive ? 'Online' : 'Offline'}
+        </button>
+        <div className={styles.mainScene}>
+          <MainScene>
+            <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
+          </MainScene>
         </div>
       </div>
-    );
-  };
+    </div>
+  );
 }
