@@ -7,12 +7,14 @@ export interface RobotState {
   robots: RobotItem[] | null;
   robotList: string[] | null;
   isBimanualMode: boolean;
+  isLoading: boolean;
 }
 
 export interface RobotActions {
   setRobots: (robots: RobotItem[]) => void;
   setRobotList: (robots: string[]) => void;
   setIsBimanualMode: (mode: boolean) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 export const useRobotStore = create<RobotState & RobotActions>()(
@@ -21,6 +23,7 @@ export const useRobotStore = create<RobotState & RobotActions>()(
       robots: null,
       robotList: null,
       isBimanualMode: false,
+      isLoading: false,
       setRobots: (robots: RobotItem[]) =>
         set((state) => {
           state.robots = robots;
@@ -33,6 +36,10 @@ export const useRobotStore = create<RobotState & RobotActions>()(
         set((state) => {
           state.isBimanualMode = isBimanualMode;
         }),
+      setIsLoading: (isLoading: boolean) =>
+        set((state) => {
+          state.isLoading = isLoading;
+        }),
     })),
     {
       name: 'robot',
@@ -41,6 +48,7 @@ export const useRobotStore = create<RobotState & RobotActions>()(
         robots: state.robots,
         robotList: state.robotList,
         isBimanualMode: state.isBimanualMode,
+        isLoading: state.isLoading,
       }),
     },
   ),

@@ -1,10 +1,14 @@
 import styles from './Loader.module.css';
 
-export default function Loader() {
+type LoaderProps = {
+  showText?: boolean;
+};
+
+export default function Loader({ showText = true }: LoaderProps) {
   return (
     <div className={styles.container}>
       <div className={styles.spinner}></div>
-      <p>Loading...</p>
+      {showText && <p>Loading...</p>}
     </div>
   );
 }

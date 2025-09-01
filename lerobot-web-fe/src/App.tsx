@@ -10,27 +10,32 @@ export default function App() {
   const apiUrl = useConfigStore((store) => store.apiUrl);
   const setRobots = useRobotStore((store) => store.setRobots);
   const robots = useRobotStore((store) => store.robots);
+  const setIsLoading = useRobotStore((store) => store.setIsLoading);
 
   useEffect(() => {
     if (!apiUrl) {
       return;
     }
 
+    setIsLoading(true);
+
     const robotsCopy = [...(robots ?? [])];
 
-    fetchInitialData().then(([robotsResponse]) => {
-      const robotIds = new Set(robotsResponse);
-      const existingRobots = robotsCopy.filter((robot) => robotIds.has(robot.id));
-      const newMappedRobots: RobotItem[] = robotsResponse
-        .filter((id) => !robots?.some((robot) => robot.id === id))
-        .map((id) => ({
-          id,
-          side: robotSideList.LEFT,
-          role: robotRoleList.FOLLOWER,
-        }));
+    fetchInitialData()
+      .then(([robotsResponse]) => {
+        const robotIds = new Set(robotsResponse);
+        const existingRobots = robotsCopy.filter((robot) => robotIds.has(robot.id));
+        const newMappedRobots: RobotItem[] = robotsResponse
+          .filter((id) => !robots?.some((robot) => robot.id === id))
+          .map((id) => ({
+            id,
+            side: robotSideList.LEFT,
+            role: robotRoleList.FOLLOWER,
+          }));
 
-      setRobots([...existingRobots, ...newMappedRobots]);
-    });
+        setRobots([...existingRobots, ...newMappedRobots]);
+      })
+      .finally(() => setIsLoading(false));
   }, [apiUrl]);
 
   const fetchInitialData = async () => {

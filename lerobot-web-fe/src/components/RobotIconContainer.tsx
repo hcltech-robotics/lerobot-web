@@ -6,6 +6,7 @@ import { RobotIcons } from './RobotIcons';
 import { useRobotStore } from '../stores/robot.store';
 import ToggleSwitch, { type ToggleSwitchChange } from './ToggleSwitch';
 import { capitalizeFirstLetter, getCheckedSwitch, setRobotRole, setRobotSide } from '../services/robot.service';
+import Loader from './Loader';
 
 import styles from './RobotIconContainer.module.css';
 
@@ -16,6 +17,7 @@ export default function RobotIconContainer() {
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
   const setIsBimanualMode = useRobotStore((store) => store.setIsBimanualMode);
   const [leaderIndexes, setLeaderIndexes] = useState<number[] | null>(null);
+  const isRobotsLoading = useRobotStore((store) => store.isLoading);
 
   if (!robotList) {
     return;
@@ -76,6 +78,7 @@ export default function RobotIconContainer() {
     <>
       {robotList.length > 0 ? (
         <PopoverWrapper title="Robot Info" trigger={connectedRobotIcons}>
+          {isRobotsLoading && <Loader />}
           <ToggleSwitch
             title="Hand mode"
             labels={['Manual', 'Bimanual']}
@@ -89,7 +92,9 @@ export default function RobotIconContainer() {
               <div key={index} className={styles.robotDetail}>
                 <div className={styles.robotRow}>
                   <span className={styles.robotId}>#{index}</span>
-                  <span className={styles.robotName} title={robot.id}>{robot.id}</span>
+                  <span className={styles.robotName} title={robot.id}>
+                    {robot.id}
+                  </span>
                   <ToggleSwitch
                     id={robot.id}
                     labels={[capitalizeFirstLetter(robotSideList.LEFT), capitalizeFirstLetter(robotSideList.RIGHT)]}
