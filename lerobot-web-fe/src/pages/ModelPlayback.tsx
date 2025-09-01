@@ -8,8 +8,10 @@ import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.mo
 import { useRobotStore } from '../stores/robot.store';
 import { CameraStream } from '../components/CameraStream';
 import { Selector } from '../components/Selector';
-import { fetchAIControl } from '../services/modelPlayback.service';
-import { controlStatus } from '../models/general.model';
+import { fetchAIControl, getUserModels } from '../services/modelPlayback.service';
+import { controlStatus, type ControlStatus } from '../models/general.model';
+import { useModelPlaybackStore } from '../stores/modelPlayback.store';
+import { aiControlStatusList } from '../models/modelPlayback.model';
 
 import styles from './ModelPlayback.module.css';
 
@@ -18,31 +20,46 @@ export default function Policies() {
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
+  const [userId, setUserId] = useState('');
+  const [hfApiKey, setHfApiKey] = useState('');
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);
   const robots = useRobotStore((store) => store.robots);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
+  const setModels = useModelPlaybackStore((store) => store.setModels);
 
   useEffect(() => {
-    setOptions(['model1', 'model2']);
+    mapModels();
   }, []);
 
-  const fetchModel = () => {
+  const mapModels = async () => {
+    const response = await getUserModels(hfApiKey, userId);
+    const mappedModels = response.models.map((model) => model.modelId);
+
+    setModels(response.models);
+    setOptions(mappedModels);
+  };
+
+  const fetchModel = async () => {
     if (!isBimanualMode) {
       const followerId = followers[0]?.id || '';
       const modelStatus = isRunning ? controlStatus.STOP : controlStatus.START;
 
-      setLoading(true);
-
-      fetchAIControl(selectedModel, followerId, modelStatus)
-        .then((response) => {
-          if (response.status === 'ok') {
-            setIsRunning(!isRunning);
-          }
-        })
-        .catch((error) => setError(error.message))
-        .finally(() => setLoading(false));
+      handleAIControl(selectedModel, followerId, modelStatus);
     }
+  };
+
+  const handleAIControl = async (selectedModel: string, followerId: string, modelStatus: ControlStatus) => {
+    setLoading(true);
+    const result = await fetchAIControl(selectedModel, followerId, modelStatus);
+
+    if (result.status === aiControlStatusList.OK) {
+      setIsRunning((prev) => !prev);
+    } else {
+      setError(result.message);
+    }
+
+    setLoading(false);
   };
 
   const followers = useMemo(() => {

@@ -30,15 +30,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 class BackendStatusResponse(BaseModel):
     message: str
-
 
 @app.get("/", response_model=BackendStatusResponse, tags=["status"])
 def root():
     return {"message": "Backend running."}
-
 
 app.include_router(joint_state.router)
 app.include_router(move_to_sleep.router)

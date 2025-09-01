@@ -1,7 +1,37 @@
-import type { ModelPlaybackResponse } from '../models/modelPlayback.model';
+import type { ControlStatus } from '../models/general.model';
+import type { ModelPlaybackResponse, ModelsResponse } from '../models/modelPlayback.model';
 import { useConfigStore } from '../stores/config.store';
 
-export async function fetchAIControl(model: string, robotId: string, mode: string): Promise<ModelPlaybackResponse> {
+export async function getUserModels(apiKey: string, userId: string): Promise<ModelsResponse> {
+  const { apiUrl } = useConfigStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  try {
+    const res = await fetch(`${apiUrl}/get-user-models`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        api_key: apiKey,
+        user_id: userId,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to query models: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error in query models:', error);
+    throw error;
+  }
+}
+
+export async function fetchAIControl(model: string, robotId: string, mode: ControlStatus): Promise<ModelPlaybackResponse> {
   const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');

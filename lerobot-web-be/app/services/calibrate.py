@@ -3,7 +3,6 @@ import pty
 import sys
 import threading
 
-from fastapi.responses import JSONResponse
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
 
@@ -15,8 +14,8 @@ sys.stdin = os.fdopen(secondary_file_descriptor)
 
 
 def start_calibration(params: CalibrationParams):
-    rid = params.robot_id
-    port = f"/dev/tty.usbmodem{rid}"
+    robotId = params.robot_id
+    port = f"/dev/tty.usbmodem{robotId}"
     if params.robot_kind == RobotKind.follower:
         config = SO100FollowerConfig(port=port)
         robot = SO100Follower(config)
