@@ -4,6 +4,7 @@ import {
   type JointState,
   type JointStatesResponse,
   type RobotItem,
+  type RobotRoles,
   type RobotSides,
 } from '../models/robot.model';
 import { useConfigStore } from '../stores/config.store';
@@ -26,7 +27,7 @@ export const getRobotById = (id: string, robots: RobotItem[]) => {
   return robots.find((robot) => robot.id === id);
 };
 
-export const setRobotSide = (id: string, change: boolean, robots: RobotItem[]) => {
+export const toggleSelectedRobotSide = (id: string, change: boolean, robots: RobotItem[]) => {
   const updatedRobotList: RobotItem[] = [...robots].map((robot) => {
     const newSide = change ? robotSideList.RIGHT : robotSideList.LEFT;
     return robot.id === id ? { ...robot, side: newSide } : robot;
@@ -35,12 +36,10 @@ export const setRobotSide = (id: string, change: boolean, robots: RobotItem[]) =
   return updatedRobotList;
 };
 
-export const setRobotRole = (id: string, robots: RobotItem[]) => {
-  const updatedRobotList: RobotItem[] = [...robots].map((robot) => {
-    return robot.id === id ? { ...robot, role: robotRoleList.LEADER } : robot;
-  });
+const toggleRole = (role: RobotRoles) => (role === robotRoleList.LEADER ? robotRoleList.FOLLOWER : robotRoleList.LEADER);
 
-  return updatedRobotList;
+export const toggleSelectedRobotRole = (id: string, robots: RobotItem[]): RobotItem[] => {
+  return robots.map((robot) => (robot.id === id ? { ...robot, role: toggleRole(robot.role) } : robot));
 };
 
 export async function getJointPositions(follower_id: RobotItem): Promise<JointStatesResponse> {

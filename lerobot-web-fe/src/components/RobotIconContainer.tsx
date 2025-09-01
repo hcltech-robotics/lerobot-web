@@ -5,7 +5,7 @@ import PopoverWrapper from './PopoverWrapper';
 import { RobotIcons } from './RobotIcons';
 import { useRobotStore } from '../stores/robot.store';
 import ToggleSwitch, { type ToggleSwitchChange } from './ToggleSwitch';
-import { capitalizeFirstLetter, getCheckedSwitch, setRobotRole, setRobotSide } from '../services/robot.service';
+import { capitalizeFirstLetter, getCheckedSwitch, toggleSelectedRobotRole, toggleSelectedRobotSide } from '../services/robot.service';
 import Loader from './Loader';
 
 import styles from './RobotIconContainer.module.css';
@@ -61,16 +61,17 @@ export default function RobotIconContainer() {
       return;
     }
 
-    const mappedRobots = setRobotSide(id, change, robots);
+    const mappedRobots = toggleSelectedRobotSide(id, change, robots);
     setRobots(mappedRobots);
   };
 
-  const onSelectLeader = (robot: string) => {
+  const onSelectLeader = (selectedRobotId: string) => {
     if (!robots) {
       return;
     }
 
-    const mappedRobots = setRobotRole(robot, robots);
+    const mappedRobots = toggleSelectedRobotRole(selectedRobotId, robots);
+
     setRobots(mappedRobots);
   };
 
