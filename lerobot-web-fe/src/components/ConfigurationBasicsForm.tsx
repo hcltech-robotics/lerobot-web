@@ -3,17 +3,21 @@ import { useConfigStore } from '../stores/config.store';
 import { isValidUrl } from '../services/configuration.service';
 import * as Form from '@radix-ui/react-form';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { useModelPlaybackStore } from '../stores/modelPlayback.store';
 
 import styles from './ConfigurationBasicsForm.module.css';
 
 export default function ConfigurationBasicsForm() {
   const setApiUrl = useConfigStore((state) => state.setApiUrl);
   const apiUrl = useConfigStore((state) => state.apiUrl);
-  const setToken = useConfigStore((state) => state.setToken);
-  const token = useConfigStore((state) => state.token);
+  const setApiKey = useModelPlaybackStore((state) => state.setApiKey);
+  const apiKey = useModelPlaybackStore((state) => state.apiKey);
+  const setUserId = useModelPlaybackStore((state) => state.setUserId);
+  const userId = useModelPlaybackStore((state) => state.userId);
 
   const [url, setUrl] = useState(apiUrl || '');
-  const [localToken, setLocalToken] = useState(token || '');
+  const [localApiKey, setLocalApiKey] = useState<string>(apiKey || '');
+  const [localUserId, setLocalUserId] = useState<string>(userId || '');
   const [showPassword, setShowPassword] = useState(false);
   const [urlTouched, setUrlTouched] = useState(false);
 
@@ -25,7 +29,8 @@ export default function ConfigurationBasicsForm() {
     if (!isFormValid) return;
 
     setApiUrl(url.trim());
-    setToken(localToken);
+    setApiKey(localApiKey);
+    setUserId(localUserId);
   };
 
   return (
@@ -41,29 +46,43 @@ export default function ConfigurationBasicsForm() {
             type="url"
             required
             name="url"
-            value={url || ''}
+            value={url}
             onChange={(e) => setUrl(e.target.value)}
             onBlur={() => setUrlTouched(true)}
           />
           {urlTouched && !isUrlValid && <div className={styles.errorMessage}>Please provide a valid URL.</div>}
         </Form.Field>
 
-        <Form.Field className={styles.field} name="token">
+        <Form.Field className={styles.field} name="hf_api_key">
           <div className={styles.messageContainer}>
-            <Form.Label className={styles.label}>Hugging Face Token</Form.Label>
+            <Form.Label className={styles.label}>Hugging Face Api Key</Form.Label>
           </div>
           <div className={styles.tokenWrapper}>
             <Form.Control
               className={`${styles.input} ${styles.tokenInput}`}
               type={showPassword ? 'text' : 'password'}
-              name="token"
-              value={localToken}
-              onChange={(e) => setLocalToken(e.target.value)}
+              name="hf_api_key"
+              value={localApiKey}
+              onChange={(e) => setLocalApiKey(e.target.value)}
             />
             <button type="button" className={styles.tokenIconButton} onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
             </button>
           </div>
+        </Form.Field>
+
+        <Form.Field className={styles.field} name="hf_user_id">
+          <div className={styles.messageContainer}>
+            <Form.Label className={styles.label}>Hugging Face User Id</Form.Label>
+          </div>
+
+          <Form.Control
+            className={`${styles.input}`}
+            type="text"
+            name="hf_user_id"
+            value={localUserId}
+            onChange={(e) => setLocalUserId(e.target.value)}
+          />
         </Form.Field>
 
         <Form.Submit className={styles.submitButton} disabled={!isFormValid}>

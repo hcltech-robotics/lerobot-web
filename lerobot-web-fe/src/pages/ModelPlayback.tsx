@@ -16,24 +16,29 @@ import { aiControlStatusList } from '../models/modelPlayback.model';
 import styles from './ModelPlayback.module.css';
 
 export default function Policies() {
+  const robots = useRobotStore((store) => store.robots);
+  const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
+  const setModels = useModelPlaybackStore((store) => store.setModels);
+  const apiKey = useModelPlaybackStore((state) => state.apiKey);
+  const userId = useModelPlaybackStore((state) => state.userId);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
-  const [userId, setUserId] = useState('');
-  const [hfApiKey, setHfApiKey] = useState('');
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);
-  const robots = useRobotStore((store) => store.robots);
-  const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
-  const setModels = useModelPlaybackStore((store) => store.setModels);
 
   useEffect(() => {
-    mapModels();
-  }, []);
+    if (!apiKey || !userId) {
+      return;
+    }
 
-  const mapModels = async () => {
-    const response = await getUserModels(hfApiKey, userId);
+    mapModels(apiKey, userId);
+  }, [apiKey]);
+
+  const mapModels = async (apiKey: string, userId: string) => {
+    const response = await getUserModels(apiKey, userId);
     const mappedModels = response.models.map((model) => model.modelId);
 
     setModels(response.models);
