@@ -109,7 +109,7 @@ export function createJointPositionsWebSocket(
 
 export async function getRobotList(): Promise<string[]> {
   const { apiUrl } = useConfigStore.getState();
-  const { setRobotList, setRobots } = useRobotStore.getState();
+  const { setRobotList } = useRobotStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
@@ -128,12 +128,7 @@ export async function getRobotList(): Promise<string[]> {
 
     const response = await res.json();
 
-    const mappedRobots: RobotItem[] = [
-      ...response.map((robot: string) => ({ id: robot, side: robotSideList.LEFT, role: robotRoleList.FOLLOWER })),
-    ];
-
     setRobotList(response);
-    setRobots(mappedRobots);
 
     return response;
   } catch (error) {
