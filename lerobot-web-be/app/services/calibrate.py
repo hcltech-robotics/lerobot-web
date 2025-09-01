@@ -30,13 +30,12 @@ def start_calibration(params: CalibrationParams):
 
     except Exception as e:
         print(f"[CALIBRATION FAILED] {e}")
-    finally:
-        robot.disconnect()
 
 
 def confirm_start():
     os.write(primary_file_descriptor, b"c\n")
     return {"message": "Calibration first step, waiting for enter"}
+
 
 def confirm_enter():
     os.write(primary_file_descriptor, b"\n")
