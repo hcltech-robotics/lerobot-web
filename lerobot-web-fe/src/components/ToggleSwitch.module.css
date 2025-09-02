@@ -1,27 +1,35 @@
 
-.SwitchWrapper {
+.switchWrapper {
   display: flex;
   justify-content: space-between;
   line-height: 45px;
   font-size: 14px;
 }
 
-.SwitchContainer {
+.switchContainer {
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
-.Switch {  
+.switch {  
   width: 40px;
   background-color: #fff;
   border-radius: 50px;
   position: relative;
-  border: 1px solid #0f5fdc;
+  border: 1px solid #b0b0b0;
   cursor: pointer;
 
+  &:hover {
+    background-color: #ebebeb;
+  }
+  
   &[data-state='checked'] {
     background-color: #0f5fdc;
+  }
+  
+  &[data-state='checked']:hover {
+    background-color: #2e7eff;
   }
   
   &[data-disabled] {
@@ -31,7 +39,7 @@
   }
 }
 
-.SwitchThumb {
+.switchThumb {
   display: block;
   width: 16px;
   height: 16px;

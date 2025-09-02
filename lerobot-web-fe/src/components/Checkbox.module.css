@@ -1,0 +1,25 @@
+.checkboxWrapper {
+	all: unset;
+	background-color: white;
+    color: #b0b0b0;
+    cursor: pointer;
+	width: 25px;
+	height: 25px;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 0px 2px #000;
+
+    &:hover {
+		background-color: #ebebeb;
+	}
+
+	&:focus {
+		box-shadow: 0 0 0 1px #b0b0b0;
+	}
+}
+
+.checkboxWrapper[data-state="checked"] {
+    color: #0f5fdc;
+}

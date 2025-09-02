@@ -25,12 +25,12 @@ export default function ToggleSwitch({ id, title, labels, checked, disabled, onC
     }
   };
   return (
-    <div className={styles.SwitchWrapper}>
+    <div className={styles.switchWrapper}>
       {title && <label>{title}</label>}
-      <div className={styles.SwitchContainer}>
+      <div className={styles.switchContainer}>
         <label>{labels[0]}</label>
-        <Switch.Root className={styles.Switch} checked={checked} disabled={disabled} onCheckedChange={onCheckedChange}>
-          <Switch.Thumb className={styles.SwitchThumb} />
+        <Switch.Root className={styles.switch} checked={checked} disabled={disabled} onCheckedChange={onCheckedChange}>
+          <Switch.Thumb className={styles.switchThumb} />
         </Switch.Root>
         <label>{labels[1]}</label>
       </div>

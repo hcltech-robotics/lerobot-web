@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { HandIcon } from '@radix-ui/react-icons';
 import { DEFAULT_ROBOT_COUNT, robotRoleList, robotSideList } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
 import { RobotIcons } from './RobotIcons';
@@ -7,6 +6,7 @@ import { useRobotStore } from '../stores/robot.store';
 import ToggleSwitch, { type ToggleSwitchChange } from './ToggleSwitch';
 import { capitalizeFirstLetter, getCheckedSwitch, toggleSelectedRobotRole, toggleSelectedRobotSide } from '../services/robot.service';
 import Loader from './Loader';
+import { Checkbox } from './Checkbox';
 
 import styles from './RobotIconContainer.module.css';
 
@@ -65,13 +65,12 @@ export default function RobotIconContainer() {
     setRobots(mappedRobots);
   };
 
-  const onSelectLeader = (selectedRobotId: string) => {
+  const onLeaderChanged = (selectedRobotId: string) => {
     if (!robots) {
       return;
     }
 
     const mappedRobots = toggleSelectedRobotRole(selectedRobotId, robots);
-
     setRobots(mappedRobots);
   };
 
@@ -103,13 +102,7 @@ export default function RobotIconContainer() {
                     disabled={robotList.length < 4}
                     onChange={onArmChange}
                   />
-                  <button
-                    className={`${styles.leaderButton} ${robot.role === robotRoleList.LEADER ? styles.leaderActive : ''}`}
-                    onClick={() => onSelectLeader(robot.id)}
-                    title="Set as Leader"
-                  >
-                    <HandIcon />
-                  </button>
+                  <Checkbox id={robot.id} checked={robot.role === robotRoleList.LEADER} onCheckedChange={onLeaderChanged} />
                 </div>
                 {index < robotList.length - 1 && <div className={styles.divider} />}
               </div>
