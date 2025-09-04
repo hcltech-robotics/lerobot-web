@@ -9,7 +9,7 @@ export async function toggleTeleoperate(mode: ControlStatus, robots: RobotItem[]
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
   try {
-    const response = await fetch(`${apiUrl}/teleoperate`, {
+    const response = await fetch(`${apiUrl}/teleoperate/${mode}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

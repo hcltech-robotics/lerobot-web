@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { sleepPosition, toggleTeleoperate } from '../services/teleoperate.service';
+import { toggleTeleoperate } from '../services/teleoperate.service';
 import { robotLayout, teleoperateStatusList } from '../models/teleoperate.model';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
@@ -29,11 +29,6 @@ export default function Teleoperate() {
       const response = await toggleTeleoperate(isRunning ? controlStatus.STOP : controlStatus.START, robots!);
 
       setTeleoperateStatus(response.message?.toLowerCase().includes('started') ? teleoperateStatusList.RUN : teleoperateStatusList.READY);
-      if (isRunning) {
-        followers.forEach(async (follower) => {
-          await sleepPosition(follower.id);
-        });
-      }
     } catch (e) {
       setError((e as Error).message);
     } finally {
