@@ -37,7 +37,7 @@ export function useJointStatePoller(followerId: RobotItem, isLive: boolean, setJ
   }, [followerId, isLive, setJointState]);
 }
 
-export function useJointStatePollerWebSocket(followerId: string, isLive: boolean, setJointState: (state: JointState) => void) {
+export function useJointStatePollerWebSocket(followerId: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
   const websocket = useRef<WebSocket | null>(null);
 
   useEffect(() => {

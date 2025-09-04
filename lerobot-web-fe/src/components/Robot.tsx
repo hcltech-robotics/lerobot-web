@@ -4,7 +4,7 @@ import URDFLoader from 'urdf-loader';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
 import { Html } from '@react-three/drei';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
-import { useJointStatePoller } from '../hooks/useJointStatePoller';
+import { useJointStatePollerWebSocket } from '../hooks/useJointStatePoller';
 import { robotRoleList, type JointState, type RobotItem, type RobotProps } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
 import { robotLayout } from '../models/teleoperate.model';
@@ -56,7 +56,7 @@ export function Robot({
     });
   }, []);
 
-  useJointStatePoller(followerId, isLive, setLiveJointState);
+  useJointStatePollerWebSocket(followerId, isLive, setLiveJointState);
   useRobotAnimation(activeJointState, robotRef, !isLive, robotModelLoaded);
 
   return (

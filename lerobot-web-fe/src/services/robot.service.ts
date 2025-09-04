@@ -55,7 +55,7 @@ export async function getJointPositions(follower_id: RobotItem): Promise<JointSt
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        follower_id,
+        follower_id: follower_id.id,
       }),
     });
 
@@ -71,7 +71,7 @@ export async function getJointPositions(follower_id: RobotItem): Promise<JointSt
 }
 
 export function createJointPositionsWebSocket(
-  follower_id: string,
+  follower_id: RobotItem,
   onMessage: (jointState: JointState) => void,
   onOpen?: () => void,
   onClose?: () => void,
@@ -80,7 +80,7 @@ export function createJointPositionsWebSocket(
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
-  const websocket = new WebSocket(`${apiUrl}/ws/joint_state?follower_id=${follower_id}`);
+  const websocket = new WebSocket(`${apiUrl}/ws/joint_state?follower_id=${follower_id.id}`);
 
   websocket.onopen = () => {
     console.log(`WebSocket opened: ${websocket.url}`);
