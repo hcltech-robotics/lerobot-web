@@ -21,10 +21,10 @@ async def generate_frames(camera_id: int):
 
     try:
         while True:
-            ret, frame = cap.read()
+            ret, frame = await asyncio.to_thread(cap.read)
             if not ret:
                 continue
-            _, buffer = cv2.imencode(".jpg", frame)
+            _, buffer = await asyncio.to_thread(cv2.imencode, ".jpg", frame)
             frame_data = base64.b64encode(buffer).decode("utf-8")
             yield frame_data
             await asyncio.sleep(0.03)  # ~30 FPS
