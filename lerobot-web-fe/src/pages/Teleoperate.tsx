@@ -8,6 +8,7 @@ import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
 import { controlStatus } from '../models/general.model';
+import OnlineStatusButton from '../components/OnlineStatusButton';
 
 import styles from './Teleoperate.module.css';
 
@@ -17,7 +18,6 @@ export default function Teleoperate() {
   const [error, setError] = useState<string | null>(null);
   const [isLive, setIsLive] = useState(false);
   const robots = useRobotStore((store) => store.robots);
-  // const follower = '58FA1019351';
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
 
@@ -68,9 +68,7 @@ export default function Teleoperate() {
           onToggleTeleoperate={handleTeleoperate}
         />
         <div className={styles.sceneContainer}>
-          <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
-            {isLive ? 'Online' : 'Offline'}
-          </button>
+          <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
           <div className={styles.mainScene}>
             <MainScene>{renderRobots}</MainScene>
           </div>

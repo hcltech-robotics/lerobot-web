@@ -12,6 +12,7 @@ import { fetchAIControl, getUserModels } from '../services/modelPlayback.service
 import { controlStatus, type ControlStatus } from '../models/general.model';
 import { useModelPlaybackStore } from '../stores/modelPlayback.store';
 import { aiControlStatusList } from '../models/modelPlayback.model';
+import OnlineStatusButton from '../components/OnlineStatusButton';
 
 import styles from './ModelPlayback.module.css';
 
@@ -125,9 +126,7 @@ export default function Policies() {
           {error && <p className={styles.errorMessage}>Error: {error} </p>}
         </div>
         <div className={styles.sceneContainer}>
-          <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
-            {isLive ? 'Online' : 'Offline'}
-          </button>
+          <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
           <div className={styles.mainScene}>
             <MainScene>{renderRobots}</MainScene>
           </div>

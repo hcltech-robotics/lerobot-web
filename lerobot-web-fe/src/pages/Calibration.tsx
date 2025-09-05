@@ -7,8 +7,6 @@ import { Robot } from '../components/Robot';
 import { confirmCalibrationStart, confirmCalibrationStep, startCalibration } from '../services/calibration.service';
 import { BaseSelector } from '../components/BaseSelector';
 import { type SelectOption } from '../components/BaseSelector';
-
-import styles from './Calibration.module.css';
 import { calibrationFirstStepJointStates, startPositionJointState } from '../models/calibration.model';
 import { calibrationSteps } from '../models/calibration.model';
 import { useCalibration } from '../hooks/useCalibration';
@@ -16,6 +14,9 @@ import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { CalibrationStep } from '../models/calibration.model';
 import type { RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
+import OnlineStatusButton from '../components/OnlineStatusButton';
+
+import styles from './Calibration.module.css';
 
 const getSelectOptionsFromRobotItems = (robotList: RobotItem[]): SelectOption[] =>
   robotList.map((robot) => ({
@@ -126,9 +127,7 @@ export default function Calibration() {
         </button>
       </div>
       <div className={styles.sceneContainer}>
-        <button className={`${styles.isLive} ${isLive ? styles.online : styles.offline}`} onClick={() => setIsLive(!isLive)}>
-          {isLive ? 'Online' : 'Offline'}
-        </button>
+        <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
         <div className={styles.mainScene}>
           <MainScene>
             <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
