@@ -5,10 +5,10 @@ interface ApiKeyState {
 }
 
 interface ApiKeyActions {
-  setApiKey: (url: string) => void;
+  setApiKey: (key: string) => void;
 }
 
 export const useApiKeyStore = create<ApiKeyState & ApiKeyActions>((set) => ({
   apiKey: null,
-  setApiKey: (key) => set({ apiKey: key }),
+  setApiKey: (apiKey) => set({ apiKey }),
 }));

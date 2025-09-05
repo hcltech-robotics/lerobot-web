@@ -12,11 +12,12 @@ export default function ConfigurationBasicsForm() {
   const setApiUrl = useConfigStore((state) => state.setApiUrl);
   const apiUrl = useConfigStore((state) => state.apiUrl);
   const setApiKey = useApiKeyStore((store) => store.setApiKey);
+  const apiKey = useApiKeyStore((store) => store.apiKey);
   const setUserId = useModelPlaybackStore((state) => state.setUserId);
   const userId = useModelPlaybackStore((state) => state.userId);
 
   const [url, setUrl] = useState(apiUrl || '');
-  const [localApiKey, setLocalApiKey] = useState<string>('');
+  const [localApiKey, setLocalApiKey] = useState<string>(apiKey || '');
   const [localUserId, setLocalUserId] = useState<string>(userId || '');
   const [showPassword, setShowPassword] = useState(false);
   const [urlTouched, setUrlTouched] = useState(false);
@@ -42,7 +43,7 @@ export default function ConfigurationBasicsForm() {
           </div>
 
           <Form.Control
-            className={`${styles.input} ${urlTouched && !isUrlValid ? styles.InputError : ''}`}
+            className={`${styles.input} ${urlTouched && !isUrlValid ? styles.inputError : ''}`}
             type="url"
             required
             name="url"

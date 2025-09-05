@@ -2,7 +2,7 @@ import logging
 import threading
 import requests
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from huggingface_hub import HfApi
 
 from ..models.ai_control import AIControlParams, AIControlResponse, UserModelsRequest, UserModelsResponse
@@ -40,5 +40,5 @@ def list_user_models(req: UserModelsRequest):
         models_list = hf_api.list_models(author=req.user_id)
         models = [{"modelId": m.modelId, "id": m._id, "private": m.private, "createdAt": m.created_at} for m in models_list]
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=e.response.status_code, detail=str(e))
     return {"models": models}

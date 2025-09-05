@@ -29,6 +29,10 @@
   outline: none;
 }
 
+.input.inputError {
+  border-color: #ff0000;
+}
+
 .submitButton {
   background-color: #3c91ff;
   color: #ffffff;

@@ -21,7 +21,7 @@ export async function getCameraList(): Promise<CameraListResponse> {
     setCameraList(response);
     return response;
   } catch (error) {
-    console.error('Error fetching status:', error);
+    console.error('Error fetching camera list:', error);
     throw error;
   }
 }
