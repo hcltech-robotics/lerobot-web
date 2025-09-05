@@ -12,7 +12,8 @@ import { fetchAIControl, getUserModels } from '../services/modelPlayback.service
 import { controlStatus, type ControlStatus } from '../models/general.model';
 import { useModelPlaybackStore } from '../stores/modelPlayback.store';
 import { aiControlStatusList } from '../models/modelPlayback.model';
-import OnlineStatusButton from '../components/OnlineStatusButton';
+import { OnlineStatusButton } from '../components/OnlineStatusButton';
+import { useApiKeyStore } from '../stores/apikey.store';
 
 import styles from './ModelPlayback.module.css';
 
@@ -20,7 +21,7 @@ export default function Policies() {
   const robots = useRobotStore((store) => store.robots);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
   const setModels = useModelPlaybackStore((store) => store.setModels);
-  const apiKey = useModelPlaybackStore((state) => state.apiKey);
+  const apiKey = useApiKeyStore((store) => store.apiKey);
   const userId = useModelPlaybackStore((state) => state.userId);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,6 +33,7 @@ export default function Policies() {
 
   useEffect(() => {
     if (!apiKey || !userId) {
+      setError('The userId and/or apiKey are missing. Please provide them on the calibration page.');
       return;
     }
 
@@ -39,11 +41,15 @@ export default function Policies() {
   }, [apiKey]);
 
   const mapModels = async (apiKey: string, userId: string) => {
-    const response = await getUserModels(apiKey, userId);
-    const mappedModels = response.models.map((model) => model.modelId);
+    try {
+      const response = await getUserModels(apiKey, userId);
+      const mappedModels = response.models.map((model) => model.modelId);
 
-    setModels(response.models);
-    setOptions(mappedModels);
+      setModels(response.models);
+      setOptions(mappedModels);
+    } catch (error) {
+      setError('An error occurred while querying user models.');
+    }
   };
 
   const fetchModel = async () => {

@@ -1,6 +1,11 @@
 export const isValidUrl = (url: string): boolean => {
   try {
-    return url.trim().length > 0 && !!new URL(url);
+    const trimmed = url.trim();
+    if (!trimmed) {
+      return false;
+    }
+    const parsedUrl = new URL(trimmed);
+    return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
   } catch {
     return false;
   }

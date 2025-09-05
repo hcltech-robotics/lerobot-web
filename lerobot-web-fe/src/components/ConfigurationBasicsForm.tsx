@@ -4,19 +4,19 @@ import { isValidUrl } from '../services/configuration.service';
 import * as Form from '@radix-ui/react-form';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useModelPlaybackStore } from '../stores/modelPlayback.store';
+import { useApiKeyStore } from '../stores/apikey.store';
 
 import styles from './ConfigurationBasicsForm.module.css';
 
 export default function ConfigurationBasicsForm() {
   const setApiUrl = useConfigStore((state) => state.setApiUrl);
   const apiUrl = useConfigStore((state) => state.apiUrl);
-  const setApiKey = useModelPlaybackStore((state) => state.setApiKey);
-  const apiKey = useModelPlaybackStore((state) => state.apiKey);
+  const setApiKey = useApiKeyStore((store) => store.setApiKey);
   const setUserId = useModelPlaybackStore((state) => state.setUserId);
   const userId = useModelPlaybackStore((state) => state.userId);
 
   const [url, setUrl] = useState(apiUrl || '');
-  const [localApiKey, setLocalApiKey] = useState<string>(apiKey || '');
+  const [localApiKey, setLocalApiKey] = useState<string>('');
   const [localUserId, setLocalUserId] = useState<string>(userId || '');
   const [showPassword, setShowPassword] = useState(false);
   const [urlTouched, setUrlTouched] = useState(false);

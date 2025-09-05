@@ -8,7 +8,7 @@ import { TeleoperateControlPanel } from '../components/TeleoperateControlPanel';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
 import { controlStatus } from '../models/general.model';
-import OnlineStatusButton from '../components/OnlineStatusButton';
+import { OnlineStatusButton } from '../components/OnlineStatusButton';
 
 import styles from './Teleoperate.module.css';
 

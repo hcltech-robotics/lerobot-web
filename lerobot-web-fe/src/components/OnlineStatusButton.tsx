@@ -5,7 +5,7 @@ interface OnlineStatusButtonProps {
   onClick: (isLive: boolean) => void;
 }
 
-export default function OnlineStatusButton({ isLive, onClick }: OnlineStatusButtonProps) {
+export function OnlineStatusButton({ isLive, onClick }: OnlineStatusButtonProps) {
   return (
     <button className={`${styles.statusButton} ${isLive ? styles.online : styles.offline}`} onClick={() => onClick(!isLive)}>
       {isLive ? 'Online' : 'Offline'}

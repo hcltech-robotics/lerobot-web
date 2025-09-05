@@ -14,7 +14,7 @@ import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { CalibrationStep } from '../models/calibration.model';
 import type { RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
-import OnlineStatusButton from '../components/OnlineStatusButton';
+import { OnlineStatusButton } from '../components/OnlineStatusButton';
 
 import styles from './Calibration.module.css';
 
