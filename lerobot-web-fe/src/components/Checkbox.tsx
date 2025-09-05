@@ -1,4 +1,4 @@
-import { Checkbox as BaseCheckbox } from 'radix-ui';
+import * as BaseCheckbox from '@radix-ui/react-checkbox';
 
 import styles from './Checkbox.module.css';
 

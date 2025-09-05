@@ -9,6 +9,7 @@ import {
 } from '../models/robot.model';
 import { useConfigStore } from '../stores/config.store';
 import { useRobotStore } from '../stores/robot.store';
+import { createWebSocket } from '../utils/createWebsocket';
 
 export const capitalizeFirstLetter = (text: string) => {
   return text.charAt(0).toUpperCase() + text.slice(1);
@@ -42,7 +43,7 @@ export const toggleSelectedRobotRole = (id: string, robots: RobotItem[]): RobotI
   return robots.map((robot) => (robot.id === id ? { ...robot, role: toggleRole(robot.role) } : robot));
 };
 
-export async function getJointPositions(follower_id: RobotItem): Promise<JointStatesResponse> {
+export async function getJointPositions(follower: RobotItem): Promise<JointStatesResponse> {
   const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
@@ -55,7 +56,7 @@ export async function getJointPositions(follower_id: RobotItem): Promise<JointSt
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        follower_id: follower_id.id,
+        follower_id: follower.id,
       }),
     });
 
@@ -71,7 +72,7 @@ export async function getJointPositions(follower_id: RobotItem): Promise<JointSt
 }
 
 export function createJointPositionsWebSocket(
-  follower_id: RobotItem,
+  follower: RobotItem,
   onMessage: (jointState: JointState) => void,
   onOpen?: () => void,
   onClose?: () => void,
@@ -80,30 +81,10 @@ export function createJointPositionsWebSocket(
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
-  const websocket = new WebSocket(`${apiUrl}/ws/joint_state?follower_id=${follower_id.id}`);
+  const url = new URL('/ws/joint_state', apiUrl);
+  url.search = new URLSearchParams({ follower_id: follower.id }).toString();
 
-  websocket.onopen = () => {
-    console.log(`WebSocket opened: ${websocket.url}`);
-    onOpen?.();
-  };
-
-  websocket.onmessage = (event) => {
-    try {
-      const data = JSON.parse(event.data);
-      if (data.joint_states) {
-        onMessage(data.joint_states);
-      }
-    } catch (e) {
-      console.warn('WebSocket message parse error', e);
-    }
-  };
-
-  websocket.onclose = () => {
-    console.log(`WebSocket closed: ${websocket.url}`);
-    onClose?.();
-  };
-
-  return websocket;
+  return createWebSocket(url, (event) => onMessage(event.data), onOpen, onClose);
 }
 
 export async function getRobotList(): Promise<string[]> {

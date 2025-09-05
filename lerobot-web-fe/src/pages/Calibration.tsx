@@ -40,31 +40,22 @@ export default function Calibration() {
 
   const handleTabClick = async (index: number) => {
     if (index !== currentStep || !selectedId) return;
-
     const step = calibrationSteps[index] as CalibrationStep;
 
-    if (step.id === 'start') {
-      try {
-        await startCalibration(selectedId, robotKind!);
-        await confirmCalibrationStart();
-      } catch (error) {
-        console.error('Failed to call backend for', step.id, error);
-      }
-    } else if (step.id !== 'finish') {
-      try {
-        await confirmCalibrationStep();
-      } catch (error) {
-        console.error('Failed to call backend for', step.id, error);
-      }
-    }
-
     try {
+      if (step.id === 'start') {
+        if (!robotKind) throw new Error('Missing robot kind for startCalibration');
+        await startCalibration(selectedId, robotKind);
+        await confirmCalibrationStart();
+      } else if (step.id !== 'finish') {
+        await confirmCalibrationStep();
+      }
       if (step.step) {
         await new Promise((res) => setTimeout(res, 1000));
       }
       goToNextStep();
     } catch (error) {
-      console.error('Calibration API call failed', error);
+      console.error('Calibration API call failed for', step.id, error);
     }
   };
 

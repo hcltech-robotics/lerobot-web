@@ -1,9 +1,10 @@
+import type { CameraProps } from '../models/camera.model';
 import { useCameraStream } from '../hooks/useCameraStream';
 
 import styles from './CameraBox.module.css';
 
-export function CameraBox({ apiUrl, id }: { apiUrl: string; id: number }) {
-  const { frame } = useCameraStream(id, apiUrl);
+export function CameraBox({ id, apiUrl }: CameraProps) {
+  const { frame } = useCameraStream({ id, apiUrl });
 
   if (!frame) {
     return null;

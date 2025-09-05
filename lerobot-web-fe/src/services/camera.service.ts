@@ -1,6 +1,7 @@
 import type { CameraListResponse } from '../models/camera.model';
 import { useCameraStore } from '../stores/camera.store';
 import { useConfigStore } from '../stores/config.store';
+import { createWebSocket } from '../utils/createWebsocket';
 
 export async function getCameraList(): Promise<CameraListResponse> {
   const { apiUrl } = useConfigStore.getState();
@@ -33,21 +34,8 @@ export function createCameraWebSocket(
   onOpen?: () => void,
   onClose?: () => void,
 ): WebSocket {
-  const websocket = new WebSocket(`${url}/ws/video/${id}`);
+  const urlObj = new URL(url);
+  urlObj.pathname = `/ws/video/${encodeURIComponent(id)}`;
 
-  websocket.onopen = () => {
-    console.log(`WebSocket opened: ${url}`);
-    onOpen?.();
-  };
-
-  websocket.onmessage = (event) => {
-    onMessage(event.data);
-  };
-
-  websocket.onclose = () => {
-    console.log(`WebSocket closed: ${url}`);
-    onClose?.();
-  };
-
-  return websocket;
+  return createWebSocket(urlObj, (event) => onMessage(event.data), onOpen, onClose);
 }

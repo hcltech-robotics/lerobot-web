@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { getJointPositions, createJointPositionsWebSocket } from '../services/robot.service';
 import type { JointState, RobotItem } from '../models/robot.model';
 
-export function useJointStatePoller(followerId: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
+export function useJointStatePoller(follower: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
   const isCancelled = useRef(false);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export function useJointStatePoller(followerId: RobotItem, isLive: boolean, setJ
     const getJointStateAPICalls = async () => {
       while (!isCancelled.current) {
         try {
-          const { jointState } = await getJointPositions(followerId);
+          const { jointState } = await getJointPositions(follower);
 
           if (jointState && Object.keys(jointState).length === 6) {
             setJointState(jointState);
@@ -34,10 +34,10 @@ export function useJointStatePoller(followerId: RobotItem, isLive: boolean, setJ
     return () => {
       isCancelled.current = true;
     };
-  }, [followerId, isLive, setJointState]);
+  }, [follower, isLive, setJointState]);
 }
 
-export function useJointStatePollerWebSocket(followerId: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
+export function useJointStatePollerWebSocket(follower: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
   const websocket = useRef<WebSocket | null>(null);
 
   useEffect(() => {
@@ -45,12 +45,12 @@ export function useJointStatePollerWebSocket(followerId: RobotItem, isLive: bool
       return;
     }
 
-    websocket.current = createJointPositionsWebSocket(followerId, (jointState) => {
+    websocket.current = createJointPositionsWebSocket(follower, (jointState) => {
       setJointState(jointState);
     });
 
     return () => {
       websocket.current?.close();
     };
-  }, [followerId, isLive, setJointState]);
+  }, [follower, isLive, setJointState]);
 }

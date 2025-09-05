@@ -7,7 +7,12 @@ interface OnlineStatusButtonProps {
 
 export function OnlineStatusButton({ isLive, onClick }: OnlineStatusButtonProps) {
   return (
-    <button className={`${styles.statusButton} ${isLive ? styles.online : styles.offline}`} onClick={() => onClick(!isLive)}>
+    <button
+      type="button"
+      aria-pressed={isLive}
+      className={`${styles.statusButton} ${isLive ? styles.online : styles.offline}`}
+      onClick={() => onClick(!isLive)}
+    >
       {isLive ? 'Online' : 'Offline'}
     </button>
   );

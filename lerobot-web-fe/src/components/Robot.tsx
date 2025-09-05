@@ -23,7 +23,7 @@ export function Robot({
   const [robotModelLoaded, setRobotModelLoaded] = useState(false);
   const [liveJointState, setLiveJointState] = useState<JointState | null>(null);
   const robots = useRobotStore((store) => store.robots);
-  const followerId = robots?.find((robot) => robot.role === robotRoleList.FOLLOWER) as RobotItem;
+  const follower = robots?.find((robot) => robot.role === robotRoleList.FOLLOWER) as RobotItem;
 
   const activeJointState = isLive ? liveJointState : calibrationJointState;
 
@@ -56,7 +56,7 @@ export function Robot({
     });
   }, []);
 
-  useJointStatePollerWebSocket(followerId, isLive, setLiveJointState);
+  useJointStatePollerWebSocket(follower, isLive, setLiveJointState);
   useRobotAnimation(activeJointState, robotRef, !isLive, robotModelLoaded);
 
   return (
