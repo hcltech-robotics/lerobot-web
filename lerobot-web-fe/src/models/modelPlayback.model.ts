@@ -11,7 +11,7 @@ export interface ModelsItem {
   id: string;
   modelId: string;
   private: boolean;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export const aiControlStatusList = {

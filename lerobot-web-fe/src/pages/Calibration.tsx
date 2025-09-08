@@ -62,7 +62,7 @@ export default function Calibration() {
   return (
     <div className={styles.contentArea}>
       <div className={styles.controlPanel}>
-        <div className={styles.selectWrapper}>
+        <div>
           <BaseSelector
             label="Select Robot ID"
             value={selectedId}
@@ -114,7 +114,7 @@ export default function Calibration() {
         </Tabs.Root>
 
         <button className={styles.restartButton} onClick={restartCalibration} disabled={!completed}>
-          Reset Calibration
+          Restart Calibration
         </button>
       </div>
       <div className={styles.sceneContainer}>

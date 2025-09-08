@@ -21,7 +21,7 @@ export function Checkbox({
         id={`checkbox_${id}`}
         onCheckedChange={() => onCheckedChange(id)}
       >
-        <BaseCheckbox.Indicator forceMount>{checked ? 'L' : 'F'}</BaseCheckbox.Indicator>
+        {checked ? 'L' : 'F'}
       </BaseCheckbox.Root>
       {label && (
         <label className={styles.label} htmlFor={`checkbox_${id}`}>
