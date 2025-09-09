@@ -1,0 +1,98 @@
+.controlForm {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .controlForm {
+    grid-template-columns: 1fr;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field:nth-child(5) {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 35px;
+  color: #555;
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  border: 1px solid #555;
+  border-radius: 8px;
+}
+.inputBox input {
+  border: none;
+}
+
+.inputBox .input {
+  border-radius: 0 8px 8px 0;
+}
+
+.inputBox .link {
+  text-decoration: none;
+}
+
+.inputBox .prefix {
+  color: #555;
+  font-size: 14px;
+  padding: 0 4px;
+}
+
+.submitButton {
+  background-color: #3c91ff;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+.submitButton:hover {
+  background-color: #1f78e0;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.submitButton {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.input {
+  padding: 0 10px;
+  height: 35px;
+  line-height: 1;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #333;
+  width: calc(100% - 20px);
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.textarea {
+  padding: 10px;
+  line-height: unset;
+  font-family: unset;
+}

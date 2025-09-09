@@ -20,7 +20,7 @@ export const TabsWrapper = ({ items, defaultValue }: TabsWrapperProps) => {
   const initialValue: string = defaultValue ?? (items[0] as TabItem).value;
 
   return (
-    <Tabs.Root className={styles.Root} defaultValue={initialValue}>
+    <Tabs.Root defaultValue={initialValue}>
       <Tabs.List className={styles.list}>
         {items.map((item) => (
           <Tabs.Trigger key={item.value} className={styles.trigger} value={item.value}>

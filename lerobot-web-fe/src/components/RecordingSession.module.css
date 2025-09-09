@@ -1,0 +1,83 @@
+.sessionContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: #fafafa;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.sessionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.selectedId {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.episodeCounter {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.progressBarWrapper {
+  width: 100%;
+}
+
+.progressBarWrapper progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  appearance: none;
+  border: 1px solid #333;
+}
+
+.progressBarWrapper progress::-webkit-progress-bar {
+  background-color: #eee;
+}
+
+.progressBarWrapper progress::-webkit-progress-value {
+  background: linear-gradient(90deg, #5f1ebe, #0f5fdc 100%);
+  transition: width 0.3s ease;
+}
+
+.statusSection {
+  text-align: center;
+  margin-top: 20px;
+  height: 70px;
+}
+
+.statusText {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+.submitButton {
+  background-color: #3c91ff;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  padding: 12px;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+.stop {
+  background-color: #ff4f4f;
+  color: #fff;
+}
+
+.stop:hover {
+  background-color: #d93939;
+}

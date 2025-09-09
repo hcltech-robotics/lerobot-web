@@ -65,7 +65,7 @@ export function Robot({
         <>
           <primitive object={robotModel} ref={robotRef} position={position} rotation={rotation} />
           {robotLabel && (
-            <Html position={[position[0], position[1] - 0.05, position[2]]} center>
+            <Html position={[position[0], position[1] - 0.05, position[2]]} center zIndexRange={[1]}>
               <div className={styles.robotLabel}>{robotLabel}</div>
             </Html>
           )}

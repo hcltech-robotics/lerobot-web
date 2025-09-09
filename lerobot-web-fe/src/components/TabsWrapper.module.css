@@ -12,7 +12,7 @@
   color: #0f5fdc;
 }
 
-.trigger [data-state="active"] {
+.trigger[data-state='active'] {
   color: #0f5fdc;
   border-bottom: 1px solid #0f5fdc;
 }

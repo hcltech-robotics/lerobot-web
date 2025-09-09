@@ -1,0 +1,114 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import * as Form from '@radix-ui/react-form';
+import { initFormData, type DatasetMetaData } from '../models/recordDataset.model';
+import { useModelPlaybackStore } from '../stores/modelPlayback.store';
+
+import styles from './DatasetForm.module.css';
+
+export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) => void }) {
+  const [formData, setFormData] = useState<DatasetMetaData>(initFormData);
+  const userId = useModelPlaybackStore((state) => state.userId);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const isValid = Object.values(formData).every((v) => v.trim() !== '');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isValid) return;
+    onSubmit(formData);
+  };
+
+  return (
+    <Form.Root className={styles.controlForm} onSubmit={handleSubmit}>
+      <Form.Field className={styles.field} name="repoId">
+        <div>
+          <Form.Label className={styles.label}>ID for the new repo</Form.Label>
+        </div>
+        <div className={styles.inputBox}>
+          <Link
+            className={styles.link}
+            to={{
+              pathname: '/configuration',
+            }}
+          >
+            <span className={styles.prefix}>{`${userId}/`}</span>
+          </Link>
+
+          <Form.Control
+            className={`${styles.input}`}
+            type="text"
+            name="repoId"
+            value={formData.repoId}
+            onChange={handleChange}
+            placeholder="example-repo-name"
+            required
+          />
+        </div>
+      </Form.Field>
+      <Form.Field className={styles.field} name="numEpisodes">
+        <div>
+          <Form.Label className={styles.label}>Number of episodes</Form.Label>
+        </div>
+
+        <Form.Control
+          className={`${styles.input}`}
+          type="number"
+          name="numEpisodes"
+          value={formData.numEpisodes}
+          onChange={handleChange}
+          required
+        />
+      </Form.Field>
+      <Form.Field className={styles.field} name="episodeTime">
+        <div>
+          <Form.Label className={styles.label}>Episode time (s)</Form.Label>
+        </div>
+
+        <Form.Control
+          className={`${styles.input}`}
+          type="number"
+          name="episodeTime"
+          value={formData.episodeTime}
+          onChange={handleChange}
+          required
+        />
+      </Form.Field>
+      <Form.Field className={styles.field} name="resetTime">
+        <div>
+          <Form.Label className={styles.label}>Reset time (s)</Form.Label>
+        </div>
+
+        <Form.Control
+          className={`${styles.input}`}
+          type="number"
+          name="resetTime"
+          value={formData.resetTime}
+          onChange={handleChange}
+          required
+        />
+      </Form.Field>
+      <Form.Field className={styles.field} name="singleTask">
+        <div>
+          <Form.Label className={styles.label}>Describe a task</Form.Label>
+        </div>
+
+        <textarea
+          className={`${styles.input} ${styles.textarea}`}
+          name="singleTask"
+          value={formData.singleTask}
+          onChange={handleChange}
+          required
+        />
+      </Form.Field>
+
+      <Form.Submit className={styles.submitButton} disabled={!isValid}>
+        Start
+      </Form.Submit>
+    </Form.Root>
+  );
+}
