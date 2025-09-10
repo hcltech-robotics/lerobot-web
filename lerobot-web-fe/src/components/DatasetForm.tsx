@@ -20,7 +20,10 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValid) return;
-    onSubmit(formData);
+
+    const updatedData = { ...formData };
+    updatedData.repoId = `${userId}/${formData.repoId}`;
+    onSubmit(updatedData);
   };
 
   return (
