@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { getJointPositions, createJointPositionsWebSocket } from '../services/robot.service';
-import type { JointState, RobotItem } from '../models/robot.model';
+import type { JointState, JointStatesWSResponse, RobotItem } from '../models/robot.model';
 
 export function useJointStatePoller(follower: RobotItem, isLive: boolean, setJointState: (state: JointState) => void) {
   const isCancelled = useRef(false);
@@ -45,8 +45,9 @@ export function useJointStatePollerWebSocket(follower: RobotItem, isLive: boolea
       return;
     }
 
-    websocket.current = createJointPositionsWebSocket(follower, (jointState) => {
-      setJointState(jointState);
+    websocket.current = createJointPositionsWebSocket(follower, (jointState: string) => {
+      const response: JointStatesWSResponse = JSON.parse(jointState);
+      setJointState(response.jointState);
     });
 
     return () => {

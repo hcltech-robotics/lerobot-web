@@ -13,7 +13,7 @@ interface ConfigActions {
 export const useConfigStore = create<ConfigState & ConfigActions>()(
   persist(
     immer((set) => ({
-      apiUrl: null,
+      apiUrl: 'http://127.0.0.1:8000',
       setApiUrl: (url) => {
         set((state) => {
           state.apiUrl = url;

@@ -73,7 +73,7 @@ export async function getJointPositions(follower: RobotItem): Promise<JointState
 
 export function createJointPositionsWebSocket(
   follower: RobotItem,
-  onMessage: (jointState: JointState) => void,
+  onMessage: (jointStateResponse: string) => void,
   onOpen?: () => void,
   onClose?: () => void,
 ): WebSocket {

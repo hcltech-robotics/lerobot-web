@@ -137,7 +137,7 @@ class TeleoperationManager:
                 await websocket.send_json(
                     {
                         "timestamp": time.time(),
-                        "joint_states": joint_states_map,
+                        "jointState": joint_states_map,
                     }
                 )
                 await asyncio.sleep(1 / fps)

@@ -13,6 +13,11 @@ export interface JointStatesResponse {
   jointState: JointState;
 }
 
+export interface JointStatesWSResponse {
+  timestamp: Date;
+  jointState: JointState;
+}
+
 export interface JointState {
   rotation: number;
   pitch: number;
