@@ -32,6 +32,7 @@
   border: 1px solid #555;
   border-radius: 8px;
 }
+
 .inputBox input {
   border: none;
 }
@@ -48,6 +49,14 @@
   color: #555;
   font-size: 14px;
   padding: 0 4px;
+}
+
+.inputBox.reverse {
+  flex-direction: row-reverse;
+}
+
+.inputBox.reverse .input {
+  border-radius: 8px 0 0 8px;
 }
 
 .submitButton {

@@ -62,6 +62,7 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
           className={`${styles.input}`}
           type="number"
           name="numEpisodes"
+          placeholder="50"
           value={formData.numEpisodes}
           onChange={handleChange}
           required
@@ -69,31 +70,39 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
       </Form.Field>
       <Form.Field className={styles.field} name="episodeTime">
         <div>
-          <Form.Label className={styles.label}>Episode time (s)</Form.Label>
+          <Form.Label className={styles.label}>Episode time</Form.Label>
         </div>
 
-        <Form.Control
-          className={`${styles.input}`}
-          type="number"
-          name="episodeTime"
-          value={formData.episodeTime}
-          onChange={handleChange}
-          required
-        />
+        <div className={`${styles.inputBox} ${styles.reverse}`}>
+          <span className={styles.prefix}>s</span>
+
+          <Form.Control
+            className={`${styles.input}`}
+            type="number"
+            name="episodeTime"
+            value={formData.episodeTime}
+            onChange={handleChange}
+            required
+          />
+        </div>
       </Form.Field>
       <Form.Field className={styles.field} name="resetTime">
         <div>
-          <Form.Label className={styles.label}>Reset time (s)</Form.Label>
+          <Form.Label className={styles.label}>Reset time</Form.Label>
         </div>
 
-        <Form.Control
-          className={`${styles.input}`}
-          type="number"
-          name="resetTime"
-          value={formData.resetTime}
-          onChange={handleChange}
-          required
-        />
+        <div className={`${styles.inputBox} ${styles.reverse}`}>
+          <span className={styles.prefix}>s</span>
+
+          <Form.Control
+            className={`${styles.input}`}
+            type="number"
+            name="resetTime"
+            value={formData.resetTime}
+            onChange={handleChange}
+            required
+          />
+        </div>
       </Form.Field>
       <Form.Field className={styles.field} name="singleTask">
         <div>
@@ -103,6 +112,7 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
         <textarea
           className={`${styles.input} ${styles.textarea}`}
           name="singleTask"
+          placeholder="Write down the task you want to record..."
           value={formData.singleTask}
           onChange={handleChange}
           required
