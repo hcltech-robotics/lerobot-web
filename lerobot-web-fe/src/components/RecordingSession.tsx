@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PauseIcon, PlusIcon, StopIcon } from '@radix-ui/react-icons';
 import { Countdown } from './Countdown';
 import type { DatasetMetaData } from '../models/recordDataset.model';
 
@@ -52,9 +53,20 @@ export function RecordingSession({ meta, onStop, onFinish }: { meta: DatasetMeta
         )}
       </div>
 
-      <button className={`${styles.submitButton} ${styles.stop}`} onClick={onStop}>
-        Stop
-      </button>
+      <div className={styles.sessionButtonsGroup}>
+        <button className={`${styles.sessionButton}`} onClick={onStop}>
+          <PauseIcon className={styles.icon} />
+          Pause
+        </button>
+        <button className={`${styles.sessionButton}`} onClick={onStop}>
+          <PlusIcon className={styles.icon} />
+          Add 5 episode
+        </button>
+        <button className={`${styles.sessionButton} ${styles.stop}`} onClick={onStop}>
+          <StopIcon className={styles.icon} />
+          Stop
+        </button>
+      </div>
     </div>
   );
 }
