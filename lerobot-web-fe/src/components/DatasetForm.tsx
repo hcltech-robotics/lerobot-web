@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
+import { PlayIcon } from '@radix-ui/react-icons';
 import { initFormData, type DatasetMetaData } from '../models/recordDataset.model';
 import { useModelPlaybackStore } from '../stores/modelPlayback.store';
 
@@ -120,6 +121,7 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
       </Form.Field>
 
       <Form.Submit className={styles.submitButton} disabled={!isValid}>
+        <PlayIcon />
         Start
       </Form.Submit>
     </Form.Root>

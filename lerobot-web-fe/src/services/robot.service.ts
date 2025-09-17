@@ -1,7 +1,6 @@
 import {
   robotRoleList,
   robotSideList,
-  type JointState,
   type JointStatesResponse,
   type RobotItem,
   type RobotRoles,
