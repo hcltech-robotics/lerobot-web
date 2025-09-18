@@ -1,51 +1,40 @@
 import { useTexture } from '@react-three/drei';
-import { useEffect, useMemo } from 'react';
-import { MeshStandardMaterial, RepeatWrapping } from 'three';
+import { RepeatWrapping } from 'three';
 
 export function TableModel() {
-  const [top, bottom, side] = useTexture(['/assets/wood.jpg', '/assets/wood.jpg', '/assets/danger-stripe.png']);
-
-  useEffect(() => {
-    if (side) {
-      side.wrapS = RepeatWrapping;
-      side.wrapT = RepeatWrapping;
-      side.repeat.set(20, 1);
-      side.needsUpdate = true;
+  const [top, bottom, side] = useTexture(['/assets/wood.jpg', '/assets/wood.jpg', '/assets/danger-stripe.png'], (textures) => {
+    const sideTex = textures[2];
+    if (!sideTex) {
+      return;
     }
-  }, [side]);
+    sideTex.wrapS = sideTex.wrapT = RepeatWrapping;
+    sideTex.repeat.set(20, 1);
+  });
 
-  const materials = useMemo(
-    () => [
-      new MeshStandardMaterial({ map: side }),
-      new MeshStandardMaterial({ map: side }),
-      new MeshStandardMaterial({ map: top }),
-      new MeshStandardMaterial({ map: bottom }),
-      new MeshStandardMaterial({ map: side }),
-      new MeshStandardMaterial({ map: side }),
-    ],
-    [top, bottom, side],
-  );
+  const tableTextures = [side, side, top, bottom, side, side];
+
+  const legPositions: [number, number, number][] = [
+    [-0.45, 0.2, -0.65],
+    [0.45, 0.2, -0.65],
+    [-0.45, 0.2, 0.65],
+    [0.45, 0.2, 0.65],
+  ];
+
   return (
     <>
       <group>
-        <mesh material={materials} position={[0, 0.4, 0]} receiveShadow>
+        <mesh position={[0, 0.4, 0]} receiveShadow>
           <boxGeometry args={[1, 0.04, 1.5]} />
+          {tableTextures.map((map, i) => map && <meshStandardMaterial key={i} attach={`material-${i}`} map={map} />)}
         </mesh>
 
-        <TableLegModel position={[-0.45, 0.2, -0.65]} />
-        <TableLegModel position={[0.45, 0.2, -0.65]} />
-        <TableLegModel position={[-0.45, 0.2, 0.65]} />
-        <TableLegModel position={[0.45, 0.2, 0.65]} />
+        {legPositions.map((position, i) => (
+          <mesh key={i} position={position} castShadow>
+            <cylinderGeometry args={[0.035, 0.035, 0.4, 16]} />
+            <meshStandardMaterial color="#0f5fdc" />
+          </mesh>
+        ))}
       </group>
     </>
-  );
-}
-
-function TableLegModel({ position }: { position: [number, number, number] }) {
-  return (
-    <mesh position={position} castShadow>
-      <cylinderGeometry args={[0.035, 0.035, 0.4, 16]} />
-      <meshStandardMaterial color="#0f5fdc" />
-    </mesh>
   );
 }

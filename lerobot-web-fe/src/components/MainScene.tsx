@@ -6,7 +6,7 @@ import { TableModel } from './TableModel';
 export function MainScene(props: PropsWithChildren) {
   return (
     <>
-      <Canvas camera={{ position: [10, 5, 2], fov: 5 }}>
+      <Canvas shadows camera={{ position: [10, 5, 2], fov: 5 }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.6} />
           <directionalLight position={[0, 8, 0]} intensity={2} castShadow />
