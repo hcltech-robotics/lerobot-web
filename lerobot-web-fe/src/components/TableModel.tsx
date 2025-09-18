@@ -1,5 +1,6 @@
 import { useTexture } from '@react-three/drei';
 import { RepeatWrapping } from 'three';
+import { tableLegPositions } from '../models/general.model';
 
 export function TableModel() {
   const [top, bottom, side] = useTexture(['/assets/wood.jpg', '/assets/wood.jpg', '/assets/danger-stripe.png'], (textures) => {
@@ -13,13 +14,6 @@ export function TableModel() {
 
   const tableTextures = [side, side, top, bottom, side, side];
 
-  const legPositions: [number, number, number][] = [
-    [-0.45, 0.2, -0.65],
-    [0.45, 0.2, -0.65],
-    [-0.45, 0.2, 0.65],
-    [0.45, 0.2, 0.65],
-  ];
-
   return (
     <>
       <group>
@@ -28,7 +22,7 @@ export function TableModel() {
           {tableTextures.map((map, i) => map && <meshStandardMaterial key={i} attach={`material-${i}`} map={map} />)}
         </mesh>
 
-        {legPositions.map((position, i) => (
+        {tableLegPositions.map((position, i) => (
           <mesh key={i} position={position} castShadow>
             <cylinderGeometry args={[0.035, 0.035, 0.4, 16]} />
             <meshStandardMaterial color="#0f5fdc" />

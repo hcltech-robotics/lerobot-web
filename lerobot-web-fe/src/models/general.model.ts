@@ -4,3 +4,10 @@ export const controlStatus = {
 } as const;
 
 export type ControlStatus = (typeof controlStatus)[keyof typeof controlStatus];
+
+export const tableLegPositions: [number, number, number][] = [
+  [-0.45, 0.2, -0.65],
+  [0.45, 0.2, -0.65],
+  [-0.45, 0.2, 0.65],
+  [0.45, 0.2, 0.65],
+];
