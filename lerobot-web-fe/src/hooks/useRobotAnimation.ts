@@ -22,6 +22,7 @@ export function useRobotAnimation(
         ...jointState,
       };
     }
+
     const robot = robotRef.current;
 
     const getJoint = (name: string) => {

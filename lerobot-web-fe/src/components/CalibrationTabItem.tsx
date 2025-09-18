@@ -11,7 +11,6 @@ interface CalibrationTabItemProps {
   totalSteps: number;
   onClick: () => void;
   disabled: boolean;
-
 }
 
 export default function CalibrationTabItem({
