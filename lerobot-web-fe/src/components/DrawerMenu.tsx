@@ -12,7 +12,7 @@ interface DrawerProps {
 const pages = [
   { label: 'Teleoperate', path: '/teleoperate', icon: <RocketIcon /> },
   { label: 'Calibration', path: '/calibration', icon: <GearIcon /> },
-  { label: 'Model Playback', path: '/model-playback', icon: <LightningBoltIcon /> },
+  { label: 'AI Control', path: '/ai-control', icon: <LightningBoltIcon /> },
   { label: 'Record Dataset', path: '/record-dataset', icon: <LayersIcon /> },
   { label: 'Configuration', path: '/configuration', icon: <MixerVerticalIcon /> },
 ];

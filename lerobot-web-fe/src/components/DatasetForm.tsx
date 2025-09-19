@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import * as Form from '@radix-ui/react-form';
 import { PlayIcon } from '@radix-ui/react-icons';
 import { initFormData, type DatasetMetaData } from '../models/recordDataset.model';
-import { useModelPlaybackStore } from '../stores/modelPlayback.store';
+import { useAiControlStore } from '../stores/aiControl.store';
 
 import styles from './DatasetForm.module.css';
 
 export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) => void }) {
   const [formData, setFormData] = useState<DatasetMetaData>(initFormData);
-  const userId = useModelPlaybackStore((state) => state.userId);
+  const userId = useAiControlStore((state) => state.userId);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

@@ -1,8 +1,8 @@
+import type { AiControlResponse, PoliciesResponse } from '../models/aiControl.model';
 import type { ControlStatus } from '../models/general.model';
-import type { ModelPlaybackResponse, ModelsResponse } from '../models/modelPlayback.model';
 import { useConfigStore } from '../stores/config.store';
 
-export async function getUserModels(apiKey: string, userId: string): Promise<ModelsResponse> {
+export async function getUserModels(apiKey: string, userId: string): Promise<PoliciesResponse> {
   const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
@@ -31,7 +31,7 @@ export async function getUserModels(apiKey: string, userId: string): Promise<Mod
   }
 }
 
-export async function fetchAIControl(model: string, robotId: string, mode: ControlStatus): Promise<ModelPlaybackResponse> {
+export async function fetchAIControl(model: string, robotId: string, mode: ControlStatus): Promise<AiControlResponse> {
   const { apiUrl } = useConfigStore.getState();
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');

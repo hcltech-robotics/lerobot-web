@@ -3,7 +3,7 @@ import { useConfigStore } from '../stores/config.store';
 import { isValidUrl } from '../services/configuration.service';
 import * as Form from '@radix-ui/react-form';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
-import { useModelPlaybackStore } from '../stores/modelPlayback.store';
+import { useAiControlStore } from '../stores/aiControl.store';
 import { useApiKeyStore } from '../stores/apikey.store';
 
 import styles from './ConfigurationBasicsForm.module.css';
@@ -13,8 +13,8 @@ export default function ConfigurationBasicsForm() {
   const apiUrl = useConfigStore((state) => state.apiUrl);
   const setApiKey = useApiKeyStore((store) => store.setApiKey);
   const apiKey = useApiKeyStore((store) => store.apiKey);
-  const setUserId = useModelPlaybackStore((state) => state.setUserId);
-  const userId = useModelPlaybackStore((state) => state.userId);
+  const setUserId = useAiControlStore((state) => state.setUserId);
+  const userId = useAiControlStore((state) => state.userId);
 
   const [url, setUrl] = useState(apiUrl || '');
   const [localApiKey, setLocalApiKey] = useState<string>(apiKey || '');

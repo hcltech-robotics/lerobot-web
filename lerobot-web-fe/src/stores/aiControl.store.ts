@@ -1,19 +1,19 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { ModelsItem } from '../models/modelPlayback.model';
+import type { PolicyItem } from '../models/aiControl.model';
 
-interface ModelPlaybackState {
-  models: ModelsItem[] | null;
+interface AiControlState {
+  models: PolicyItem[] | null;
   userId: string | null;
 }
 
-interface ModelPlaybackActions {
-  setModels: (models: ModelsItem[]) => void;
+interface AiControlActions {
+  setModels: (models: PolicyItem[]) => void;
   setUserId: (userId: string) => void;
 }
 
-export const useModelPlaybackStore = create<ModelPlaybackState & ModelPlaybackActions>()(
+export const useAiControlStore = create<AiControlState & AiControlActions>()(
   persist(
     immer((set) => ({
       models: null,
@@ -30,7 +30,7 @@ export const useModelPlaybackStore = create<ModelPlaybackState & ModelPlaybackAc
       },
     })),
     {
-      name: 'modelPlayback',
+      name: 'aiControl',
       partialize: (state) => ({
         models: state.models,
         userId: state.userId,

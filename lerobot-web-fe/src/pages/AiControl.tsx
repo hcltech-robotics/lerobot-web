@@ -8,21 +8,21 @@ import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.mo
 import { useRobotStore } from '../stores/robot.store';
 import { CameraStream } from '../components/CameraStream';
 import { Selector } from '../components/Selector';
-import { fetchAIControl, getUserModels } from '../services/modelPlayback.service';
+import { fetchAIControl, getUserModels } from '../services/aiControl.service';
 import { controlStatus, type ControlStatus } from '../models/general.model';
-import { useModelPlaybackStore } from '../stores/modelPlayback.store';
-import { aiControlStatusList } from '../models/modelPlayback.model';
+import { useAiControlStore } from '../stores/aiControl.store';
+import { aiControlStatusList } from '../models/aiControl.model';
 import { OnlineStatusButton } from '../components/OnlineStatusButton';
 import { useApiKeyStore } from '../stores/apikey.store';
 
-import styles from './ModelPlayback.module.css';
+import styles from './AiControl.module.css';
 
-export default function Policies() {
+export default function AiControl() {
   const robots = useRobotStore((store) => store.robots);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
-  const setModels = useModelPlaybackStore((store) => store.setModels);
+  const setModels = useAiControlStore((store) => store.setModels);
   const apiKey = useApiKeyStore((store) => store.apiKey);
-  const userId = useModelPlaybackStore((state) => state.userId);
+  const userId = useAiControlStore((state) => state.userId);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
