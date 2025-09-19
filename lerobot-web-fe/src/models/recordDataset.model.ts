@@ -13,3 +13,16 @@ export const initFormData = {
   resetTime: '',
   singleTask: '',
 };
+
+export interface RecordingSessionProps {
+  meta: DatasetMetaData;
+  onStop: () => void;
+  onFinish: () => void;
+}
+
+export const recordingState = {
+  RESET: 'reset',
+  EPISODE: 'episode',
+} as const;
+
+export type RecordingStates = (typeof recordingState)[keyof typeof recordingState];
