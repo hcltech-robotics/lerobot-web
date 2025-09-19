@@ -1,0 +1,106 @@
+.overlay {
+    background-color: #000000b3;
+    position: fixed;
+    inset: 0;
+    animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
+.content {
+    background-color: #fcfcfc;
+    border-radius: 6px;
+    box-shadow:
+        0 0 0 1px color-mix(in oklab, #00000026, #d9d9d9 25%),
+        0 12px 60px #00000017,
+        0 16px 64px #00000026,
+        0 16px 36px -20px #0000009b;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 500px;
+    max-height: 85vh;
+    padding: 25px;
+    animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 2;
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.title {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.description {
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.button {
+    all: unset;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    padding: 0 15px;
+    font-size: 15px;
+    line-height: 1;
+    font-weight: 500;
+    height: 35px;
+    user-select: none;
+    cursor: pointer;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.button:focus:not(:focus-visible) {
+    outline: 0;
+}
+
+.button:focus-visible {
+    outline: 2px solid #7cb5ff;
+    outline-offset: 1px;
+}
+
+.alert {
+    background-color: #ff4f4f;
+    color: #fff;
+    outline-color: #ff4f4f;
+    &:hover {
+        background-color: #d93939;
+    }
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 25px;
+    justify-content: flex-end;
+}
+
+@keyframes overlayShow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes contentShow {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -48%) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}

@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { PauseIcon, PlusIcon, ReloadIcon, StopIcon } from '@radix-ui/react-icons';
 import { Countdown } from './Countdown';
 import { recordingState, type RecordingSessionProps, type RecordingStates } from '../models/recordDataset.model';
+import { AlertDialog } from './AlertDialog';
 
 import styles from './RecordingSession.module.css';
 
 export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionProps) {
   const [phase, setPhase] = useState<RecordingStates>(recordingState.EPISODE);
   const [step, setStep] = useState(1);
+  const [open, setOpen] = useState(false);
 
   const handleEpisodeEnd = () => {
     if (step >= Number(meta.numEpisodes)) {
@@ -20,6 +22,11 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
   const handleResetEnd = () => {
     setStep((prev) => prev + 1);
     setPhase(recordingState.EPISODE);
+  };
+
+  const handleAlertSubmit = () => {
+    setOpen(false);
+    onStop();
   };
 
   return (
@@ -66,11 +73,20 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
           <PlusIcon className={styles.icon} />
           Add 5 extra sec
         </button>
-        <button className={`${styles.sessionButton} ${styles.stop}`} onClick={onStop}>
+        <button className={`${styles.sessionButton} ${styles.stop}`} onClick={() => setOpen(true)}>
           <StopIcon className={styles.icon} />
           Stop
         </button>
       </div>
+      <AlertDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Are you sure?"
+        description="This action cannot be undone. This will permanently stop recording and any episodes recorded so far will be lost."
+        cancelText="Cancel"
+        actionText="Yes, stop recording"
+        onAction={handleAlertSubmit}
+      />
     </div>
   );
 }
