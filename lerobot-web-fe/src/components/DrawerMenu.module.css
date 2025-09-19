@@ -30,6 +30,8 @@
   cursor: pointer;
   padding: 8px 0px;
   color: #8291a0;
+  width: 24px;
+  height: 24px;
 }
 
 .drawerContent {

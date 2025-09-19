@@ -1,7 +1,15 @@
 import * as Collapsible from '@radix-ui/react-collapsible';
-import { GearIcon, LightningBoltIcon, RocketIcon, LayersIcon, MixerVerticalIcon } from '@radix-ui/react-icons';
-import { Menu, X } from 'lucide-react';
+import {
+  GearIcon,
+  LightningBoltIcon,
+  RocketIcon,
+  LayersIcon,
+  MixerVerticalIcon,
+  HamburgerMenuIcon,
+  Cross1Icon,
+} from '@radix-ui/react-icons';
 import { NavLink } from 'react-router-dom';
+
 import styles from './DrawerMenu.module.css';
 
 interface DrawerProps {
@@ -23,9 +31,9 @@ export function DrawerMenu({ isOpen, setOpen }: DrawerProps) {
       <nav className={`${styles.drawer} ${isOpen ? styles.open : styles.closed}`}>
         <div className={styles.drawerHeader}>
           {!isOpen ? (
-            <Menu className={styles.burger} onClick={() => setOpen(true)} />
+            <HamburgerMenuIcon className={styles.burger} onClick={() => setOpen(true)} />
           ) : (
-            <X className={styles.close} onClick={() => setOpen(false)} />
+            <Cross1Icon className={styles.close} onClick={() => setOpen(false)} />
           )}
         </div>
 

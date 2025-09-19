@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { StopIcon } from '@radix-ui/react-icons';
-import { PlayIcon } from 'lucide-react';
+import { StopIcon, PlayIcon } from '@radix-ui/react-icons';
 import { robotLayout } from '../models/teleoperate.model';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
