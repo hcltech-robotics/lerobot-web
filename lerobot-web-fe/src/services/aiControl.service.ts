@@ -8,7 +8,7 @@ export async function getUserModels(apiKey: string, userId: string): Promise<Pol
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
   try {
-    const res = await fetch(`${apiUrl}/get-user-models`, {
+    const res = await fetch(`${apiUrl}/user-models`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

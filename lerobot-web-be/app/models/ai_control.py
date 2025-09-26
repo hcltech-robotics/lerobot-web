@@ -1,5 +1,5 @@
 from typing import List, Optional
-
+from datetime import datetime
 from pydantic import BaseModel
 
 
@@ -25,3 +25,16 @@ class AIControlParams(BaseModel):
 class AIControlResponse(BaseModel):
     status: str
     message: str
+
+class UserModelsRequest(BaseModel):
+    api_key: str
+    user_id: str
+
+class UserModelsItem(BaseModel):
+    id: str
+    modelId: str
+    private: bool
+    createdAt: datetime
+
+class UserModelsResponse(BaseModel):
+    models: List[UserModelsItem]

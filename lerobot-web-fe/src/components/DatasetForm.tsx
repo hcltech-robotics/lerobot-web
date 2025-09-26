@@ -81,6 +81,7 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
             className={`${styles.input}`}
             type="number"
             name="episodeTime"
+            placeholder="10"
             value={formData.episodeTime}
             onChange={handleChange}
             required
@@ -99,6 +100,7 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
             className={`${styles.input}`}
             type="number"
             name="resetTime"
+            placeholder="10"
             value={formData.resetTime}
             onChange={handleChange}
             required
