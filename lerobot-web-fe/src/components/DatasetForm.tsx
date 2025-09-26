@@ -24,6 +24,9 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
 
     const updatedData = { ...formData };
     updatedData.repoId = `${userId}/${formData.repoId}`;
+    updatedData.numEpisodes = Number(formData.numEpisodes);
+    updatedData.episodeTime = Number(formData.episodeTime);
+    updatedData.resetTime = Number(formData.resetTime);
     onSubmit(updatedData);
   };
 
@@ -47,9 +50,9 @@ export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) =>
             className={`${styles.input}`}
             type="text"
             name="repoId"
+            placeholder="repo-name"
             value={formData.repoId}
             onChange={handleChange}
-            placeholder="example-repo-name"
             required
           />
         </div>

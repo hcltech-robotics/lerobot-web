@@ -1,12 +1,12 @@
 export interface DatasetMetaData {
   repoId: string;
-  numEpisodes: string;
-  episodeTime: string;
-  resetTime: string;
+  numEpisodes: string | number;
+  episodeTime: string | number;
+  resetTime: string | number;
   singleTask: string;
 }
 
-export const initFormData = {
+export const initFormData: DatasetMetaData = {
   repoId: '',
   numEpisodes: '',
   episodeTime: '',

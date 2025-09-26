@@ -116,10 +116,18 @@ export async function getRobotList(): Promise<string[]> {
   }
 }
 
-export const getLeaderBySide = (robotList: RobotItem[], side: RobotSides) => {
+export const getLeaderBySide = (robotList: RobotItem[], side: RobotSides): string[] => {
   return robotList
     .map((robot) => {
       return robot.side === side && robot.role === robotRoleList.LEADER ? robot.id : null;
+    })
+    .filter(Boolean) as string[];
+};
+
+export const getFollowerBySide = (robotList: RobotItem[], side: RobotSides): string[] => {
+  return robotList
+    .map((robot) => {
+      return robot.side === side && robot.role === robotRoleList.FOLLOWER ? robot.id : null;
     })
     .filter(Boolean) as string[];
 };

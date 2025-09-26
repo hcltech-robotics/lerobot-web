@@ -1,0 +1,62 @@
+import { useRobotStore } from '../stores/robot.store';
+import { useConfigStore } from '../stores/config.store';
+import { useCameraStore } from '../stores/camera.store';
+import type { DatasetMetaData } from '../models/recordDataset.model';
+import { getFollowerBySide, getLeaderBySide } from './robot.service';
+
+export async function recordDataset(meta: DatasetMetaData): Promise<any> {
+  const { apiUrl } = useConfigStore.getState();
+  const { isBimanualMode, robots } = useRobotStore.getState();
+  const { cameraList } = useCameraStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  if (isBimanualMode) {
+    throw new Error('Bimanual mode is not supported for recording a new data set.');
+  }
+
+  if (!robots || robots.length === 0) {
+    throw new Error('No connected robot found. Please connect and try again.');
+  }
+
+  const cameras = cameraList?.cameras.map((camera) => ({
+    type: 'opencv',
+    index_or_path: camera,
+    with: 640,
+    height: 480,
+    fps: 30,
+  }));
+
+  const follower = getFollowerBySide(robots, 'left');
+  const leader = getLeaderBySide(robots, 'left');
+
+  try {
+    const res = await fetch(`${apiUrl}/record/start`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        follower_port: follower[0],
+        leader_port: leader[0],
+        repo_id: meta.repoId,
+        num_episodes: meta.numEpisodes,
+        episode_time_s: meta.episodeTime,
+        reset_time_s: meta.resetTime,
+        fps: 30,
+        display_data: false,
+        cameras: cameras,
+      }),
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to playback model: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error in model playback:', error);
+    throw error;
+  }
+}

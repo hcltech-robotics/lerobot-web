@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { DatasetMetaData } from '../models/recordDataset.model';
 import { DatasetForm } from './DatasetForm';
 import { RecordingSession } from './RecordingSession';
+import { recordDataset } from '../services/recordDataset.service';
 
 import styles from './RecordDatasetControlPanel.module.css';
 
@@ -10,10 +11,11 @@ export function RecordDatasetControlPanel() {
   const [isRunning, setIsRunning] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const handleStart = (data: DatasetMetaData) => {
+  const handleStart = async (data: DatasetMetaData) => {
     setDatasetMetaData(data);
     setIsRunning(true);
     setIsSuccess(false);
+    await recordDataset(data);
   };
 
   const handleStop = () => {
