@@ -10,12 +10,18 @@ export function RecordDatasetControlPanel() {
   const [datasetMetaData, setDatasetMetaData] = useState<DatasetMetaData | null>(null);
   const [isRunning, setIsRunning] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleStart = async (data: DatasetMetaData) => {
+    setError(false);
     setDatasetMetaData(data);
-    setIsRunning(true);
-    setIsSuccess(false);
-    await recordDataset(data);
+
+    try {
+      await recordDataset(data);
+      setIsRunning(true);
+      setIsSuccess(false);
+    } catch (error) {}
+    setError(true);
   };
 
   const handleStop = () => {
@@ -33,6 +39,7 @@ export function RecordDatasetControlPanel() {
       {!isRunning && <DatasetForm onSubmit={handleStart} />}
       {isRunning && datasetMetaData && <RecordingSession meta={datasetMetaData} onStop={handleStop} onFinish={handleFinish} />}
       {isSuccess && <p className={styles.successMessage}>Successfully recorded "{datasetMetaData?.repoId}"</p>}
+      {error && <p className={styles.errorMessage}>Error while recording "{datasetMetaData?.repoId}"</p>}
     </section>
   );
 }
