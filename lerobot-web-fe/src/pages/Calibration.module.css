@@ -16,8 +16,6 @@
   border-radius: 8px;
 }
 
-
-
 .progressIndicator {
   display: inline-flex;
   align-items: center;
@@ -123,4 +121,35 @@
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.nameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.nameWrapper label {
+  color: #555555;
+  font-size: 14px;
+  font-weight: normal;
+}
+
+.nameWrapper input {
+  padding: 6px 12px;
+  border: 1px solid #d5dce5;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #1d2123;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

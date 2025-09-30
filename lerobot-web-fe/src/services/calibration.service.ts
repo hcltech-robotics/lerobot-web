@@ -3,7 +3,7 @@ import type { RobotRoles } from '../models/robot.model';
 
 const { apiUrl } = useConfigStore.getState();
 
-export const startCalibration = async (robotId: string, robotKind: RobotRoles) => {
+export const startCalibration = async (robotId: string, robotKind: RobotRoles, robotName?: string) => {
   try {
     const res = await fetch(`${apiUrl}/calibrate/start`, {
       method: 'POST',
@@ -11,6 +11,7 @@ export const startCalibration = async (robotId: string, robotKind: RobotRoles) =
       body: JSON.stringify({
         robot_id: robotId,
         robot_kind: robotKind,
+        robot_name: robotName,
       }),
     });
 

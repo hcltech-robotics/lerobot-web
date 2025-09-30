@@ -5,30 +5,23 @@ import CalibrationTabItem from '../components/CalibrationTabItem';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
 import { confirmCalibrationStart, confirmCalibrationStep, startCalibration } from '../services/calibration.service';
-import { BaseSelector } from '../components/BaseSelector';
-import { type SelectOption } from '../components/BaseSelector';
 import { calibrationFirstStepJointStates, startPositionJointState } from '../models/calibration.model';
 import { calibrationSteps } from '../models/calibration.model';
 import { useCalibration } from '../hooks/useCalibration';
 import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { CalibrationStep } from '../models/calibration.model';
-import type { RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
 import { OnlineStatusButton } from '../components/OnlineStatusButton';
+import { Selector } from '../components/Selector';
 
 import styles from './Calibration.module.css';
-
-const getSelectOptionsFromRobotItems = (robotList: RobotItem[]): SelectOption[] =>
-  robotList.map((robot) => ({
-    label: `${robot.side} ${robot.role}`,
-    value: robot.id,
-  }));
 
 export default function Calibration() {
   const [selectedId, setSelectedId] = useState<string>('');
   const [isLive, setIsLive] = useState(false);
-  const robots = useRobotStore.getState().robots;
-  const robotList = getSelectOptionsFromRobotItems(robots!) as SelectOption[];
+  const [robotName, setRobotName] = useState('');
+  const robots = useRobotStore((store) => store.robots);
+  const robotList = useRobotStore((store) => store.robotList);
   const robotKind = robots!.find((robot) => robot.id === selectedId)?.role;
 
   const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
@@ -45,7 +38,7 @@ export default function Calibration() {
     try {
       if (step.id === 'start') {
         if (!robotKind) throw new Error('Missing robot kind for startCalibration');
-        await startCalibration(selectedId, robotKind);
+        await startCalibration(selectedId, robotKind, robotName);
         await confirmCalibrationStart();
       } else if (step.id !== 'finish') {
         await confirmCalibrationStep();
@@ -62,14 +55,21 @@ export default function Calibration() {
   return (
     <div className={styles.contentArea}>
       <div className={styles.controlPanel}>
+        <h2 className={styles.title}>Calibration</h2>
         <div>
-          <BaseSelector
-            label="Select Robot ID"
-            value={selectedId}
-            options={robotList}
-            onChange={setSelectedId}
-            disabled={currentStep !== 0 || completed}
-          />
+          <div className={styles.selectorWrapper}>
+            <Selector
+              label="Select Robot ID"
+              selected={selectedId}
+              options={robotList || []}
+              onChange={setSelectedId}
+              disabled={currentStep !== 0 || completed}
+            />
+          </div>
+          <div className={styles.nameWrapper}>
+            <label htmlFor="name">Add a name for the robot</label>
+            <input type="text" name="name" id="name" value={robotName} onChange={(e) => setRobotName(e.target.value)} />
+          </div>
           {currentStep > 0 && !completed && (
             <div className={styles.progressIndicator}>
               <p>Calibration in progress</p>
