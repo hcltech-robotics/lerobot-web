@@ -15,9 +15,10 @@ sys.stdin = os.fdopen(secondary_file_descriptor)
 
 def start_calibration(params: CalibrationParams):
     robotId = params.robot_id
+    robotName = params.robot_name
     port = f"/dev/tty.usbmodem{robotId}"
     if params.robot_kind == RobotKind.follower:
-        config = SO100FollowerConfig(port=port)
+        config = SO100FollowerConfig(port=port, id={robotName})
         robot = SO100Follower(config)
     else:
         config = SO100LeaderConfig(port=port)

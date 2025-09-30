@@ -12,3 +12,4 @@ class CalibrationParams(BaseModel):
     robot_kind: RobotKind
     robot_id: str
     user_input: str = ""
+    robot_name: str = ""

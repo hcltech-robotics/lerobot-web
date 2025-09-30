@@ -68,7 +68,14 @@ export default function Calibration() {
           </div>
           <div className={styles.nameWrapper}>
             <label htmlFor="name">Add a name for the robot</label>
-            <input type="text" name="name" id="name" value={robotName} onChange={(e) => setRobotName(e.target.value)} />
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={robotName}
+              onChange={(e) => setRobotName(e.target.value)}
+              disabled={currentStep !== 0 || completed}
+            />
           </div>
           {currentStep > 0 && !completed && (
             <div className={styles.progressIndicator}>

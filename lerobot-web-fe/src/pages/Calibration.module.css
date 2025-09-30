@@ -153,3 +153,9 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.nameWrapper input:disabled {
+  color: #919eaf;
+  background-color: #e6ebf5;
+  cursor: not-allowed;
+}
