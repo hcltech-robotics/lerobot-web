@@ -15,3 +15,8 @@
   font-size: 20px;
   font-weight: bold;
 }
+
+.chartWrapper {
+  width: 150px;
+  height: 55px;
+}
