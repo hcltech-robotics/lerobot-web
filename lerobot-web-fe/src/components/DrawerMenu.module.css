@@ -1,7 +1,7 @@
 .drawer {
   height: 100vh;
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
+  background-color: #0f5fdc;
+  border-right: 1px solid #fff;
   transition: width 0.3s ease;
   overflow: hidden;
   display: flex;
@@ -29,7 +29,7 @@
   border: none;
   cursor: pointer;
   padding: 8px 0px;
-  color: #8291a0;
+  color: #fff;
   width: 24px;
   height: 24px;
 }
@@ -62,7 +62,7 @@
 
 .drawerLabel {
   font-size: 18px;
-  color: #8291a0;
+  color: #fff;
   align-self: center;
 }
 
@@ -75,5 +75,5 @@
 .drawerIcon svg {
   height: 24px;
   width: 24px;
-  color: #8291a0;
+  color: #fff;
 }

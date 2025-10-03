@@ -38,7 +38,7 @@ export function LiveChart() {
   return (
     <ResponsiveContainer>
       <LineChart data={data}>
-        <CartesianGrid stroke="#ccc" />
+        <CartesianGrid stroke="#888" />
         <Line type="monotone" dataKey="value" stroke="#b440bb" dot={false} isAnimationActive={false} />
         <Line type="monotone" dataKey="value2" stroke="#e3e3e3" dot={false} isAnimationActive={false} />
         <Line type="monotone" dataKey="value3" stroke="#42cacd" dot={false} isAnimationActive={false} />

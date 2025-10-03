@@ -10,6 +10,12 @@ export function TableModel() {
     }
     sideTex.wrapS = sideTex.wrapT = RepeatWrapping;
     sideTex.repeat.set(20, 1);
+    const topTex = textures[0];
+    if (!topTex) {
+      return;
+    }
+    topTex.wrapS = topTex.wrapT = RepeatWrapping;
+    topTex.repeat.set(1, 4);
   });
 
   const tableTextures = [side, side, top, bottom, side, side];

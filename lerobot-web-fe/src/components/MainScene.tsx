@@ -6,18 +6,17 @@ import { TableModel } from './TableModel';
 export function MainScene(props: PropsWithChildren) {
   return (
     <>
-      <Canvas shadows camera={{ position: [10, 5, 2], fov: 5 }}>
+      <Canvas shadows camera={{ position: [10, 5, 2], fov: 10 }}>
         <Suspense fallback={null}>
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[0, 8, 0]} intensity={2} castShadow />
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[0, 8, 0]} intensity={1.5} castShadow />
           <Grid
             position={[0, 0, 0]}
             args={[10, 10]}
             cellSize={10.5}
-            cellColor="#555"
             sectionSize={0.5}
-            sectionColor="#999"
-            fadeDistance={15}
+            sectionColor="#5f1ebe"
+            fadeDistance={30}
             fadeStrength={0.5}
             infiniteGrid
           />

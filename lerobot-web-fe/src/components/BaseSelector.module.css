@@ -44,3 +44,8 @@
   background-color: #f0f0f0;
   outline: none;
 }
+
+.viewPort {
+  max-height: 40vh;
+  overflow: auto;
+}

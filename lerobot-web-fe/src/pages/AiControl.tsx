@@ -25,7 +25,6 @@ export default function AiControl() {
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [isLive, setIsLive] = useState(false);
   const [options, setOptions] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);
@@ -40,6 +39,7 @@ export default function AiControl() {
   }, [apiKey]);
 
   const mapModels = async (apiKey: string, userId: string) => {
+    setLoading(true);
     try {
       const response = await getUserModels(apiKey, userId);
       const mappedModels = response.models.map((model) => model.modelId);
@@ -49,6 +49,7 @@ export default function AiControl() {
     } catch (error) {
       setError('An error occurred while querying user models.');
     }
+    setLoading(false);
   };
 
   const fetchModel = async () => {
@@ -88,58 +89,39 @@ export default function AiControl() {
     return left ? [left] : [];
   }, [robots, isBimanualMode]);
 
-  const renderRobots = followers.map((follower) => {
-    const layout = isBimanualMode ? robotLayout[follower.side] : robotLayout.single;
-
-    return <Robot key={follower.id} isLive={isLive} position={layout.position} rotation={layout.rotation} robotLabel={follower.id} />;
-  });
-
   return (
-    <div className={styles.contentArea}>
-      <div className={styles.control}>
-        <div className={styles.statusBox}>
-          <h2 className={styles.title}>Select a pre-trained model</h2>
-          <Selector
-            label="Select a model"
-            options={options}
-            selected={selectedModel}
-            onChange={(model: string) => setSelectedModel(model)}
-            disabled={isRunning}
-          />
-          <button
-            className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
-            disabled={!selectedModel || followers.length === 0}
-            onClick={fetchModel}
-          >
-            {loading ? (
-              <>
-                <span className={styles.loader} />
-                Loading
-              </>
-            ) : isRunning ? (
-              <>
-                <StopIcon className={styles.icon} />
-                Stop
-              </>
-            ) : (
-              <>
-                <PlayIcon className={styles.icon} />
-                Start
-              </>
-            )}
-          </button>
-          {error && <p className={styles.errorMessage}>Error: {error} </p>}
-        </div>
-        <div className={styles.sceneContainer}>
-          <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
-          <div className={styles.mainScene}>
-            <MainScene>{renderRobots}</MainScene>
-          </div>
-        </div>
-      </div>
-      <div className={styles.cameraContainer}>
-        <CameraStream />
-      </div>
+    <div className={styles.statusBox}>
+      <h2 className={styles.title}>Select a pre-trained model</h2>
+      <Selector
+        label="Select a model"
+        options={options}
+        selected={selectedModel}
+        onChange={(model: string) => setSelectedModel(model)}
+        disabled={isRunning}
+      />
+      <button
+        className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
+        disabled={!selectedModel || followers.length === 0}
+        onClick={fetchModel}
+      >
+        {loading ? (
+          <>
+            <span className={styles.loader} />
+            Loading
+          </>
+        ) : isRunning ? (
+          <>
+            <StopIcon className={styles.icon} />
+            Stop
+          </>
+        ) : (
+          <>
+            <PlayIcon className={styles.icon} />
+            Start
+          </>
+        )}
+      </button>
+      {error && <p className={styles.errorMessage}>Error: {error} </p>}
     </div>
   );
 }

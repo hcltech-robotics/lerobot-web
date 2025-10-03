@@ -9,14 +9,11 @@
   transition:
     margin-left 0.3s ease,
     width 0.3s ease;
+  border-bottom: 1px solid #fff;
 }
 
 .title {
   font-size: 20px;
   font-weight: bold;
-}
-
-.chartWrapper {
-  width: 150px;
-  height: 55px;
+  color: #fff;
 }

@@ -1,15 +1,7 @@
-.controlPanel {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-}
-
 .statusBox {
-  background-color: #f0f0f0;
   padding: 1rem 1.5rem;
   border-radius: 8px;
-  color: #555555;
+  position: relative;
 }
 
 .statusTitle {
@@ -31,18 +23,27 @@
 }
 
 .controlButton {
-  display: inline-flex;
+  background-color: #3c91ff;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
   align-items: center;
-  width: fit-content;
-  gap: 0.5rem;
   border: none;
   font-size: 1rem;
   font-weight: 600;
   padding: 0.75rem 1.25rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.3s ease;
   margin-top: 20px;
+  width: 100%;
+}
+
+.controlButton:hover {
+  background-color: #1f78e0;
+}
+
+.controlButton svg {
+  margin-right: 10px;
+  vertical-align: text-top;
 }
 
 .controlButton:disabled {

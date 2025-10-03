@@ -28,7 +28,7 @@ export function BaseSelector({ label, value, options, onChange, disabled = false
         </Select.Trigger>
         <Select.Portal>
           <Select.Content className={styles.selectContent} position="popper">
-            <Select.Viewport>
+            <Select.Viewport className={styles.viewPort}>
               {options &&
                 options.map((option) => (
                   <Select.Item key={option.value} value={option.value} className={styles.selectItem}>

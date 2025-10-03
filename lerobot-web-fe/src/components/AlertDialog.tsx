@@ -1,4 +1,4 @@
-import * as BaseAlertDialog from '@radix-ui/react-alert-dialog';
+import * as RadixAlertDialog from '@radix-ui/react-alert-dialog';
 
 import styles from './AlertDialog.module.css';
 
@@ -22,24 +22,24 @@ export function AlertDialog({
   onAction,
 }: AlertDialogProps) {
   return (
-    <BaseAlertDialog.Root open={open} onOpenChange={onOpenChange}>
-      <BaseAlertDialog.Portal>
-        <BaseAlertDialog.Overlay className={styles.overlay} />
-        <BaseAlertDialog.Content className={styles.content}>
-          <BaseAlertDialog.Title className={styles.title}>{title}</BaseAlertDialog.Title>
-          <BaseAlertDialog.Description className={styles.description}>{description}</BaseAlertDialog.Description>
+    <RadixAlertDialog.Root open={open} onOpenChange={onOpenChange}>
+      <RadixAlertDialog.Portal>
+        <RadixAlertDialog.Overlay className={styles.overlay} />
+        <RadixAlertDialog.Content className={styles.content}>
+          <RadixAlertDialog.Title className={styles.title}>{title}</RadixAlertDialog.Title>
+          <RadixAlertDialog.Description className={styles.description}>{description}</RadixAlertDialog.Description>
           <div className={styles.buttonGroup}>
-            <BaseAlertDialog.Cancel asChild>
+            <RadixAlertDialog.Cancel asChild>
               <button className={styles.button}>{cancelText}</button>
-            </BaseAlertDialog.Cancel>
-            <BaseAlertDialog.Action asChild>
+            </RadixAlertDialog.Cancel>
+            <RadixAlertDialog.Action asChild>
               <button className={`${styles.button} ${styles.alert}`} onClick={onAction}>
                 {actionText}
               </button>
-            </BaseAlertDialog.Action>
+            </RadixAlertDialog.Action>
           </div>
-        </BaseAlertDialog.Content>
-      </BaseAlertDialog.Portal>
-    </BaseAlertDialog.Root>
+        </RadixAlertDialog.Content>
+      </RadixAlertDialog.Portal>
+    </RadixAlertDialog.Root>
   );
 }

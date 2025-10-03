@@ -1,7 +1,6 @@
 .controlForm {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 768px) {
@@ -43,6 +42,12 @@
 
 .inputBox .link {
   text-decoration: none;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 50px;
+  text-align: center;
 }
 
 .inputBox .prefix {
@@ -63,10 +68,7 @@
   background-color: #3c91ff;
   color: #ffffff;
   transition: background-color 0.2s ease;
-  display: inline-flex;
   align-items: center;
-  width: fit-content;
-  gap: 0.5rem;
   border: none;
   font-size: 1rem;
   font-weight: 600;
@@ -74,8 +76,6 @@
   border-radius: 6px;
   cursor: pointer;
   margin-top: 20px;
-  grid-column: 1 / -1;
-  justify-self: start;
 }
 
 .submitButton:hover {
@@ -86,6 +86,11 @@
   opacity: 0.6;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.submitButton svg {
+  margin-right: 10px;
+  vertical-align: text-top;
 }
 
 .icon {
@@ -112,4 +117,5 @@
   line-height: unset;
   font-family: unset;
   resize: vertical;
+  min-height: 50px;
 }

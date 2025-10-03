@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Layout from '../pages/Layout';
 import { lazy, Suspense } from 'react';
 import Loader from '../components/Loader';
+import { BasicLayout } from '../pages/BasicLayout';
 
 const Teleoperate = lazy(() => import('../pages/Teleoperate'));
 const Calibration = lazy(() => import('../pages/Calibration'));
@@ -17,11 +18,15 @@ export default function AppRouter() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Navigate to="/configuration" />} />
             <Route path="teleoperate" element={<Teleoperate />} />
-            <Route path="calibration" element={<Calibration />} />
             <Route path="ai-control" element={<AiControl />} />
             <Route path="record-dataset" element={<RecordDataset />} />
-            <Route path="configuration" element={<Configuration />} />
             <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+          <Route path="configuration" element={<BasicLayout />}>
+            <Route index element={<Configuration />} />
+          </Route>
+          <Route path="calibration" element={<BasicLayout />}>
+            <Route index element={<Calibration />} />
           </Route>
         </Routes>
       </Suspense>
