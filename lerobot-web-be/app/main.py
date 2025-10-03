@@ -12,8 +12,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI(
-    title="LeRobot Backend",
-    summary="This is a backend service for web control of the LeRobot robotic arm",
+    title="HCLTech Robot Dojo Backend",
+    summary="This is a backend service for web control of the HCLTech Robot Dojo",
     version="0.0.1",
 )
 
