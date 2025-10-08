@@ -1,4 +1,5 @@
 import { PauseIcon, ReloadIcon, StopIcon } from '@radix-ui/react-icons';
+import { Tooltip } from './Tooltip';
 
 import styles from './ControlButtons.module.css';
 
@@ -6,13 +7,19 @@ export function ControlButtons({ onPause, onRetry, onStop }: { onPause: () => vo
   return (
     <div className={styles.controls}>
       <button className={styles.controlButton} onClick={onPause}>
-        <PauseIcon className={styles.icon} />
+        <Tooltip content="Pause">
+          <PauseIcon className={styles.icon} />
+        </Tooltip>
       </button>
       <button className={styles.controlButton} onClick={onRetry}>
-        <ReloadIcon className={styles.icon} />
+        <Tooltip content="Retry">
+          <ReloadIcon className={styles.icon} />
+        </Tooltip>
       </button>
       <button className={`${styles.controlButton} ${styles.stop}`} onClick={onStop}>
-        <StopIcon className={styles.icon} />
+        <Tooltip content="Stop">
+          <StopIcon className={styles.icon} />
+        </Tooltip>
       </button>
     </div>
   );
