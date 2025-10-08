@@ -23,6 +23,7 @@
   right: 0;
   bottom: 0;
   z-index: 1;
+  pointer-events: none;
 }
 
 .contentArea {
@@ -47,7 +48,7 @@
   border-radius: 8px;
   width: 250px;
   position: absolute;
-  top: 16px;
+  top: 96px;
   right: 16px;
   background-color: #f0f0f091;
   backdrop-filter: blur(5px);
@@ -61,8 +62,11 @@
   flex-direction: column;
   gap: 10px;
   overflow: hidden;
-  position: relative;
   height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .mainScene {
@@ -76,15 +80,11 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-  position: absolute;
-  top: 16px;
-  left: 16px;
+  font-family: sans-serif;
+  margin: 16px;
   z-index: 1;
   width: 250px;
-
   background-color: #f0f0f091;
-  backdrop-filter: blur(5px);
   border: 1px solid #fff;
   box-shadow: 0px 0px 2px 0px #fff;
   border-radius: 8px;
@@ -93,7 +93,6 @@
 }
 
 .chartWrapper {
-  display: none;
   width: 240px;
   height: 55px;
   position: absolute;
@@ -102,7 +101,7 @@
   border-radius: 8px;
   padding: 5px;
   background-color: #f0f0f091;
-    backdrop-filter: blur(5px);
-    border: 1px solid #fff;
-    box-shadow: 0px 0px 2px 0px #fff;
+  backdrop-filter: blur(5px);
+  border: 1px solid #fff;
+  box-shadow: 0px 0px 2px 0px #fff;
 }

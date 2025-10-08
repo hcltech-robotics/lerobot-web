@@ -1,0 +1,33 @@
+.controls {
+  display: flex;
+  gap: 20px;
+}
+
+.controlButton {
+  background-color: #3c91ff;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 40px;
+  border: none;
+  font-size: 0;
+  padding: 20px;
+  transition: background-color 0.2s ease;
+  box-shadow: 0px 0px 20px -10px #fff;
+}
+
+.controlButton:hover {
+  background-color: #1f78e0;
+}
+
+.stop {
+  background-color: #ff4f4f;
+}
+
+.stop:hover {
+  background-color: #d93939;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}

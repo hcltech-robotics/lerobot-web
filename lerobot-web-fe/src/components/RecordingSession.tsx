@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { PauseIcon, PlusIcon, ReloadIcon, StopIcon } from '@radix-ui/react-icons';
-import { Countdown } from './Countdown';
 import { recordingState, type RecordingSessionProps, type RecordingStates } from '../models/recordDataset.model';
+import { Countdown } from './Countdown';
 import { AlertDialog } from './AlertDialog';
+import { ControlButtons } from './ControlButtons';
 
 import styles from './RecordingSession.module.css';
 
@@ -59,24 +59,8 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
           </>
         )}
       </div>
-
-      <div className={styles.sessionButtonsGroup}>
-        <button className={`${styles.sessionButton}`} onClick={onStop}>
-          <PauseIcon className={styles.icon} />
-          Pause
-        </button>
-        <button className={`${styles.sessionButton}`} onClick={onStop}>
-          <ReloadIcon className={styles.icon} />
-          Retry episode
-        </button>
-        <button className={`${styles.sessionButton}`} onClick={onStop}>
-          <PlusIcon className={styles.icon} />
-          Add 5 extra sec
-        </button>
-        <button className={`${styles.sessionButton} ${styles.stop}`} onClick={() => setOpen(true)}>
-          <StopIcon className={styles.icon} />
-          Stop
-        </button>
+      <div className={styles.controlButtonsWrapper}>
+        <ControlButtons onPause={onStop} onRetry={onStop} onStop={() => setOpen(true)} />
       </div>
       <AlertDialog
         open={open}

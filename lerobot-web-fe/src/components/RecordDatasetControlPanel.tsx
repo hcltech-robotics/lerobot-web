@@ -20,8 +20,9 @@ export function RecordDatasetControlPanel() {
       await recordDataset(data);
       setIsRunning(true);
       setIsSuccess(false);
-    } catch (error) {}
-    setError(true);
+    } catch (error) {
+      setError(true);
+    }
   };
 
   const handleStop = () => {
