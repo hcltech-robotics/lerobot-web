@@ -10,7 +10,6 @@ import { useRobotStore } from '../stores/robot.store';
 import { robotLayout } from '../models/teleoperate.model';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { Robot } from '../components/Robot';
-import { LiveChart } from '../components/LiveChart';
 
 import styles from './Layout.module.css';
 
@@ -58,9 +57,6 @@ export default function Layout() {
               </div>
               <div className={styles.cameraContainer}>
                 <CameraStream />
-              </div>
-              <div className={styles.chartWrapper}>
-                <LiveChart />
               </div>
             </div>
           </div>
