@@ -19,7 +19,7 @@ pip install -r requirements.txt
 or,
 
 ```bash
-pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python
+pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest
 ```
 
 Install a virtual display:
@@ -31,7 +31,7 @@ sudo api install xvfb
 ## Clone the `lerobot` repository into the root directory:
 
 ```bash
-git clone https://github.com/huggingface/lerobot
+git clone https://github.com/hcltech-robotics/lerobot.git
 ```
 
 ## Navigate into the `lerobot` folder and install the package:
