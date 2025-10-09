@@ -33,8 +33,8 @@ class TeleoperateControlResponse(BaseModel):
 
 sleep_position = {
     "shoulder_pan.pos": -0.50,
-    "shoulder_lift.pos": -119.8,
-    "elbow_flex.pos": 70.0,
+    "shoulder_lift.pos": -100,
+    "elbow_flex.pos": 85.0,
     "wrist_flex.pos": 50.0,
     "wrist_roll.pos": 0.2,
     "gripper.pos": 0.72,
