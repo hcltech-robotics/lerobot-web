@@ -1,5 +1,5 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
-from lerobot.find_cameras import find_all_opencv_cameras
+from lerobot.scripts.lerobot_find_cameras import find_all_opencv_cameras
 
 from ..models.camera import ListCamerasResponse
 from ..utils.camera import detect_cameras, generate_frames

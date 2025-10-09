@@ -1,6 +1,6 @@
 import re
 
-from lerobot.find_port import find_available_ports
+from lerobot.scripts.lerobot_find_port import find_available_ports
 
 
 # get the current connected robot arm serial numbers

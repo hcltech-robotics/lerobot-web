@@ -24,7 +24,7 @@ class TeleoperationManager:
 
         self._stop_event = asyncio.Event()
         self._teleop_task: Optional[asyncio.Task] = None
-        self.joint_state_queue: asyncio.Queue = asyncio.Queue()
+        self.joint_state_queue: asyncio.Queue = asyncio.Queue(maxsize=3)
 
     # ---------- INIT + CONNECT ----------
     def _create_arms(self, leader_map: dict, follower_map: dict, is_bi_setup: bool):
