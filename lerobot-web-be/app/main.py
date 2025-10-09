@@ -4,6 +4,7 @@ from app.routes import (
     camera,
     joint_state,
     move_to_sleep,
+    record,
     robots,
     teleoperate,
 )
@@ -47,3 +48,4 @@ app.include_router(camera.router)
 app.include_router(robots.router)
 app.include_router(calibrate.router)
 app.include_router(ai_control.router)
+app.include_router(record.router)
