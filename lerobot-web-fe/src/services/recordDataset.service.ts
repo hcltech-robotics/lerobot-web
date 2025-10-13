@@ -1,8 +1,9 @@
 import { useRobotStore } from '../stores/robot.store';
 import { useConfigStore } from '../stores/config.store';
 import { useCameraStore } from '../stores/camera.store';
-import type { DatasetMetaData } from '../models/recordDataset.model';
+import type { DatasetMetaData, RecordingSessionWsResponse } from '../models/recordDataset.model';
 import { getFollowerBySide, getLeaderBySide } from './robot.service';
+import { createWebSocket } from '../utils/createWebsocket';
 
 export async function recordDataset(meta: DatasetMetaData): Promise<any> {
   const { apiUrl } = useConfigStore.getState();
@@ -59,4 +60,18 @@ export async function recordDataset(meta: DatasetMetaData): Promise<any> {
     console.error('Error in model playback:', error);
     throw error;
   }
+}
+
+export function useRecordingStatus(
+  onMessage: (jointStateResponse: RecordingSessionWsResponse) => void,
+  onOpen?: () => void,
+  onClose?: () => void,
+): WebSocket {
+  const { apiUrl } = useConfigStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  const url = new URL('/record/ws2', apiUrl);
+
+  return createWebSocket(url, (event) => onMessage(JSON.parse(event.data)), onOpen, onClose);
 }

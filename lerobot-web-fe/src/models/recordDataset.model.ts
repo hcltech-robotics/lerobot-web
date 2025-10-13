@@ -20,9 +20,13 @@ export interface RecordingSessionProps {
   onFinish: () => void;
 }
 
-export const recordingState = {
-  RESET: 'reset',
-  EPISODE: 'episode',
-} as const;
-
-export type RecordingStates = (typeof recordingState)[keyof typeof recordingState];
+export interface RecordingSessionWsResponse {
+  current_episode: number;
+  episode_start_time: number;
+  episodes_left: number;
+  in_reset: number;
+  is_running: number;
+  reset_time_s: number;
+  time_left_s: number;
+  total_episodes: number;
+}
