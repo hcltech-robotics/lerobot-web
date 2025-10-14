@@ -1,11 +1,11 @@
 import { useRobotStore } from '../stores/robot.store';
 import { useConfigStore } from '../stores/config.store';
 import { useCameraStore } from '../stores/camera.store';
-import type { DatasetMetaData, RecordingSessionWsResponse } from '../models/recordDataset.model';
+import type { DatasetMetaData, RecordingResponse, RecordingSessionWsResponse } from '../models/recordDataset.model';
 import { getFollowerBySide, getLeaderBySide } from './robot.service';
 import { createWebSocket } from '../utils/createWebsocket';
 
-export async function recordDataset(meta: DatasetMetaData): Promise<any> {
+export async function recordDataset(meta: DatasetMetaData): Promise<RecordingResponse> {
   const { apiUrl } = useConfigStore.getState();
   const { isBimanualMode, robots } = useRobotStore.getState();
   const { cameraList } = useCameraStore.getState();
@@ -58,6 +58,81 @@ export async function recordDataset(meta: DatasetMetaData): Promise<any> {
     return await res.json();
   } catch (error) {
     console.error('Error in model playback:', error);
+    throw error;
+  }
+}
+
+export async function pauseRecording(): Promise<RecordingResponse> {
+  const { apiUrl } = useConfigStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  try {
+    const res = await fetch(`${apiUrl}/record/stop`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to pause recording dataset: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error in pause recording dataset:', error);
+    throw error;
+  }
+}
+
+export async function retryRecording(): Promise<RecordingResponse> {
+  const { apiUrl } = useConfigStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  try {
+    const res = await fetch(`${apiUrl}/record/rerecord`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to retry recording dataset: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error in retry recording dataset:', error);
+    throw error;
+  }
+}
+
+export async function stopRecording(): Promise<RecordingResponse> {
+  const { apiUrl } = useConfigStore.getState();
+
+  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+
+  try {
+    const res = await fetch(`${apiUrl}/record/exit`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Failed to stop recording dataset: ${res.statusText}`);
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error('Error in stop recording dataset:', error);
     throw error;
   }
 }

@@ -2,17 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import { type RecordingSessionProps, type RecordingSessionWsResponse } from '../models/recordDataset.model';
 import { AlertDialog } from './AlertDialog';
 import { ControlButtons } from './ControlButtons';
-import { useRecordingStatus } from '../services/recordDataset.service';
+import { pauseRecording, retryRecording, stopRecording, useRecordingStatus } from '../services/recordDataset.service';
 import { useConfigStore } from '../stores/config.store';
 
 import styles from './RecordingSession.module.css';
 
 export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionProps) {
   const [open, setOpen] = useState(false);
-  const apiUrl = useConfigStore((state) => state.apiUrl);
-  const websocket = useRef<WebSocket | null>(null);
   const [wsResponse, setWsResponse] = useState<RecordingSessionWsResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const apiUrl = useConfigStore((state) => state.apiUrl);
+  const websocket = useRef<WebSocket | null>(null);
 
   let statusText: string | null = null;
   let timeLeft: number | null = null;
@@ -40,6 +40,15 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
   const handleAlertSubmit = () => {
     setOpen(false);
     onStop();
+    stopRecording();
+  };
+
+  const onPause = () => {
+    pauseRecording();
+  };
+
+  const onRetry = () => {
+    retryRecording();
   };
 
   const formatTime = (time: number) =>
@@ -83,7 +92,7 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
       )}
 
       <div className={styles.controlButtonsWrapper}>
-        <ControlButtons onPause={onStop} onRetry={onStop} onStop={() => setOpen(true)} />
+        <ControlButtons onPause={onPause} onRetry={onRetry} onStop={() => setOpen(true)} />
       </div>
 
       <AlertDialog

@@ -30,3 +30,8 @@ export interface RecordingSessionWsResponse {
   time_left_s: number;
   total_episodes: number;
 }
+
+export interface RecordingResponse {
+  status: string;
+  message: string;
+}
