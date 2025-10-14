@@ -146,7 +146,7 @@ export function useRecordingStatus(
 
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
-  const url = new URL('/record/ws2', apiUrl);
+  const url = new URL('/record/ws', apiUrl);
 
   return createWebSocket(url, (event) => onMessage(JSON.parse(event.data)), onOpen, onClose);
 }

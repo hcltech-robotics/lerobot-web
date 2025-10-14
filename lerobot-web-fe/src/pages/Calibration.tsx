@@ -57,26 +57,13 @@ export default function Calibration() {
       <div className={styles.controlPanel}>
         <h2 className={styles.title}>Calibration</h2>
         <div>
-          <div className={styles.selectorWrapper}>
-            <Selector
-              label="Select Robot ID"
-              selected={selectedId}
-              options={robotList || []}
-              onChange={setSelectedId}
-              disabled={currentStep !== 0 || completed}
-            />
-          </div>
-          <div className={styles.nameWrapper}>
-            <label htmlFor="name">Add a name for the robot</label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              value={robotName}
-              onChange={(e) => setRobotName(e.target.value)}
-              disabled={currentStep !== 0 || completed}
-            />
-          </div>
+          <Selector
+            label="Select Robot ID"
+            selected={selectedId}
+            options={robotList || []}
+            onChange={setSelectedId}
+            disabled={currentStep !== 0 || completed}
+          />
           {currentStep > 0 && !completed && (
             <div className={styles.progressIndicator}>
               <p>Calibration in progress</p>

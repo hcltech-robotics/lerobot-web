@@ -4,19 +4,21 @@ import * as Form from '@radix-ui/react-form';
 import { PlayIcon } from '@radix-ui/react-icons';
 import { initFormData, type DatasetMetaData } from '../models/recordDataset.model';
 import { useAiControlStore } from '../stores/aiControl.store';
+import { useRobotStore } from '../stores/robot.store';
 
 import styles from './DatasetForm.module.css';
 
 export function DatasetForm({ onSubmit }: { onSubmit: (data: DatasetMetaData) => void }) {
   const [formData, setFormData] = useState<DatasetMetaData>(initFormData);
   const userId = useAiControlStore((state) => state.userId);
+  const robots = useRobotStore((state) => state.robots);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const isValid = Object.values(formData).every((v) => v.trim() !== '');
+  const isValid = Object.values(formData).every((v) => v.trim() !== '') && userId && robots?.length !== 0;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
