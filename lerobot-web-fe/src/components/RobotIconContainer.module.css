@@ -41,3 +41,20 @@
   margin: 2px 0;
   opacity: 0.5;
 }
+
+.noRobot {
+  display: flex;
+  align-items: center;
+  color: #333;
+  font-weight: bold;
+  font-size: 18px;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.noRobotIcon {
+  width: 32px;
+  height: 32px;
+  color: #333;
+}

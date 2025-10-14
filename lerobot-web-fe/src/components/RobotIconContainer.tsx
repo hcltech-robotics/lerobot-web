@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { DEFAULT_ROBOT_COUNT, robotRoleList, robotSideList } from '../models/robot.model';
 import PopoverWrapper from './PopoverWrapper';
 import { RobotIcons } from './RobotIcons';
@@ -116,8 +117,12 @@ export default function RobotIconContainer() {
         </PopoverWrapper>
       ) : (
         <PopoverWrapper title="Robot Info" trigger={disconnectedRobotIcons}>
+          {isRobotsLoading && <Loader />}
           <div className={styles.divider} />
-          <p>No robots available</p>
+          <div className={styles.noRobot}>
+            <ExclamationTriangleIcon className={styles.noRobotIcon} />
+            <span>No robots available</span>
+          </div>
         </PopoverWrapper>
       )}
     </>
