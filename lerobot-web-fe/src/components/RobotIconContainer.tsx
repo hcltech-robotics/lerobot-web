@@ -46,11 +46,16 @@ export default function RobotIconContainer() {
   }, [robots]);
 
   const connectedRobotIcons = (
-    <div tabIndex={0} role="button">
+    <div role="button">
       <RobotIcons robotCount={robotList.length} setActive={true} leaderIndex={leaderIndexes} />
     </div>
   );
-  const disconnectedRobotIcons = <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />;
+
+  const disconnectedRobotIcons = (
+    <div role="button">
+      <RobotIcons robotCount={DEFAULT_ROBOT_COUNT} />
+    </div>
+  );
 
   const onModeChange = ({ change }: ToggleSwitchChange) => {
     setIsBimanualMode(change);
@@ -79,6 +84,7 @@ export default function RobotIconContainer() {
       {robotList.length > 0 ? (
         <PopoverWrapper title="Robot Info" trigger={connectedRobotIcons}>
           {isRobotsLoading && <Loader />}
+          <div className={styles.divider} />
           <ToggleSwitch
             title="Hand mode"
             labels={['Manual', 'Bimanual']}
@@ -109,7 +115,10 @@ export default function RobotIconContainer() {
             ))}
         </PopoverWrapper>
       ) : (
-        disconnectedRobotIcons
+        <PopoverWrapper title="Robot Info" trigger={disconnectedRobotIcons}>
+          <div className={styles.divider} />
+          <p>No robots available</p>
+        </PopoverWrapper>
       )}
     </>
   );

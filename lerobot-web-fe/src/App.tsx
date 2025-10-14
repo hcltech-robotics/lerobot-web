@@ -23,6 +23,10 @@ export default function App() {
 
     fetchInitialData()
       .then(([robotsResponse]) => {
+        if (!robotsResponse) {
+          return;
+        }
+
         const robotIds = new Set(robotsResponse);
         const existingRobots = robotsCopy.filter((robot) => robotIds.has(robot.id));
         const newMappedRobots: RobotItem[] = robotsResponse
