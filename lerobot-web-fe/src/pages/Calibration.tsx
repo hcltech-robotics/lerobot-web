@@ -127,7 +127,7 @@ export default function Calibration() {
       <div className={styles.sceneContainer}>
         <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
         <div className={styles.mainScene}>
-          <MainScene>
+          <MainScene zoom={5}>
             <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
           </MainScene>
         </div>

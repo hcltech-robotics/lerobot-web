@@ -3,10 +3,14 @@ import { Canvas } from '@react-three/fiber';
 import { Grid, OrbitControls } from '@react-three/drei';
 import { TableModel } from './TableModel';
 
-export function MainScene(props: PropsWithChildren) {
+type MainSceneProps = PropsWithChildren<{
+  zoom: number;
+}>;
+
+export function MainScene({ children, zoom = 10 }: MainSceneProps) {
   return (
     <>
-      <Canvas shadows camera={{ position: [10, 5, 2], fov: 10 }}>
+      <Canvas shadows camera={{ position: [10, 5, 2], fov: zoom }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.8} />
           <directionalLight position={[0, 8, 0]} intensity={1.5} castShadow />
@@ -20,7 +24,7 @@ export function MainScene(props: PropsWithChildren) {
             fadeStrength={0.5}
             infiniteGrid
           />
-          {props.children}
+          {children}
           <TableModel />
           <OrbitControls
             minPolarAngle={0}
