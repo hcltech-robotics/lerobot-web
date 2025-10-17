@@ -1,5 +1,5 @@
 import type { ControlStatus } from '../models/general.model';
-import type { RobotItem } from '../models/robot.model';
+import { type RobotItem } from '../models/robot.model';
 import type { TeleoperateResponse } from '../models/teleoperate.model';
 import { useConfigStore } from '../stores/config.store';
 

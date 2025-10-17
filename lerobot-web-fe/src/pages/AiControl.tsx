@@ -1,17 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { StopIcon, PlayIcon } from '@radix-ui/react-icons';
-import { robotLayout } from '../models/teleoperate.model';
-import { MainScene } from '../components/MainScene';
-import { Robot } from '../components/Robot';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
-import { CameraStream } from '../components/CameraStream';
 import { Selector } from '../components/Selector';
 import { fetchAIControl, getUserModels } from '../services/aiControl.service';
 import { controlStatus, type ControlStatus } from '../models/general.model';
 import { useAiControlStore } from '../stores/aiControl.store';
 import { aiControlStatusList } from '../models/aiControl.model';
-import { OnlineStatusButton } from '../components/OnlineStatusButton';
 import { useApiKeyStore } from '../stores/apikey.store';
 
 import styles from './AiControl.module.css';

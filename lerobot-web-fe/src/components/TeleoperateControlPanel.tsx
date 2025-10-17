@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
 import { useRobotStore } from '../stores/robot.store';
-import { robotSideList, type RobotSides } from '../models/robot.model';
-import { getLeaderBySide } from '../services/robot.service';
-import { Selector } from './Selector';
+import { validateRobots } from '../services/robot.service';
 
 import styles from './TeleoperateControlPanel.module.css';
 
@@ -17,66 +15,27 @@ type TeleoperateControlPanelProps = {
 
 export function TeleoperateControlPanel({ status, loading, error, isRunning, onToggleTeleoperate }: TeleoperateControlPanelProps) {
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
-  const robotlist = useRobotStore((store) => store.robots);
-  const [leftOptions, setLeftOptions] = useState<string[]>([]);
-  const [rightOptions, setRightOptions] = useState<string[]>([]);
-  const [selectedLeft, setSelectedLeft] = useState<string>('');
-  const [selectedRight, setSelectedRight] = useState<string>('');
-  const [isSelectedLeader, setIsSelectedLeader] = useState<boolean>(false);
+  const robots = useRobotStore((store) => store.robots);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   useEffect(() => {
-    if (robotlist) {
-      const left = getLeaderBySide(robotlist, robotSideList.LEFT);
-      const right = getLeaderBySide(robotlist, robotSideList.RIGHT);
-
-      setLeftOptions(left);
-      setRightOptions(right);
-    } else {
-      setIsSelectedLeader(false);
-    }
-  }, [isBimanualMode, robotlist]);
-
-  const onLeaderChange = (value: string, side: RobotSides) => {
-    if (side === robotSideList.LEFT) {
-      setSelectedLeft(value);
-    } else {
-      setSelectedRight(value);
-    }
-  };
-
-  useEffect(() => {
-    if (isBimanualMode) {
-      setIsSelectedLeader(!(selectedLeft && selectedRight));
-    } else {
-      setIsSelectedLeader(!selectedLeft);
-    }
-  }, [selectedLeft, selectedRight, isBimanualMode]);
+    const isValid = validateRobots(robots, isBimanualMode);
+    setIsDisabled(!isValid);
+  }, [isBimanualMode, robots]);
 
   return (
     <div className={styles.statusBox}>
       <h2 className={styles.statusTitle}>Teleoperation Status</h2>
-      <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
-      {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
-      <Selector
-        options={leftOptions}
-        selected={selectedLeft}
-        label={isBimanualMode ? 'Select a leader for left' : 'Select a leader'}
-        disabled={isRunning}
-        onChange={(value) => onLeaderChange(value, robotSideList.LEFT)}
-      />
-      {isBimanualMode && (
-        <Selector
-          selected={selectedRight}
-          options={rightOptions}
-          label="Select a leader for right"
-          disabled={isRunning}
-          onChange={(value) => onLeaderChange(value, robotSideList.RIGHT)}
-        />
+      {!isDisabled ? (
+        <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
+      ) : (
+        <p className={styles.statusText}>Select a leader and a follower arm in the top right corner</p>
       )}
+      {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
       <button
         className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
         onClick={onToggleTeleoperate}
-        disabled={isSelectedLeader || loading}
+        disabled={isDisabled || loading}
       >
         {loading ? (
           <>

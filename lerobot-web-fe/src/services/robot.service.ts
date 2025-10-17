@@ -131,3 +131,26 @@ export const getFollowerBySide = (robotList: RobotItem[], side: RobotSides): str
     })
     .filter(Boolean) as string[];
 };
+
+export const validateRobots = (robotList: RobotItem[] | null, isBimanualMode: boolean): boolean => {
+  if (!robotList || robotList.length === 0) {
+    return false;
+  }
+
+  const hasLeaderAndFollower = (side: RobotSides): boolean => {
+    const robotsOnSide = robotList.filter((r) => r.side === side);
+    const hasLeader = robotsOnSide.some((r) => r.role === robotRoleList.LEADER);
+    const hasFollower = robotsOnSide.some((r) => r.role === robotRoleList.FOLLOWER);
+    return hasLeader && hasFollower;
+  };
+
+  if (!isBimanualMode) {
+    return hasLeaderAndFollower(robotSideList.LEFT) || hasLeaderAndFollower(robotSideList.RIGHT);
+  }
+
+  if (isBimanualMode) {
+    return hasLeaderAndFollower(robotSideList.LEFT) && hasLeaderAndFollower(robotSideList.RIGHT);
+  }
+
+  return false;
+};
