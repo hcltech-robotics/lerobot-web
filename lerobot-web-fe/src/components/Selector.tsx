@@ -4,7 +4,7 @@ import { BaseSelector, type SelectOption } from './BaseSelector';
 import styles from './Selector.module.css';
 
 interface SelectorProps {
-  options: string[];
+  options: string[] | SelectOption[];
   selected: string;
   label?: string;
   disabled?: boolean;
@@ -15,13 +15,23 @@ export function Selector({ options, selected, label = 'Select an option', disabl
   const [mappedOptions, setMappedOptions] = useState<SelectOption[]>([]);
 
   useEffect(() => {
-    if (options) {
+    let mapped: SelectOption[];
+
+    if (!options) {
+      return;
+    }
+
+    if (typeof options[0] === 'string') {
       const robotOptions = options.map((value) => ({
         label: value,
         value: value,
       }));
-      setMappedOptions(robotOptions);
+      mapped = robotOptions as SelectOption[];
+    } else {
+      mapped = options as SelectOption[];
     }
+
+    setMappedOptions(mapped);
   }, [options]);
 
   return (

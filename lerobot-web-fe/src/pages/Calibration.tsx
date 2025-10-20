@@ -19,10 +19,10 @@ import styles from './Calibration.module.css';
 export default function Calibration() {
   const [selectedId, setSelectedId] = useState<string>('');
   const [isLive, setIsLive] = useState(false);
-  const [robotName, setRobotName] = useState('');
   const robots = useRobotStore((store) => store.robots);
-  const robotList = useRobotStore((store) => store.robotList);
   const robotKind = robots!.find((robot) => robot.id === selectedId)?.role;
+
+  const mappedRobots = robots && robots.map((item) => ({ label: `${item.side}-${item.role} (${item.id})`, value: item.id }));
 
   const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
@@ -32,13 +32,16 @@ export default function Calibration() {
     currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? secondStepAnimationState : startPositionJointState;
 
   const handleTabClick = async (index: number) => {
-    if (index !== currentStep || !selectedId) return;
+    if (index !== currentStep || !selectedId) {
+      return;
+    }
+
     const step = calibrationSteps[index] as CalibrationStep;
 
     try {
       if (step.id === 'start') {
         if (!robotKind) throw new Error('Missing robot kind for startCalibration');
-        await startCalibration(selectedId, robotKind, robotName);
+        await startCalibration(selectedId, robotKind);
         await confirmCalibrationStart();
       } else if (step.id !== 'finish') {
         await confirmCalibrationStep();
@@ -58,9 +61,9 @@ export default function Calibration() {
         <h2 className={styles.title}>Calibration</h2>
         <div>
           <Selector
-            label="Select Robot ID"
+            label="Select a robot arm"
             selected={selectedId}
-            options={robotList || []}
+            options={mappedRobots || []}
             onChange={setSelectedId}
             disabled={currentStep !== 0 || completed}
           />
