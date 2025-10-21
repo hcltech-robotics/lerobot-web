@@ -45,6 +45,7 @@ export async function recordDataset(meta: DatasetMetaData): Promise<RecordingRes
         num_episodes: meta.numEpisodes,
         episode_time_s: meta.episodeTime,
         reset_time_s: meta.resetTime,
+        task_description: meta.singleTask,
         fps: 30,
         display_data: false,
         cameras: cameras,
