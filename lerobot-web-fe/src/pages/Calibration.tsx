@@ -11,20 +11,17 @@ import { useCalibration } from '../hooks/useCalibration';
 import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { CalibrationStep } from '../models/calibration.model';
 import { useRobotStore } from '../stores/robot.store';
-import { OnlineStatusButton } from '../components/OnlineStatusButton';
 import { Selector } from '../components/Selector';
 
 import styles from './Calibration.module.css';
 
 export default function Calibration() {
   const [selectedId, setSelectedId] = useState<string>('');
-  const [isLive, setIsLive] = useState(false);
   const robots = useRobotStore((store) => store.robots);
   const robotKind = robots!.find((robot) => robot.id === selectedId)?.role;
+  const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
   const mappedRobots = robots && robots.map((item) => ({ label: `${item.side}-${item.role} (${item.id})`, value: item.id }));
-
-  const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
   const secondStepActive = currentStep === 2;
   const secondStepAnimationState = useSecondStepAnimation(secondStepActive);
@@ -40,7 +37,9 @@ export default function Calibration() {
 
     try {
       if (step.id === 'start') {
-        if (!robotKind) throw new Error('Missing robot kind for startCalibration');
+        if (!robotKind) {
+          throw new Error('Missing robot kind for startCalibration');
+        }
         await startCalibration(selectedId, robotKind);
         await confirmCalibrationStart();
       } else if (step.id !== 'finish') {
@@ -115,10 +114,9 @@ export default function Calibration() {
         </button>
       </div>
       <div className={styles.sceneContainer}>
-        <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
         <div className={styles.mainScene}>
           <MainScene zoom={5}>
-            <Robot isLive={isLive} calibrationJointState={calibrationJointState} />
+            <Robot isLive={false} calibrationJointState={calibrationJointState} />
           </MainScene>
         </div>
       </div>

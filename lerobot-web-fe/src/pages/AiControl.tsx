@@ -8,6 +8,7 @@ import { controlStatus, type ControlStatus } from '../models/general.model';
 import { useAiControlStore } from '../stores/aiControl.store';
 import { aiControlStatusList } from '../models/aiControl.model';
 import { useApiKeyStore } from '../stores/apikey.store';
+import { useRunningStore } from '../stores/running.store';
 
 import styles from './AiControl.module.css';
 
@@ -17,12 +18,17 @@ export default function AiControl() {
   const setModels = useAiControlStore((store) => store.setModels);
   const apiKey = useApiKeyStore((store) => store.apiKey);
   const userId = useAiControlStore((state) => state.userId);
+  const setRunning = useRunningStore((state) => state.setRunning);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => {
+    setRunning('ai-control', isRunning);
+  }, [isRunning]);
 
   useEffect(() => {
     if (!apiKey || !userId) {

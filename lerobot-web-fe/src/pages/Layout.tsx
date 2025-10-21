@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { DrawerMenu } from '../components/DrawerMenu';
 import Header from '../components/Header';
@@ -10,6 +10,7 @@ import { useRobotStore } from '../stores/robot.store';
 import { robotLayout } from '../models/teleoperate.model';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { Robot } from '../components/Robot';
+import { useRunningStore } from '../stores/running.store';
 
 import styles from './Layout.module.css';
 
@@ -18,6 +19,11 @@ export default function Layout() {
   const [isLive, setIsLive] = useState(false);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
   const robots = useRobotStore((store) => store.robots);
+  const isAnyRunning = useRunningStore((state) => state.isAnyRunning());
+
+  useEffect(() => {
+    setIsLive(isAnyRunning);
+  }, [isAnyRunning]);
 
   const followers = useMemo(() => {
     if (!robots) return [];

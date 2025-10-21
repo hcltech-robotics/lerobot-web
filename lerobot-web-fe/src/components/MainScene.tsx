@@ -4,7 +4,7 @@ import { Grid, OrbitControls } from '@react-three/drei';
 import { TableModel } from './TableModel';
 
 type MainSceneProps = PropsWithChildren<{
-  zoom: number;
+  zoom?: number;
 }>;
 
 export function MainScene({ children, zoom = 10 }: MainSceneProps) {

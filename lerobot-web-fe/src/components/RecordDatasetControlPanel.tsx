@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { DatasetMetaData } from '../models/recordDataset.model';
 import { DatasetForm } from './DatasetForm';
 import { RecordingSession } from './RecordingSession';
 import { recordDataset } from '../services/recordDataset.service';
+import { useRunningStore } from '../stores/running.store';
 
 import styles from './RecordDatasetControlPanel.module.css';
 
@@ -11,6 +12,11 @@ export function RecordDatasetControlPanel() {
   const [isRunning, setIsRunning] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const setRunning = useRunningStore((state) => state.setRunning);
+
+  useEffect(() => {
+    setRunning('recording-dataset', isRunning);
+  }, [isRunning]);
 
   const handleStart = async (data: DatasetMetaData) => {
     setError(false);
