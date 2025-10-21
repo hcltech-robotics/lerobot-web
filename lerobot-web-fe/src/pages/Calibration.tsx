@@ -99,7 +99,7 @@ export default function Calibration() {
 
           {calibrationSteps.map((step) => (
             <Tabs.Content key={step.id} value={step.id} className={styles.tabContent}>
-              {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration</p>}
+              {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration!</p>}
               {step.id === 'start' && (
                 <div className={styles.alert}>
                   <ExclamationTriangleIcon className={styles.alertIcon} />
