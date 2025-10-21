@@ -18,7 +18,7 @@ def start_calibration(params: CalibrationParams):
     robotName = params.robot_name
     port = f"/dev/tty.usbmodem{robotId}"
     if params.robot_kind == RobotKind.follower:
-        config = SO100FollowerConfig(port=port, id={robotName})
+        config = SO100FollowerConfig(port=port)
         robot = SO100Follower(config)
     else:
         config = SO100LeaderConfig(port=port)
