@@ -12,6 +12,7 @@ from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
 
 from ..models.teleoperate import sleep_position
 from ..utils.joint_state import remap_keys_for_client_and_convert_to_deg
+from ..utils.serial_prefixes import get_serial_prefixes
 
 logger = logging.getLogger(__name__)
 
@@ -28,23 +29,24 @@ class TeleoperationManager:
 
     # ---------- INIT + CONNECT ----------
     def _create_arms(self, leader_map: dict, follower_map: dict, is_bi_setup: bool):
+        prefixes = get_serial_prefixes()
         if is_bi_setup:
             leader_config = BiSO100LeaderConfig(
-                left_arm_port=f"/dev/tty.usbmodem{leader_map['left']}",
-                right_arm_port=f"/dev/tty.usbmodem{leader_map['right']}",
+                left_arm_port=f"{prefixes[0]}{leader_map['left']}",
+                right_arm_port=f"{prefixes[0]}{leader_map['right']}",
             )
             follower_config = BiSO100FollowerConfig(
-                left_arm_port=f"/dev/tty.usbmodem{follower_map['left']}",
-                right_arm_port=f"/dev/tty.usbmodem{follower_map['right']}",
+                left_arm_port=f"{prefixes[0]}{follower_map['left']}",
+                right_arm_port=f"{prefixes[0]}{follower_map['right']}",
             )
             self.leader_arm = BiSO100Leader(leader_config)
             self.follower_arm = BiSO100Follower(follower_config)
         else:
             leader_id = list(leader_map.values())[0]
             follower_id = list(follower_map.values())[0]
-            leader_config = SO100LeaderConfig(port=f"/dev/tty.usbmodem{leader_id}")
+            leader_config = SO100LeaderConfig(port=f"{prefixes[0]}{leader_id}")
             follower_config = SO100FollowerConfig(
-                port=f"/dev/tty.usbmodem{follower_id}"
+                port=f"{prefixes[0]}{follower_id}"
             )
             self.leader_arm = SO100Leader(leader_config)
             self.follower_arm = SO100Follower(follower_config)

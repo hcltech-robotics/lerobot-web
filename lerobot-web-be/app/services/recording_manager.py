@@ -19,6 +19,8 @@ from lerobot.utils.control_utils import init_keyboard_listener
 from lerobot.utils.utils import log_say
 from lerobot.utils.visualization_utils import init_rerun
 
+from ..utils.serial_prefixes import get_serial_prefixes
+
 logger = logging.getLogger(__name__)
 
 
@@ -62,13 +64,16 @@ class RecordingManager:
             "arm": cameras[1],
         }
 
+        prefixes = get_serial_prefixes()
+
         self.robot_config = SO100FollowerConfig(
-            port=f"/dev/tty.usbmodem{follower_port}",
+            port=f"{prefixes[0]}{follower_port}",
             id="left_follower_arm",
             cameras=camera_config,
         )
         self.teleop_config = SO100LeaderConfig(
-            port=f"/dev/tty.usbmodem{leader_port}", id="left_leader_arm"
+            port=f"{prefixes[0]}{leader_port}",
+            id="left_leader_arm"
         )
 
         self.robot = SO100Follower(self.robot_config)

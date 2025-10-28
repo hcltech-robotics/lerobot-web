@@ -5,6 +5,7 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 
 from ..utils.joint_state import remap_joint_state_keys_for_client
+from ..utils.serial_prefixes import get_serial_prefixes
 
 router = APIRouter()
 
@@ -31,8 +32,9 @@ async def websocket_joint_state(websocket: WebSocket):
 
         for fid in follower_ids:
             try:
+                prefixes = get_serial_prefixes()
                 config = SO100FollowerConfig(
-                    port=f"/dev/tty.usbmodem{fid}", use_degrees=True
+                    port=f"{prefixes[0]}{fid}", use_degrees=True
                 )
                 robot = SO100Follower(config)
                 print(f"Connecting to robot at port: {config.port}")

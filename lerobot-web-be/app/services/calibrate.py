@@ -7,6 +7,7 @@ from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
 
 from ..models.calibrate import CalibrationParams, RobotKind
+from ..utils.serial_prefixes import get_serial_prefixes
 
 enter_flag = False
 primary_file_descriptor, secondary_file_descriptor = pty.openpty()
@@ -15,8 +16,8 @@ sys.stdin = os.fdopen(secondary_file_descriptor)
 
 def start_calibration(params: CalibrationParams):
     robotId = params.robot_id
-    robotName = params.robot_name
-    port = f"/dev/tty.usbmodem{robotId}"
+    prefixes = get_serial_prefixes() 
+    port = f"{prefixes[0]}{robot_id}"
     if params.robot_kind == RobotKind.follower:
         config = SO100FollowerConfig(port=port)
         robot = SO100Follower(config)

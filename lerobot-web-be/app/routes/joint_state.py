@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from ..models.joint_state import JointState
 from ..services.teleoperate import teleop_manager
 from ..utils.joint_state import remap_keys_for_client_and_convert_to_deg
+from ..utils.serial_prefixes import get_serial_prefixes
 
 router = APIRouter()
 
@@ -19,8 +20,9 @@ class JointStateRequest(BaseModel):
 # get the current state once from robot arm and print the values
 @router.post("/joint_state", response_model=JointState, tags=["status"])
 def get_state(req: JointStateRequest):
+    prefixes = get_serial_prefixes()
     config = SO100FollowerConfig(
-        port=f"/dev/tty.usbmodem{req.follower_id}", use_degrees=True
+        port=f"{prefixes[0]}{req.follower_id}", use_degrees=True
     )
     robot = SO100Follower(config)
 

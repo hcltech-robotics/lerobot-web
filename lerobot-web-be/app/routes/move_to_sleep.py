@@ -5,6 +5,8 @@ from fastapi import APIRouter
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 from pydantic import BaseModel
 
+from ..utils.serial_prefixes import get_serial_prefixes
+
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
@@ -18,9 +20,9 @@ def move_to_sleep(params: MoveToSleepRequest):
     robot = None
 
     try:
-
+        prefixes = get_serial_prefixes() 
         config = SO100FollowerConfig(
-            port=f"/dev/tty.usbmodem{params.follower_id}", use_degrees=True
+            port=f"{prefixes[0]}{params.follower_id}", use_degrees=True
         )
         robot = SO100Follower(config)
 
