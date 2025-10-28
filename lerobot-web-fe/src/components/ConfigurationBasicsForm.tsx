@@ -5,6 +5,7 @@ import * as Form from '@radix-ui/react-form';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useAiControlStore } from '../stores/aiControl.store';
 import { useApiKeyStore } from '../stores/apikey.store';
+import { ToastType, useToastStore } from '../stores/toast.store';
 
 import styles from './ConfigurationBasicsForm.module.css';
 
@@ -15,6 +16,7 @@ export default function ConfigurationBasicsForm() {
   const apiKey = useApiKeyStore((store) => store.apiKey);
   const setUserId = useAiControlStore((state) => state.setUserId);
   const userId = useAiControlStore((state) => state.userId);
+  const addToast = useToastStore((state) => state.addToast);
 
   const [url, setUrl] = useState(apiUrl || '');
   const [localApiKey, setLocalApiKey] = useState<string>(apiKey || '');
@@ -27,11 +29,18 @@ export default function ConfigurationBasicsForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid) {
+      return;
+    }
 
     setApiUrl(url.trim());
     setApiKey(localApiKey);
     setUserId(localUserId);
+    addToast({
+      type: ToastType.Success,
+      title: 'Success!',
+      description: 'Configuration saved successfully.',
+    });
   };
 
   return (

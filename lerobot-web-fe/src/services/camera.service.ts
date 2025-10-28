@@ -1,30 +1,15 @@
 import type { CameraListResponse } from '../models/camera.model';
 import { useCameraStore } from '../stores/camera.store';
-import { useConfigStore } from '../stores/config.store';
 import { createWebSocket } from '../utils/createWebsocket';
+import { apiFetch } from '../utils/apiFetch';
 
 export async function getCameraList(): Promise<CameraListResponse> {
-  const { apiUrl } = useConfigStore.getState();
-  const setCameraList = useCameraStore.getState().setCameraList;
+  const response = await apiFetch<CameraListResponse>('list-cameras', { toast: { error: false } });
 
-  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
+  const { setCameraList } = useCameraStore.getState();
+  setCameraList(response);
 
-  try {
-    const cameraListResponse = await fetch(`${apiUrl}/list-cameras`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-
-    const response: CameraListResponse = await cameraListResponse.json();
-    setCameraList(response);
-    return response;
-  } catch (error) {
-    console.error('Error fetching camera list:', error);
-    throw error;
-  }
+  return response;
 }
 
 export function createCameraWebSocket(

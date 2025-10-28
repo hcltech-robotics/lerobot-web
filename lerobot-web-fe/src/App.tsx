@@ -5,6 +5,7 @@ import { useConfigStore } from './stores/config.store';
 import { getRobotList } from './services/robot.service';
 import { useRobotStore } from './stores/robot.store';
 import { robotRoleList, robotSideList, type RobotItem } from './models/robot.model';
+import { ToastProvider } from './components/ToastProvider';
 
 export default function App() {
   const apiUrl = useConfigStore((store) => store.apiUrl);
@@ -49,6 +50,7 @@ export default function App() {
   return (
     <>
       <AppRouter />
+      <ToastProvider />
     </>
   );
 }

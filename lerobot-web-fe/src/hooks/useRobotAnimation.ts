@@ -39,7 +39,7 @@ export function useRobotAnimation(
     };
 
     if (Object.values(joints).some((joint) => !joint)) {
-      console.warn('One or more joints not found');
+      console.error('One or more joints not found');
       return;
     }
 
