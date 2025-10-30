@@ -17,7 +17,7 @@ sys.stdin = os.fdopen(secondary_file_descriptor)
 def start_calibration(params: CalibrationParams):
     robotId = params.robot_id
     prefixes = get_serial_prefixes() 
-    port = f"{prefixes[0]}{robot_id}"
+    port = f"{prefixes[0]}{robotId}"
     if params.robot_kind == RobotKind.follower:
         config = SO100FollowerConfig(port=port)
         robot = SO100Follower(config)
