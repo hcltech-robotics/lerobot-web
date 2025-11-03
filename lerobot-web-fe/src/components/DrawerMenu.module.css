@@ -53,11 +53,11 @@
 }
 
 .drawerItem:hover {
-  background-color: #e0e0e0;
+  background-color: #00000030;
 }
 
 .selected {
-  background-color: #c8d2dd;
+  background-color: #00000030;
 }
 
 .drawerLabel {
@@ -76,8 +76,4 @@
   height: 24px;
   width: 24px;
   color: #fff;
-}
-
-.selected svg {
-  color: #105fdc;
 }

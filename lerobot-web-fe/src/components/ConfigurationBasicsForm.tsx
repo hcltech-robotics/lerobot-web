@@ -19,12 +19,15 @@ export default function ConfigurationBasicsForm() {
   const addToast = useToastStore((state) => state.addToast);
 
   const [url, setUrl] = useState(apiUrl || '');
+  const [foxgloveUrl, setFoxgloveUrl] = useState('');
   const [localApiKey, setLocalApiKey] = useState<string>(apiKey || '');
   const [localUserId, setLocalUserId] = useState<string>(userId || '');
   const [showPassword, setShowPassword] = useState(false);
   const [urlTouched, setUrlTouched] = useState(false);
+  const [foxgloveUrlTouched, setFoxgloveUrlTouched] = useState(false);
 
   const isUrlValid = isValidUrl(url);
+  const isFoxgloveUrlValid = isValidUrl(foxgloveUrl);
   const isFormValid = isUrlValid;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -48,7 +51,7 @@ export default function ConfigurationBasicsForm() {
       <Form.Root onSubmit={handleSubmit}>
         <Form.Field className={styles.field} name="url">
           <div className={styles.messageContainer}>
-            <Form.Label className={styles.label}>Backend Url</Form.Label>
+            <Form.Label className={styles.label}>Backend URL</Form.Label>
           </div>
 
           <Form.Control
@@ -60,7 +63,23 @@ export default function ConfigurationBasicsForm() {
             onChange={(e) => setUrl(e.target.value)}
             onBlur={() => setUrlTouched(true)}
           />
-          {urlTouched && !isUrlValid && <div className={styles.errorMessage}>Please provide a valid URL.</div>}
+          {urlTouched && !isUrlValid && <div className={styles.errorMessage}>Please provide a valid URL</div>}
+        </Form.Field>
+
+        <Form.Field className={styles.field} name="foxgloveUrl">
+          <div className={styles.messageContainer}>
+            <Form.Label className={styles.label}>Foxglove URL</Form.Label>
+          </div>
+
+          <Form.Control
+            className={`${styles.input} ${foxgloveUrlTouched && !isFoxgloveUrlValid ? styles.inputError : ''}`}
+            type="url"
+            name="foxgloveUrl"
+            value={foxgloveUrl}
+            onChange={(e) => setFoxgloveUrl(e.target.value)}
+            onBlur={() => setFoxgloveUrlTouched(true)}
+          />
+          {foxgloveUrlTouched && !isFoxgloveUrlValid && <div className={styles.errorMessage}>Please provide a valid URL</div>}
         </Form.Field>
 
         <Form.Field className={styles.field} name="hf_api_key">

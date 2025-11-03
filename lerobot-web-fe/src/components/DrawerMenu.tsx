@@ -7,6 +7,7 @@ import {
   MixerVerticalIcon,
   HamburgerMenuIcon,
   Cross1Icon,
+  ChatBubbleIcon,
 } from '@radix-ui/react-icons';
 import { NavLink } from 'react-router-dom';
 
@@ -22,6 +23,7 @@ const pages = [
   { label: 'Calibration', path: '/calibration', icon: <GearIcon /> },
   { label: 'AI Control', path: '/ai-control', icon: <LightningBoltIcon /> },
   { label: 'Record Dataset', path: '/record-dataset', icon: <LayersIcon /> },
+  { label: 'Chat Control', path: '/chat-control', icon: <ChatBubbleIcon /> },
   { label: 'Configuration', path: '/configuration', icon: <MixerVerticalIcon /> },
 ];
 

@@ -5,7 +5,9 @@ export const isValidUrl = (url: string): boolean => {
       return false;
     }
     const parsedUrl = new URL(trimmed);
-    return parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:';
+    return (
+      parsedUrl.protocol === 'http:' || parsedUrl.protocol === 'https:' || parsedUrl.protocol === 'ws:' || parsedUrl.protocol === 'wss:'
+    );
   } catch {
     return false;
   }
