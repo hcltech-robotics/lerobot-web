@@ -5,9 +5,8 @@ import { Html } from '@react-three/drei';
 import { STLLoader } from 'three/examples/jsm/Addons.js';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePollerWebSocket } from '../hooks/useJointStatePoller';
-import { robotRoleList, type JointState, type RobotItem, type RobotProps } from '../models/robot.model';
+import { type JointState, type RobotProps } from '../models/robot.model';
 import { robotLayout } from '../models/teleoperate.model';
-import { useRobotStore } from '../stores/robot.store';
 
 import styles from './Robot.module.css';
 
@@ -22,8 +21,6 @@ export function Robot({
   const [robotModel, setRobotModel] = useState<THREE.Object3D | null>(null);
   const [robotModelLoaded, setRobotModelLoaded] = useState(false);
   const [liveJointState, setLiveJointState] = useState<JointState | null>(null);
-  const robots = useRobotStore((store) => store.robots);
-  const follower = robots?.find((robot) => robot.role === robotRoleList.FOLLOWER) as RobotItem;
 
   const activeJointState = isLive ? liveJointState : calibrationJointState;
 
@@ -56,7 +53,7 @@ export function Robot({
     });
   }, []);
 
-  useJointStatePollerWebSocket(follower, isLive, setLiveJointState);
+  useJointStatePollerWebSocket(robotLabel, isLive, setLiveJointState);
   useRobotAnimation(activeJointState, robotRef, !isLive, robotModelLoaded);
 
   return (

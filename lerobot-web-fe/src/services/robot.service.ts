@@ -52,7 +52,7 @@ export async function getJointPositions(follower: RobotItem): Promise<JointState
 }
 
 export function createJointPositionsWebSocket(
-  follower: RobotItem,
+  follower: string,
   onMessage: (jointStateResponse: string) => void,
   onOpen?: () => void,
   onClose?: () => void,
@@ -62,7 +62,7 @@ export function createJointPositionsWebSocket(
   if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
 
   const url = new URL('/ws/joint_state', apiUrl);
-  url.search = new URLSearchParams({ follower_id: follower.id }).toString();
+  url.search = new URLSearchParams({ follower_id: follower }).toString();
 
   return createWebSocket(url, (event) => onMessage(event.data), onOpen, onClose);
 }

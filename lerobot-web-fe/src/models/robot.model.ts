@@ -57,7 +57,7 @@ export interface RobotProps {
   calibrationJointState?: JointState | null;
   position?: [number, number, number];
   rotation?: [number, number, number];
-  robotLabel?: string;
+  robotLabel: string;
 }
 
 export const JOINT_STATES_OFFSETS = {
