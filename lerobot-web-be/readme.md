@@ -2,30 +2,25 @@
 
 Created by Python based FastAPI web framework.
 
-## Activate lerobot env
+## Activating a virtual environment for the backend
+
+If you haven't created your own yet, help [here](https://www.w3schools.com/python/python_virtualenv.asp).
 
 ```bash
-conda activate lerobot
+python -m venv lerobot
+```
+
+Activation (e.g. on Linux and macOS):
+```bash
+source lerobot/bin/activate
 ```
 
 ## Install
 
-Install dependecies via txt:
+Install dependecies:
 
 ```bash
-pip install -r requirements.txt
-```
-
-or,
-
-```bash
-pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest
-```
-
-Install a virtual display:
-
-```bash
-sudo api install xvfb
+pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo
 ```
 
 ## Clone the `lerobot` repository into the root directory:
@@ -45,13 +40,6 @@ pip install -e .
 
 ```bash
 python -c "import lerobot; print(lerobot.__file__)"
-```
-
-## If necessary, install the following additional packages:
-
-```bash
-pip install feetech-servo-sdk
-pip install placo
 ```
 
 ## Start the app:
