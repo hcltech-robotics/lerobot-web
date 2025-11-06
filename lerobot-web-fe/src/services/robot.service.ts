@@ -1,10 +1,10 @@
 import {
   robotRoleList,
   robotSideList,
-  type JointStatesResponse,
   type RobotItem,
   type RobotRoles,
   type RobotSides,
+  type RobotTypes,
 } from '../models/robot.model';
 import { useConfigStore } from '../stores/config.store';
 import { useRobotStore } from '../stores/robot.store';
@@ -43,14 +43,6 @@ export const toggleSelectedRobotRole = (id: string, robots: RobotItem[]): RobotI
   return robots.map((robot) => (robot.id === id ? { ...robot, role: toggleRole(robot.role) } : robot));
 };
 
-export async function getJointPositions(follower: RobotItem): Promise<JointStatesResponse> {
-  return apiFetch<JointStatesResponse>('joint_state', {
-    method: 'POST',
-    body: JSON.stringify({ follower_id: follower.id }),
-    toast: { success: false },
-  });
-}
-
 export function createJointPositionsWebSocket(
   follower: string,
   onMessage: (jointStateResponse: string) => void,
@@ -67,9 +59,10 @@ export function createJointPositionsWebSocket(
   return createWebSocket(url, (event) => onMessage(event.data), onOpen, onClose);
 }
 
-export async function getRobotList(): Promise<string[]> {
+export async function getRobotList(robotType: RobotTypes): Promise<string[]> {
   const response = await apiFetch<string[]>('robots', {
-    method: 'GET',
+    method: 'POST',
+    body: JSON.stringify({ robot_type: robotType }),
     toast: { error: false },
   });
 

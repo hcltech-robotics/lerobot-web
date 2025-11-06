@@ -9,7 +9,7 @@ import { robotSideList } from '../models/robot.model';
 
 export async function recordDataset(meta: DatasetMetaData): Promise<RecordingResponse> {
   const { apiUrl } = useConfigStore.getState();
-  const { isBimanualMode, robots } = useRobotStore.getState();
+  const { isBimanualMode, robots, robotType } = useRobotStore.getState();
   const { cameraList } = useCameraStore.getState();
 
   if (!apiUrl) {
@@ -48,6 +48,7 @@ export async function recordDataset(meta: DatasetMetaData): Promise<RecordingRes
       fps: 30,
       display_data: false,
       cameras,
+      robot_type: robotType,
     }),
     toast: { success: 'Recording started.' },
   });

@@ -1,9 +1,10 @@
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { RobotItem } from '../models/robot.model';
+import { robotTypeList, type RobotItem, type RobotTypes } from '../models/robot.model';
 
 export interface RobotState {
+  robotType: RobotTypes;
   robots: RobotItem[] | null;
   robotList: string[] | null;
   isBimanualMode: boolean;
@@ -12,6 +13,7 @@ export interface RobotState {
 
 export interface RobotActions {
   setRobots: (robots: RobotItem[]) => void;
+  setRobotType: (robotType: RobotTypes) => void;
   setRobotList: (robots: string[]) => void;
   setIsBimanualMode: (mode: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
@@ -20,6 +22,7 @@ export interface RobotActions {
 export const useRobotStore = create<RobotState & RobotActions>()(
   persist(
     immer((set) => ({
+      robotType: robotTypeList.SO100,
       robots: null,
       robotList: null,
       isBimanualMode: false,
@@ -40,11 +43,16 @@ export const useRobotStore = create<RobotState & RobotActions>()(
         set((state) => {
           state.isLoading = isLoading;
         }),
+      setRobotType: (robotType: RobotTypes) =>
+        set((state) => {
+          state.robotType = robotType;
+        }),
     })),
     {
       name: 'robot',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
+        robotType: state.robotType,
         robots: state.robots,
         robotList: state.robotList,
         isBimanualMode: state.isBimanualMode,

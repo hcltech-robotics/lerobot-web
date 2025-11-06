@@ -13,6 +13,7 @@ export default function Teleoperate() {
   const robots = useRobotStore((store) => store.robots);
   const isRunning = useMemo(() => teleoperateStatus === teleoperateStatusList.RUN, [teleoperateStatus]);
   const setRunning = useRunningStore((state) => state.setRunning);
+  const robotType = useRobotStore((state) => state.robotType);
 
   useEffect(() => {
     setRunning('teleoperate', isRunning);
@@ -23,7 +24,7 @@ export default function Teleoperate() {
     setError(null);
 
     try {
-      const response = await toggleTeleoperate(isRunning ? controlStatus.STOP : controlStatus.START, robots!);
+      const response = await toggleTeleoperate(isRunning ? controlStatus.STOP : controlStatus.START, robots!, robotType);
 
       setTeleoperateStatus(response.message?.toLowerCase().includes('started') ? teleoperateStatusList.RUN : teleoperateStatusList.READY);
     } catch (e) {

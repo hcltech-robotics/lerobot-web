@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { StopIcon, PlayIcon } from '@radix-ui/react-icons';
-import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
+import { robotRoleList, robotSideList, type RobotItem, type RobotTypes } from '../models/robot.model';
 import { useRobotStore } from '../stores/robot.store';
 import { Selector } from '../components/Selector';
 import { fetchAIControl, getUserModels } from '../services/aiControl.service';
@@ -15,6 +15,7 @@ import styles from './AiControl.module.css';
 export default function AiControl() {
   const robots = useRobotStore((store) => store.robots);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
+  const robotType = useRobotStore((store) => store.robotType);
   const setModels = useAiControlStore((store) => store.setModels);
   const apiKey = useApiKeyStore((store) => store.apiKey);
   const userId = useAiControlStore((state) => state.userId);
@@ -58,13 +59,13 @@ export default function AiControl() {
       const followerId = followers[0]?.id || '';
       const modelStatus = isRunning ? controlStatus.STOP : controlStatus.START;
 
-      handleAIControl(selectedModel, followerId, modelStatus);
+      handleAIControl(selectedModel, followerId, modelStatus, robotType);
     }
   };
 
-  const handleAIControl = async (selectedModel: string, followerId: string, modelStatus: ControlStatus) => {
+  const handleAIControl = async (selectedModel: string, followerId: string, modelStatus: ControlStatus, robotType: RobotTypes) => {
     setLoading(true);
-    const result = await fetchAIControl(selectedModel, followerId, modelStatus);
+    const result = await fetchAIControl(selectedModel, followerId, modelStatus, robotType);
 
     if (result.status === aiControlStatusList.OK) {
       setIsRunning((prev) => !prev);

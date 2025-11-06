@@ -18,6 +18,7 @@ import styles from './Calibration.module.css';
 export default function Calibration() {
   const [selectedId, setSelectedId] = useState<string>('');
   const robots = useRobotStore((store) => store.robots);
+  const robotType = useRobotStore((store) => store.robotType);
   const robotKind = robots!.find((robot) => robot.id === selectedId)?.role;
   const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
@@ -40,7 +41,7 @@ export default function Calibration() {
         if (!robotKind) {
           throw new Error('Missing robot kind for startCalibration');
         }
-        await startCalibration(selectedId, robotKind);
+        await startCalibration(selectedId, robotKind, robotType);
         await confirmCalibrationStart();
       } else if (step.id !== 'finish') {
         await confirmCalibrationStep();
@@ -116,7 +117,7 @@ export default function Calibration() {
       <div className={styles.sceneContainer}>
         <div className={styles.mainScene}>
           <MainScene zoom={5}>
-            <Robot isLive={false} calibrationJointState={calibrationJointState} />
+            <Robot isLive={false} calibrationJointState={calibrationJointState} robotLabel={selectedId} />
           </MainScene>
         </div>
       </div>

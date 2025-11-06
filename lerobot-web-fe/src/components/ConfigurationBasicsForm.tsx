@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { useConfigStore } from '../stores/config.store';
-import { isValidUrl } from '../services/configuration.service';
 import * as Form from '@radix-ui/react-form';
 import { EyeClosedIcon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { useConfigStore } from '../stores/config.store';
 import { useAiControlStore } from '../stores/aiControl.store';
 import { useApiKeyStore } from '../stores/apikey.store';
 import { ToastType, useToastStore } from '../stores/toast.store';
+import { useRobotStore } from '../stores/robot.store';
+import { isValidUrl } from '../services/configuration.service';
+import { robotTypeList, type RobotTypes } from '../models/robot.model';
 
 import styles from './ConfigurationBasicsForm.module.css';
 
@@ -13,6 +15,8 @@ export default function ConfigurationBasicsForm() {
   const setApiUrl = useConfigStore((state) => state.setApiUrl);
   const apiUrl = useConfigStore((state) => state.apiUrl);
   const setApiKey = useApiKeyStore((store) => store.setApiKey);
+  const robotType = useRobotStore((state) => state.robotType);
+  const setRobotType = useRobotStore((store) => store.setRobotType);
   const apiKey = useApiKeyStore((store) => store.apiKey);
   const setUserId = useAiControlStore((state) => state.setUserId);
   const userId = useAiControlStore((state) => state.userId);
@@ -36,9 +40,13 @@ export default function ConfigurationBasicsForm() {
       return;
     }
 
+    const formData = new FormData(e.currentTarget);
+    const values = Object.fromEntries(formData.entries());
+
     setApiUrl(url.trim());
     setApiKey(localApiKey);
     setUserId(localUserId);
+    setRobotType(values.robotType as RobotTypes);
     addToast({
       type: ToastType.Success,
       title: 'Success!',
@@ -80,6 +88,22 @@ export default function ConfigurationBasicsForm() {
             onBlur={() => setFoxgloveUrlTouched(true)}
           />
           {foxgloveUrlTouched && !isFoxgloveUrlValid && <div className={styles.errorMessage}>Please provide a valid URL</div>}
+        </Form.Field>
+
+        <Form.Field className={styles.field} name="robot_type">
+          <div className={styles.messageContainer}>
+            <Form.Label className={styles.label}>Robot Type</Form.Label>
+          </div>
+
+          <Form.Control asChild>
+            <select className={styles.select} name="robotType" defaultValue={robotType} required>
+              {Object.entries(robotTypeList).map(([key, value]) => (
+                <option key={key} value={value}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          </Form.Control>
         </Form.Field>
 
         <Form.Field className={styles.field} name="hf_api_key">

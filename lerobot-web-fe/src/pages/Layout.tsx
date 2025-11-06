@@ -65,7 +65,7 @@ export default function Layout() {
                 <MainScene isAutoRotate={isLive || isAutorotate}>{renderRobots}</MainScene>
               </div>
               <button className={styles.autorotateControl} onClick={() => setIsAutorotate(!isAutorotate)}>
-                {isLive || isAutorotate ? <PlayIcon /> : <PauseIcon />}
+                {isLive || isAutorotate ? <PlayIcon /> : <PauseIcon />} Auto-rotate
               </button>
               <div className={styles.cameraContainer}>
                 <CameraStream />

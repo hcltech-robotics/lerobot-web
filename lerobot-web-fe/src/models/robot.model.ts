@@ -52,6 +52,13 @@ export const robotRoleList = {
 
 export type RobotRoles = (typeof robotRoleList)[keyof typeof robotRoleList];
 
+export const robotTypeList = {
+  SO100: 'so100',
+  SO101: 'so101',
+} as const;
+
+export type RobotTypes = (typeof robotTypeList)[keyof typeof robotTypeList];
+
 export interface RobotProps {
   isLive: boolean;
   calibrationJointState?: JointState | null;

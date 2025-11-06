@@ -4,7 +4,7 @@ import { getCameraList } from './services/camera.service';
 import { useConfigStore } from './stores/config.store';
 import { getRobotList } from './services/robot.service';
 import { useRobotStore } from './stores/robot.store';
-import { robotRoleList, robotSideList, type RobotItem } from './models/robot.model';
+import { robotRoleList, robotSideList, type RobotItem, type RobotTypes } from './models/robot.model';
 import { ToastProvider } from './components/ToastProvider';
 
 export default function App() {
@@ -12,6 +12,7 @@ export default function App() {
   const setRobots = useRobotStore((store) => store.setRobots);
   const robots = useRobotStore((store) => store.robots);
   const setIsLoading = useRobotStore((store) => store.setIsLoading);
+  const robotType = useRobotStore((store) => store.robotType);
 
   useEffect(() => {
     if (!apiUrl) {
@@ -22,7 +23,7 @@ export default function App() {
 
     const robotsCopy = [...(robots ?? [])];
 
-    fetchInitialData()
+    fetchInitialData(robotType)
       .then(([robotsResponse]) => {
         if (!robotsResponse) {
           return;
@@ -41,10 +42,10 @@ export default function App() {
         setRobots([...existingRobots, ...newMappedRobots]);
       })
       .finally(() => setIsLoading(false));
-  }, [apiUrl]);
+  }, [apiUrl, robotType]);
 
-  const fetchInitialData = async () => {
-    return await Promise.all([getRobotList(), getCameraList()]);
+  const fetchInitialData = async (robotType: RobotTypes) => {
+    return await Promise.all([getRobotList(robotType), getCameraList()]);
   };
 
   return (
