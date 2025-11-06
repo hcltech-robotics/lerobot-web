@@ -17,7 +17,7 @@ async def teleoperate_start(params: TeleoperateControlParams):
     is_bi_setup, leader_map, follower_map = validate_teleop_setup(params.robots)
 
     await teleop_manager.start_teleoperation(
-        params.fps, leader_map, follower_map, is_bi_setup
+        params.fps, leader_map, follower_map, is_bi_setup, params.robot_type
     )
     return {"status": "ok", "message": "Teleoperation started"}
 

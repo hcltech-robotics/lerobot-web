@@ -5,13 +5,11 @@ from typing import Optional
 
 from fastapi import WebSocketDisconnect
 from fastapi.websockets import WebSocketState
-from lerobot.robots.bi_so100_follower import BiSO100Follower, BiSO100FollowerConfig
-from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
-from lerobot.teleoperators.bi_so100_leader import BiSO100Leader, BiSO100LeaderConfig
-from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
 
+from ..models.robots import RobotType
 from ..models.teleoperate import sleep_position
 from ..utils.joint_state import remap_keys_for_client_and_convert_to_deg
+from ..utils.robots import configure_follower, configure_leader
 from ..utils.serial_prefixes import get_serial_prefixes
 
 logger = logging.getLogger(__name__)
@@ -28,31 +26,25 @@ class TeleoperationManager:
         self.joint_state_queue: asyncio.Queue = asyncio.Queue(maxsize=3)
 
     # ---------- INIT + CONNECT ----------
-    def _create_arms(self, leader_map: dict, follower_map: dict, is_bi_setup: bool):
-        prefixes = get_serial_prefixes()
-        if is_bi_setup:
-            leader_config = BiSO100LeaderConfig(
-                left_arm_port=f"{prefixes[0]}{leader_map['left']}",
-                right_arm_port=f"{prefixes[0]}{leader_map['right']}",
-            )
-            follower_config = BiSO100FollowerConfig(
-                left_arm_port=f"{prefixes[0]}{follower_map['left']}",
-                right_arm_port=f"{prefixes[0]}{follower_map['right']}",
-            )
-            self.leader_arm = BiSO100Leader(leader_config)
-            self.follower_arm = BiSO100Follower(follower_config)
-        else:
-            leader_id = list(leader_map.values())[0]
-            follower_id = list(follower_map.values())[0]
-            leader_config = SO100LeaderConfig(port=f"{prefixes[0]}{leader_id}")
-            follower_config = SO100FollowerConfig(port=f"{prefixes[0]}{follower_id}")
-            self.leader_arm = SO100Leader(leader_config)
-            self.follower_arm = SO100Follower(follower_config)
-
+    def _create_arms(
+        self,
+        leader_map: dict,
+        follower_map: dict,
+        is_bi_setup: bool,
+        robot_type: RobotType,
+    ):
+        self.follower_arm = configure_follower(is_bi_setup, follower_map, robot_type)
+        self.leader_arm = configure_leader(is_bi_setup, leader_map, robot_type)
         self.is_bi_setup = is_bi_setup
 
-    def connect_arms(self, leader_map: dict, follower_map: dict, is_bi_setup: bool):
-        self._create_arms(leader_map, follower_map, is_bi_setup)
+    def connect_arms(
+        self,
+        leader_map: dict,
+        follower_map: dict,
+        is_bi_setup: bool,
+        robot_type: RobotType,
+    ):
+        self._create_arms(leader_map, follower_map, is_bi_setup, robot_type)
         if not self.follower_arm or not self.leader_arm:
             logger.error("Arms not initialized before teleopeation loop")
             return
@@ -64,7 +56,7 @@ class TeleoperationManager:
         try:
             self.follower_arm.connect(calibrate=False)
         except Exception as e:
-            logger.error(f"Error during connection to leader arm: {e}")
+            logger.error(f"Error during connection to follower arm: {e}")
             return
         if not self.leader_arm.is_connected or not self.follower_arm.is_connected:
             raise RuntimeError("Leader or follower arm failed to connect.")
@@ -149,12 +141,17 @@ class TeleoperationManager:
             logger.info("Teleoperation loop stopped")
 
     async def start_teleoperation(
-        self, fps: int, leader_map: dict, follower_map: dict, is_bi_setup: bool
+        self,
+        fps: int,
+        leader_map: dict,
+        follower_map: dict,
+        is_bi_setup: bool,
+        robot_type: RobotType,
     ):
         if self._teleop_task and not self._teleop_task.done():
             raise RuntimeError("Teleoperation already running")
 
-        self.connect_arms(leader_map, follower_map, is_bi_setup)
+        self.connect_arms(leader_map, follower_map, is_bi_setup, robot_type)
         self._stop_event.clear()
         self._teleop_task = asyncio.create_task(
             self._teleoperate_loop(fps, follower_map)

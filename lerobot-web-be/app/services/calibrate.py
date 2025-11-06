@@ -3,11 +3,8 @@ import pty
 import sys
 import threading
 
-from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
-from lerobot.teleoperators.so100_leader import SO100Leader, SO100LeaderConfig
-
 from ..models.calibrate import CalibrationParams, RobotKind
-from ..utils.serial_prefixes import get_serial_prefixes
+from ..utils.robots import configure_follower, configure_leader
 
 enter_flag = False
 primary_file_descriptor, secondary_file_descriptor = pty.openpty()
@@ -16,14 +13,10 @@ sys.stdin = os.fdopen(secondary_file_descriptor)
 
 def start_calibration(params: CalibrationParams):
     robotId = params.robot_id
-    prefixes = get_serial_prefixes() 
-    port = f"{prefixes[0]}{robotId}"
     if params.robot_kind == RobotKind.follower:
-        config = SO100FollowerConfig(port=port)
-        robot = SO100Follower(config)
+        robot = configure_follower(False, {"robot_id": robotId}, params.robot_type)
     else:
-        config = SO100LeaderConfig(port=port)
-        robot = SO100Leader(config)
+        robot = configure_leader(False, {"robot_id": robotId}, params.robot_type)
     try:
         robot.connect(calibrate=False)
         t = threading.Thread(target=robot.calibrate, daemon=True)

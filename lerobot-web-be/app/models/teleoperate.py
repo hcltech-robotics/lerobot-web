@@ -3,6 +3,8 @@ from typing import List
 
 from pydantic import BaseModel
 
+from ..models.robots import RobotType
+
 
 class SideEnum(str, Enum):
     left = "left"
@@ -24,6 +26,7 @@ class TeleoperateControlParams(BaseModel):
     mode: str
     robots: List[RobotAssignment]
     fps: int = 30
+    robot_type: RobotType
 
 
 class TeleoperateControlResponse(BaseModel):
