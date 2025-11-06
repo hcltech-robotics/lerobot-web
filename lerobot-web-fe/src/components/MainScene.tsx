@@ -4,13 +4,14 @@ import { Grid, OrbitControls } from '@react-three/drei';
 import { TableModel } from './TableModel';
 
 type MainSceneProps = PropsWithChildren<{
+  isAutoRotate?: boolean;
   zoom?: number;
 }>;
 
-export function MainScene({ children, zoom = 10 }: MainSceneProps) {
+export function MainScene({ children, isAutoRotate = false, zoom = 10 }: MainSceneProps) {
   return (
     <>
-      <Canvas shadows camera={{ position: [10, 5, 2], fov: zoom }}>
+      <Canvas shadows camera={{ position: [7, 3, 1], fov: zoom }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.8} />
           <directionalLight position={[0, 8, 0]} intensity={1.5} castShadow />
@@ -32,7 +33,7 @@ export function MainScene({ children, zoom = 10 }: MainSceneProps) {
             enablePan={true}
             enableZoom={true}
             target={[0, 0.45, 0]}
-            autoRotate
+            autoRotate={!isAutoRotate}
             autoRotateSpeed={0.1}
           />
         </Suspense>

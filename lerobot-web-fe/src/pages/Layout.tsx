@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import { PauseIcon, PlayIcon } from '@radix-ui/react-icons';
 import { DrawerMenu } from '../components/DrawerMenu';
 import Header from '../components/Header';
 import { BrandLogo } from '../components/BrandLogo';
@@ -17,12 +18,14 @@ import styles from './Layout.module.css';
 export default function Layout() {
   const [isOpen, setOpen] = useState(false);
   const [isLive, setIsLive] = useState(false);
+  const [isAutorotate, setIsAutorotate] = useState(false);
   const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
   const robots = useRobotStore((store) => store.robots);
   const isAnyRunning = useRunningStore((state) => state.isAnyRunning());
 
   useEffect(() => {
     setIsLive(isAnyRunning);
+    setIsAutorotate(isAnyRunning);
   }, [isAnyRunning]);
 
   const followers = useMemo(() => {
@@ -59,8 +62,11 @@ export default function Layout() {
             <div className={styles.sceneContainer}>
               <OnlineStatusButton isLive={isLive} onClick={setIsLive} />
               <div className={styles.mainScene}>
-                <MainScene>{renderRobots}</MainScene>
+                <MainScene isAutoRotate={isLive || isAutorotate}>{renderRobots}</MainScene>
               </div>
+              <button className={styles.autorotateControl} onClick={() => setIsAutorotate(!isAutorotate)}>
+                {isLive || isAutorotate ? <PlayIcon /> : <PauseIcon />}
+              </button>
               <div className={styles.cameraContainer}>
                 <CameraStream />
               </div>
