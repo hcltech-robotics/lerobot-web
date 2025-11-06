@@ -74,22 +74,6 @@ export default function ConfigurationBasicsForm() {
           {urlTouched && !isUrlValid && <div className={styles.errorMessage}>Please provide a valid URL</div>}
         </Form.Field>
 
-        <Form.Field className={styles.field} name="foxgloveUrl">
-          <div className={styles.messageContainer}>
-            <Form.Label className={styles.label}>Foxglove URL</Form.Label>
-          </div>
-
-          <Form.Control
-            className={`${styles.input} ${foxgloveUrlTouched && !isFoxgloveUrlValid ? styles.inputError : ''}`}
-            type="url"
-            name="foxgloveUrl"
-            value={foxgloveUrl}
-            onChange={(e) => setFoxgloveUrl(e.target.value)}
-            onBlur={() => setFoxgloveUrlTouched(true)}
-          />
-          {foxgloveUrlTouched && !isFoxgloveUrlValid && <div className={styles.errorMessage}>Please provide a valid URL</div>}
-        </Form.Field>
-
         <Form.Field className={styles.field} name="robot_type">
           <div className={styles.messageContainer}>
             <Form.Label className={styles.label}>Robot Type</Form.Label>
@@ -104,6 +88,22 @@ export default function ConfigurationBasicsForm() {
               ))}
             </select>
           </Form.Control>
+        </Form.Field>
+
+        <Form.Field className={styles.field} name="foxgloveUrl">
+          <div className={styles.messageContainer}>
+            <Form.Label className={styles.label}>Foxglove URL</Form.Label>
+          </div>
+
+          <Form.Control
+            className={`${styles.input} ${foxgloveUrlTouched && !isFoxgloveUrlValid ? styles.inputError : ''}`}
+            type="url"
+            name="foxgloveUrl"
+            value={foxgloveUrl}
+            onChange={(e) => setFoxgloveUrl(e.target.value)}
+            onBlur={() => setFoxgloveUrlTouched(true)}
+          />
+          {foxgloveUrlTouched && !isFoxgloveUrlValid && <div className={styles.errorMessage}>Please provide a valid URL</div>}
         </Form.Field>
 
         <Form.Field className={styles.field} name="hf_api_key">
