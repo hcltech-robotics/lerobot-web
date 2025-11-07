@@ -63,7 +63,7 @@ def find_robot_udev_name(dev_path: str):
     give back all port that start with robot_... name.
     """
     dev_basename = Path(dev_path).name  # ttyUSB0
-    for path in glob.glob("/dev/robot_*"):
+    for path in glob.glob("/dev/lerobot_*"):
         try:
             target = os.readlink(path)  # "ttyUSB0"
             if Path(target).name == dev_basename:

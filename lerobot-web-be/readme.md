@@ -48,18 +48,18 @@ python -c "import lerobot; print(lerobot.__file__)"
 nano /etc/udev/rules.d/99-robots.rules
 ```
 
-Use the following or similar text to create udev rule. It is IMPORTANT to start the SYMLINK and TAG with "robot_".
+Use the following or similar text to create udev rule. It is IMPORTANT to start the SYMLINK and TAG with "lerobot_".
 
 ```bash
 # Follower
 SUBSYSTEM=="tty", KERNEL=="ttyACM*", \
   ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d3", ATTRS{serial}=="{{FOLLOWER_ROBOT_SERIAL}}", \
-  SYMLINK+="robot_follower_1", TAG+="robot_follower", GROUP="dialout", MODE="0660"
+  SYMLINK+="lerobot_follower_1", TAG+="lerobot_follower", GROUP="dialout", MODE="0660"
 
 # Leader
 SUBSYSTEM=="tty", KERNEL=="ttyACM*", \
   ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d3", ATTRS{serial}=="{{LEADER_ROBOT_SERIAL}}", \
-  SYMLINK+="robot_leader_1", TAG+="robot_leader", GROUP="dialout", MODE="0660"
+  SYMLINK+="lerobot_leader_1", TAG+="lerobot_leader", GROUP="dialout", MODE="0660"
 ```
 
 Then trigger the rules with the following:
