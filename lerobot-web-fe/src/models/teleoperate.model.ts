@@ -1,5 +1,3 @@
-import type { RobotSides } from './robot.model';
-
 export interface TeleoperateResponse {
   status: string;
   message: string | null;
