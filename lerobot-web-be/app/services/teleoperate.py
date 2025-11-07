@@ -107,7 +107,7 @@ class TeleoperationManager:
                     if self.is_bi_setup:
                         left_action_map = {}
                         right_action_map = {}
-                        prefixes = get_serial_prefixes()
+                        prefixes = get_serial_prefixes(list(follower_map.values())[0])
 
                         left_arm_port = f"{prefixes[0]}{follower_map['left']}"
                         right_arm_port = f"{prefixes[0]}{follower_map['right']}"

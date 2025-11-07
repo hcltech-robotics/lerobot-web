@@ -1,10 +1,11 @@
 import logging
 from time import sleep
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
 from pydantic import BaseModel
 
+from ..utils.robots import configure_follower
 from ..utils.serial_prefixes import get_serial_prefixes
 
 router = APIRouter()
@@ -20,7 +21,7 @@ def move_to_sleep(params: MoveToSleepRequest):
     robot = None
 
     try:
-        prefixes = get_serial_prefixes() 
+        prefixes = get_serial_prefixes(params.follower_id)
         config = SO100FollowerConfig(
             port=f"{prefixes[0]}{params.follower_id}", use_degrees=True
         )
@@ -40,9 +41,17 @@ def move_to_sleep(params: MoveToSleepRequest):
         robot.send_action(middle_state)
     except Exception as e:
         logger.error(f"Failed to move to sleep: {e}")
-        return {"status": "error", "message": f"Failed to move to sleep: {e}"}
+        raise HTTPException(status_code=500, detail=f"Failed to move to sleep: {e}")
+
     finally:
         sleep(1)
-        if robot and robot.is_connected:
-            robot.disconnect()
+        try:
+            if robot and robot.is_connected:
+                robot.disconnect()
+        except Exception:
+            logger.exception("Failed to disconnect in move_to_sleep finally")
+            raise HTTPException(
+                status_code=500, detail=f"Failed to disconect the follower arm"
+            )
+
     return {"status": "ok", "message": "Robot arm moved to sleep"}

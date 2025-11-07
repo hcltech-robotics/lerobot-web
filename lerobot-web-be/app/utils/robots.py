@@ -1,4 +1,8 @@
+import glob
+import os
 import re
+import sys
+from pathlib import Path
 
 from fastapi import HTTPException
 from lerobot.robots.bi_so100_follower.bi_so100_follower import BiSO100Follower
@@ -25,18 +29,48 @@ from ..utils.serial_prefixes import get_serial_prefixes
 
 # get the current connected robot arm serial numbers
 async def find_serial_ids():
-    usb_ports = find_available_ports()
+    usb_ports = [str(p) for p in find_available_ports()]
     prefixes = get_serial_prefixes()
 
-    pattern = re.compile(rf"^{re.escape(prefixes[0])}([\w\d]+)$")
-    matching_ports = [dev for dev in usb_ports if pattern.fullmatch(dev)]
-    ids = []
-    for path in matching_ports:
-        match = pattern.match(path)
-        if match:
-            ids.append(match.group(1))
+    def is_candidate(dev: str) -> bool:
+        return any(dev.startswith(pref) for pref in prefixes)
 
+    tty_candidates = [p for p in usb_ports if is_candidate(p)]
+    ids = []
+    for dev in tty_candidates:
+        robot_name = find_robot_udev_name(dev)
+        if robot_name:
+            ids.append(robot_name)
+            continue
+        if sys.platform.startswith("darwin"):
+            for pref in prefixes:
+                if dev.startswith(pref):
+                    ids.append(dev[len(pref) :])
+                    break
+        else:
+            name = Path(dev).name
+            match = re.match(r"tty(ACM|USB)(\d+)", name)
+            if match:
+                ids.append(match.group(2))
+            else:
+                ids.append(name)
     return ids
+
+
+def find_robot_udev_name(dev_path: str):
+    """
+    Find all /dev/robot_* symlink,
+    give back all port that start with robot_... name.
+    """
+    dev_basename = Path(dev_path).name  # ttyUSB0
+    for path in glob.glob("/dev/robot_*"):
+        try:
+            target = os.readlink(path)  # "ttyUSB0"
+            if Path(target).name == dev_basename:
+                return Path(path).name  # "robot_leader_1"
+        except OSError:
+            continue
+    return None
 
 
 def configure_follower(
@@ -45,7 +79,7 @@ def configure_follower(
     robot_type: RobotType,
     camera_config: dict = {},
 ):
-    prefixes = get_serial_prefixes()
+    prefixes = get_serial_prefixes(list(follower_map.values())[0])
     if robot_type == RobotType.SO100:
         if is_bi_setup:
             follower_config = BiSO100FollowerConfig(
@@ -76,7 +110,7 @@ def configure_follower(
 
 
 def configure_leader(is_bi_setup: bool, leader_map: dict, robot_type: RobotType):
-    prefixes = get_serial_prefixes()
+    prefixes = get_serial_prefixes(list(leader_map.values())[0])
     if robot_type == RobotType.SO100:
         if is_bi_setup:
             follower_config = BiSO100LeaderConfig(
