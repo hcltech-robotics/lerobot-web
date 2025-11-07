@@ -13,27 +13,3 @@ export const teleoperateStatusList = {
 } as const;
 
 export type teleoperateStatus = (typeof teleoperateStatusList)[keyof typeof teleoperateStatusList];
-
-export interface RobotIds {
-  leader: string;
-  follower: string;
-}
-
-export type RobotLayoutKey = RobotSides | 'single';
-
-export type RobotLayout = Record<RobotLayoutKey, { position: [number, number, number]; rotation: [number, number, number] }>;
-
-export const robotLayout: RobotLayout = {
-  left: {
-    position: [0, 0.42, 0.45],
-    rotation: [-Math.PI / 2, 0, -Math.PI],
-  },
-  right: {
-    position: [0, 0.42, -0.45],
-    rotation: [-Math.PI / 2, 0, 0],
-  },
-  single: {
-    position: [0, 0.42, -0.2],
-    rotation: [-Math.PI / 2, 0, 0],
-  },
-};

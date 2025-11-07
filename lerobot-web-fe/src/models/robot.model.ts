@@ -78,3 +78,27 @@ export interface RobotItem {
   side: RobotSides;
   role: RobotRoles;
 }
+
+export interface RobotIds {
+  leader: string;
+  follower: string;
+}
+
+export type RobotLayoutKey = RobotSides | 'single';
+
+export type RobotLayout = Record<RobotLayoutKey, { position: [number, number, number]; rotation: [number, number, number] }>;
+
+export const robotLayout: RobotLayout = {
+  left: {
+    position: [0.35, 0.42, -0.1],
+    rotation: [-Math.PI / 2, 0, 0],
+  },
+  right: {
+    position: [-0.35, 0.42, -0.1],
+    rotation: [-Math.PI / 2, 0, 0],
+  },
+  single: {
+    position: [0, 0.42, -0.1],
+    rotation: [-Math.PI / 2, 0, 0],
+  },
+};

@@ -11,7 +11,7 @@ type MainSceneProps = PropsWithChildren<{
 export function MainScene({ children, isAutoRotate = false, zoom = 10 }: MainSceneProps) {
   return (
     <>
-      <Canvas shadows camera={{ position: [7, 3, 1], fov: zoom }}>
+      <Canvas shadows camera={{ position: [6, 3, 5], fov: zoom }}>
         <Suspense fallback={null}>
           <ambientLight intensity={0.8} />
           <directionalLight position={[0, 8, 0]} intensity={1.5} castShadow />
