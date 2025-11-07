@@ -6,7 +6,7 @@ import { STLLoader } from 'three/examples/jsm/Addons.js';
 import { useRobotAnimation } from '../hooks/useRobotAnimation';
 import { useJointStatePollerWebSocket } from '../hooks/useJointStatePoller';
 import { type JointState, type RobotProps } from '../models/robot.model';
-import { robotLayout } from '../models/teleoperate.model';
+import { robotLayout } from '../models/robot.model';
 
 import styles from './Robot.module.css';
 

@@ -8,7 +8,7 @@ import { OnlineStatusButton } from '../components/OnlineStatusButton';
 import { MainScene } from '../components/MainScene';
 import { CameraStream } from '../components/CameraStream';
 import { useRobotStore } from '../stores/robot.store';
-import { robotLayout } from '../models/teleoperate.model';
+import { robotLayout } from '../models/robot.model';
 import { robotRoleList, robotSideList, type RobotItem } from '../models/robot.model';
 import { Robot } from '../components/Robot';
 import { useRunningStore } from '../stores/running.store';
