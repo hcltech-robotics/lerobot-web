@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { differenceInSeconds } from 'date-fns';
 import { useChatHistoryStore } from '../stores/chat.store';
 import { ChatTypingIndicator } from './ChatTypingIndicator';
-import { useInterval } from '../utils/TimeHooks';
+import { useInterval } from '../utils/timeHooks';
 import { ChatEntry } from './ChatEntry';
 
 import styles from './ChatHistory.module.css';
