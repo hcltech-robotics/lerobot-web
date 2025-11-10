@@ -4,7 +4,7 @@ Created by Python based FastAPI web framework.
 
 ## Activating a virtual environment for the backend
 
-If you haven't created your own yet, help [here](https://www.w3schools.com/python/python_virtualenv.asp).
+If you haven't created your own yet, see [Python virtual environment setup](https://www.w3schools.com/python/python_virtualenv.asp).
 
 ```bash
 python -m venv lerobot
@@ -17,7 +17,7 @@ source lerobot/bin/activate
 
 ## Install
 
-Install dependecies:
+Install dependencies:
 
 ```bash
 pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo
