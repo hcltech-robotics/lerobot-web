@@ -12,11 +12,15 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
+class MoveToSleepResponse(BaseModel):
+    status: str
+    message: str
+
 class MoveToSleepRequest(BaseModel):
     follower_id: str
 
 
-@router.post("/move_to_sleep")
+@router.post("/move_to_sleep", response_model=MoveToSleepResponse, tags=["control"])
 def move_to_sleep(params: MoveToSleepRequest):
     robot = None
 

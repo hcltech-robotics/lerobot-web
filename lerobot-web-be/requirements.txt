@@ -1,2 +1,10 @@
-fastapi
-uvicorn[standard]
+fastapi[standard]
+uvicorn
+starlette
+aiortc
+python-multipart
+opencv-python
+transformers
+pytest
+feetech-servo-sdk
+placo

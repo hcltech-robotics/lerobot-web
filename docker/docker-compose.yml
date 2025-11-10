@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: lerobot-web-backend
+    ports:
+      - "8000:8000"
+    devices:
+      - "/dev/ttyACM0:/dev/ttyACM0"
+      - "/dev/ttyACM1:/dev/ttyACM1"
+    environment:
+      - PYTHONUNBUFFERED=1
+    group_add:
+      - "20"
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: lerobot-web-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
