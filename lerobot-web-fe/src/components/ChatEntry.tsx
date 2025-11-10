@@ -30,24 +30,26 @@ export const ChatEntry = ({ item }: { item: ChatHistoryItem }) => {
 
   useLayoutEffect(() => {
     const el = containerRef.current;
-    if (el) {
-      handleScroll();
-
-      const handleScrollEvent = () => {
-        handleScroll();
-      };
-      el.addEventListener('scroll', handleScrollEvent);
-
-      const resizeObserver = new ResizeObserver(() => {
-        handleScroll();
-      });
-      resizeObserver.observe(el);
-
-      return () => {
-        el.removeEventListener('scroll', handleScrollEvent);
-        resizeObserver.disconnect();
-      };
+    if (!el) {
+      return () => {};
     }
+
+    handleScroll();
+
+    const handleScrollEvent = () => {
+      handleScroll();
+    };
+    el.addEventListener('scroll', handleScrollEvent);
+
+    const resizeObserver = new ResizeObserver(() => {
+      handleScroll();
+    });
+    resizeObserver.observe(el);
+
+    return () => {
+      el.removeEventListener('scroll', handleScrollEvent);
+      resizeObserver.disconnect();
+    };
   }, [handleScroll]);
 
   const renderText = () => (

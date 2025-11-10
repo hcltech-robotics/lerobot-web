@@ -10,7 +10,7 @@ import styles from './RecordingSession.module.css';
 export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionProps) {
   const [open, setOpen] = useState(false);
   const [wsResponse, setWsResponse] = useState<RecordingSessionWsResponse | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const apiUrl = useConfigStore((state) => state.apiUrl);
   const websocket = useRef<WebSocket | null>(null);
 
