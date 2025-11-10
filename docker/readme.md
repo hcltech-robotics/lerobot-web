@@ -17,3 +17,17 @@ Run the following command in the docker folder:
 ```bash
 docker compose up --build
 ```
+
+## Running
+
+Frontend will listen here after build:
+
+```bash
+http://localhost:8080/
+```
+
+Backend will listen here after build:
+
+```bash
+http://localhost:8000/docs
+```
