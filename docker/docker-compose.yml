@@ -13,6 +13,7 @@ services:
       - PYTHONUNBUFFERED=1
     group_add:
       - "20"
+      - "44"
 
   frontend:
     build:
