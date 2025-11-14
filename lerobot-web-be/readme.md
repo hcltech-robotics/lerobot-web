@@ -7,21 +7,28 @@ Created by Python based FastAPI web framework.
 If you haven't created your own yet, see [Python virtual environment setup](https://www.w3schools.com/python/python_virtualenv.asp).
 
 ```bash
-python -m venv lerobot
+python -m venv lerobot-env --system-site-packages
 ```
 
 Activation (e.g. on Linux and macOS):
 ```bash
-source lerobot/bin/activate
+source lerobot-env/bin/activate
 ```
 
-## Install
+## Install
 
 Install dependencies:
 
 ```bash
-pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo
+pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo pillow
 ```
+
+On Linux (Ubuntu) install GStreamer:
+
+```bash
+apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstreamer-plugins-bad1.0-dev gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio
+```
+
 
 ## Clone the `lerobot` repository into the root directory:
 
