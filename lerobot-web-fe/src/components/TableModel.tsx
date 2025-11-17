@@ -23,7 +23,7 @@ export function TableModel() {
   return (
     <>
       <group>
-        <mesh position={[0, 0.4, 0.2]} receiveShadow>
+        <mesh position={[0, 0.4, 0]} receiveShadow>
           <boxGeometry args={[1.5, 0.04, 0.8]} />
           {tableTextures.map((map, i) => map && <meshStandardMaterial key={i} attach={`material-${i}`} map={map} />)}
         </mesh>

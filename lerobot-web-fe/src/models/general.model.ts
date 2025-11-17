@@ -8,10 +8,10 @@ export const controlStatus = {
 export type ControlStatus = (typeof controlStatus)[keyof typeof controlStatus];
 
 export const tableLegPositions: [number, number, number][] = [
-  [-0.65, 0.2, -0.1],
-  [0.65, 0.2, -0.1],
-  [-0.65, 0.2, 0.5],
-  [0.65, 0.2, 0.5],
+  [-0.65, 0.2, -0.3],
+  [0.65, 0.2, -0.3],
+  [-0.65, 0.2, 0.3],
+  [0.65, 0.2, 0.3],
 ];
 
 export interface ToastItemProps {

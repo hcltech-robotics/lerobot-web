@@ -90,15 +90,15 @@ export type RobotLayout = Record<RobotLayoutKey, { position: [number, number, nu
 
 export const robotLayout: RobotLayout = {
   left: {
-    position: [0.35, 0.42, -0.1],
+    position: [0.35, 0.42, -0.3],
     rotation: [-Math.PI / 2, 0, 0],
   },
   right: {
-    position: [-0.35, 0.42, -0.1],
+    position: [-0.35, 0.42, -0.3],
     rotation: [-Math.PI / 2, 0, 0],
   },
   single: {
-    position: [0, 0.42, -0.1],
+    position: [0, 0.42, -0.3],
     rotation: [-Math.PI / 2, 0, 0],
   },
 };
