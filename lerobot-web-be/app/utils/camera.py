@@ -5,7 +5,7 @@ import cv2
 
 
 def open_camera(camera_id: int) -> cv2.VideoCapture:
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(camera_id)
 
     if not cap.isOpened():
         raise RuntimeError(f"Camera {camera_id} cannot be opened")
