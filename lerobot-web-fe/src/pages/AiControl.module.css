@@ -105,3 +105,19 @@
   color: #ff0000;
   opacity: 0.8;
 }
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .statusBox p,
+  .controlButton {
+    font-size: 1.25em;
+  }
+
+  .controlButton svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+}

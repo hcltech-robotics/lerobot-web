@@ -84,17 +84,26 @@
   }
 }
 
-/* @keyframes slideOutRight {
-  from {
-    opacity: 1;
-    transform: translateX(0);
+@media (min-width: 1921px) {
+  .toast {
+    width: 20em;
   }
-  to {
-    opacity: 0;
-    transform: translateX(100%);
+
+  .toast .body {
+    font-size: 1.25em;
+  }
+
+  .toast .toastClose {
+    font-size: 1em;
+  }
+
+  .toast .title svg {
+    width: 1em;
+    height: 1em;
+    margin-right: 0.5em;
+  }
+
+  .toast .head {
+    font-size: 1.5em;
   }
 }
-
-.toast[data-state="closed"] {
-  animation: slideOutRight 0.2s ease-in;
-} */

@@ -161,3 +161,18 @@
   background-color: #e6ebf5;
   cursor: not-allowed;
 }
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .tabContent,
+  .restartButton {
+    font-size: 1.25em;
+  }
+
+  .alert {
+    font-size: unset;
+  }
+}

@@ -58,3 +58,23 @@
   height: 32px;
   color: #333;
 }
+
+@media (min-width: 1921px) {
+  .noRobotIcon {
+    width: 3em;
+    height: 3em;
+  }
+
+  .noRobot {
+    font-size: 1.25em;
+  }
+
+  .robotId,
+  .robotName {
+    font-size: 1.5em;
+  }
+
+  .robotName {
+    max-width: 10em;
+  }
+}

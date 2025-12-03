@@ -1,8 +1,8 @@
 .checkboxWrapper {
 	all: unset;
 	background-color: white;
-    color: #b0b0b0;
-    cursor: pointer;
+	color: #b0b0b0;
+	cursor: pointer;
 	width: 25px;
 	height: 25px;
 	border-radius: 4px;
@@ -11,7 +11,7 @@
 	justify-content: center;
 	box-shadow: 0 0px 2px #000;
 
-    &:hover {
+	&:hover {
 		background-color: #ebebeb;
 	}
 
@@ -21,5 +21,13 @@
 }
 
 .checkboxWrapper[data-state="checked"] {
-    color: #0f5fdc;
+	color: #0f5fdc;
+}
+
+@media (min-width: 1921px) {
+	.checkboxWrapper {
+		font-size: 1.5em;
+		width: 1.75em;
+		height: 1.75em;
+	}
 }

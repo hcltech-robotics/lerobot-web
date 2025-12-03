@@ -1,10 +1,10 @@
 .cameraListWrapper {
-    display: flex;
-    gap: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .cameraBoxWrapper {
-    width: 250px;
+  width: 250px;
 }
 
 .noSignal {
@@ -25,4 +25,15 @@
   height: 32px;
   color: #333;
   margin-bottom: 8px;
+}
+
+@media (min-width: 1921px) {
+  .noSignal {
+    font-size: 1.5em;
+  }
+
+  .noSignalIcon {
+    width: 2em;
+    height: 2em;
+  }
 }

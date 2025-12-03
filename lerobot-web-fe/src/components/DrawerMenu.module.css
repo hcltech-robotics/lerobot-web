@@ -43,7 +43,7 @@
 
 .drawerItem {
   display: flex;
-  gap: 10px;
+  gap: 0.75em;
   background: none;
   border: none;
   cursor: pointer;
@@ -76,4 +76,30 @@
   height: 24px;
   width: 24px;
   color: #fff;
+}
+
+@media (min-width: 1921px) {
+  .open {
+    width: 20em;
+  }
+
+  .closed {
+    width: 5em;
+    align-items: center;
+  }
+
+  .drawerLabel {
+    font-size: 1.5em;
+  }
+
+  .drawerIcon svg,
+  .burger,
+  .close {
+    height: 2em;
+    width: 2em;
+  }
+
+  .drawerHeader {
+    padding: 1em;
+  }
 }

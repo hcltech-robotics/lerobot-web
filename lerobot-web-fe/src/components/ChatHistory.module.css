@@ -3,7 +3,6 @@
   user-select: text;
   padding: 12px 8px 10px 8px;
   margin-bottom: -8px;
-  backdrop-filter: blur(10px);
   border-radius: 10px 10px 0 0;
   background-color: #f0f0f091;
   border: 1px solid #fff;

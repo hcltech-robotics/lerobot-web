@@ -28,3 +28,19 @@
   color: #333;
   margin-bottom: 8px;
 }
+
+@media (min-width: 1921px) {
+  .noSignal {
+    font-size: 1.5em;
+  }
+
+  .noSignalIcon {
+    width: 2em;
+    height: 2em;
+  }
+
+  .cameraStream {
+    gap: 1.5em;
+    padding: 1.5em;
+  }
+}
