@@ -28,7 +28,7 @@
 .progressBarWrapper progress {
   width: 100%;
   height: 10px;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
   appearance: none;
   border: 1px solid #333;
