@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   align-content: center;
-  border-radius: 12px;
+  border-radius: 8px;
   background: #f0f2f8;
   position: relative;
   overflow: hidden;
@@ -15,6 +15,7 @@
   height: 100%;
   max-height: 15vh;
   object-fit: fill;
+  transition: all 500ms ease;
 }
 
 .cameraBox {
@@ -22,6 +23,19 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  border-radius: 8px;
+  background-color: #f0f0f091;
+  border: 1px solid #fff;
+  box-shadow: 0px 0px 2px 0px #fff;
+  padding: 12px;
+}
+
+.cameraBox[data-zoomable='true'] {
+  cursor: pointer;
+}
+
+.zoomed .cameraImage {
+  max-height: 25vh;
 }
 
 .cameraLabel {
@@ -29,9 +43,9 @@
   font-weight: bold;
   color: #8291a0;
   background-color: #e6ebf5;
-  border-radius: 0px 10px;
-  left: 0;
-  bottom: 0;
+  border-radius: 0px 8px;
+  left: 12px;
+  bottom: 12px;
   font-size: 12px;
   padding: 2px 14px;
   letter-spacing: 1px;
