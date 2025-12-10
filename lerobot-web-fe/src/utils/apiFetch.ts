@@ -78,7 +78,6 @@ export async function apiFetch<T>(path: string, init: ApiInit = {}): Promise<T> 
       addToast({ type: ToastType.Error, title: 'Error', description: msg });
     }
 
-    console.error('apiFetch error:', { url, method, err });
     throw err instanceof Error ? err : new Error(String(err));
   }
 }

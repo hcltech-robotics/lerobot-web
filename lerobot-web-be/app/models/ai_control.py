@@ -1,7 +1,6 @@
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel
-from datetime import datetime
+from pydantic import BaseModel, Field
 
 
 class CameraConfig(BaseModel):
@@ -37,5 +36,31 @@ class UserModelsItem(BaseModel):
     private: bool
     createdAt: datetime
 
+
 class UserModelsResponse(BaseModel):
     models: List[UserModelsItem]
+
+
+class GrootRequest(BaseModel):
+    lang_instruction: str = Field(min_length=1)
+
+
+class GrootResponse(BaseModel):
+    started: bool
+    pid: int | None = None
+
+
+class GrootStatusResponse(BaseModel):
+    running: bool
+    pid: int | None = None
+
+
+class UserModel(BaseModel):
+    modelId: str
+    id: str
+    private: bool
+    createdAt: Optional[datetime]
+
+
+class UserModelsResponse(BaseModel):
+    models: List[UserModel]

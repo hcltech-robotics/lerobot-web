@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ChatInput } from '../components/ChatInput';
 import { ChatHistory } from '../components/ChatHistory';
 import { useChatHistoryStore } from '../stores/chat.store';
+import { createGrootWebSocket, startGroot, stopGroot } from '../services/aiControl.service';
 
 import styles from './ChatControl.module.css';
 
@@ -9,6 +10,7 @@ export default function ChatControl() {
   const [showHistory, setShowHistory] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const addTextMessage = useChatHistoryStore((state) => state.addTextMessage);
+  const wsRef = useRef<WebSocket | null>(null);
 
   const toggleHistory = () => {
     setShowHistory(!showHistory);
@@ -26,16 +28,30 @@ export default function ChatControl() {
     setIsTyping(true);
 
     try {
-      /* TODO: response for chat simulation */
-      setTimeout(() => {
-        setIsTyping(false);
-        addTextMessage('response', 'other');
-        console.log('other response');
-      }, 500);
+      await startGroot(query);
+
+      wsRef.current?.close();
+      wsRef.current = createGrootWebSocket(
+        '/ai-control/groot/stream',
+        (response) => {
+          addTextMessage(response, 'other');
+          if (response.includes('[GROOT]')) {
+            stop();
+          }
+        },
+        () => console.log('[LOG: CHAT] Groot stream opened'),
+        () => console.log('[LOG: CHAT] Groot stream closed'),
+      );
     } catch (error) {
-      console.error('[ERROR: LLM] Error in chat communication:', error);
+      console.error('[ERROR: CHAT] Error in chat communication:', error);
+    } finally {
       setIsTyping(false);
     }
+  };
+
+  const stop = async () => {
+    await stopGroot();
+    wsRef.current?.close();
   };
 
   return (
