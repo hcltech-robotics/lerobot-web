@@ -74,7 +74,7 @@ sudo udevadm trigger
 
 Update the .env file with the correct values.
 
-Like camera settings:
+Camera settings:
 
 ```bash
 CAMERA_WIDTH=640
@@ -82,9 +82,7 @@ CAMERA_HEIGHT=480
 CAMERA_FPS=15
 ```
 
-or 
-
-Like the parameters for running the groot server:
+Groot server parameters:
 
 ```bash
 PYTHON_BIN=python
