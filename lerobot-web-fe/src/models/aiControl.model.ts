@@ -25,3 +25,12 @@ export interface GrootStartPayload {
   robot_type: string;
   robot_port: string;
 }
+
+export interface GrootStartResponse {
+  started: boolean;
+  pid: number;
+}
+
+export interface GrootStopResponse {
+  stopped: boolean;
+}

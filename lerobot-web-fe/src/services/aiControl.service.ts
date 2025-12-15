@@ -1,5 +1,11 @@
 import type { RobotTypes } from '../models/robot.model';
-import type { AiControlResponse, GrootStartPayload, PoliciesResponse } from '../models/aiControl.model';
+import type {
+  AiControlResponse,
+  GrootStartPayload,
+  GrootStartResponse,
+  GrootStopResponse,
+  PoliciesResponse,
+} from '../models/aiControl.model';
 import type { ControlStatus } from '../models/general.model';
 import { apiFetch } from '../utils/apiFetch';
 import { createWebSocket } from '../utils/createWebsocket';
@@ -35,7 +41,7 @@ export async function fetchAIControl(
 }
 
 export async function startGroot(payload: GrootStartPayload) {
-  return apiFetch<any>('/ai-control/groot/start', {
+  return apiFetch<GrootStartResponse>('/ai-control/groot/start', {
     method: 'POST',
     body: JSON.stringify(payload),
     toast: { success: false },
@@ -58,7 +64,7 @@ export function createGrootWebSocket(
 }
 
 export async function stopGroot() {
-  return apiFetch<any>('/ai-control/groot/stop', {
+  return apiFetch<GrootStopResponse>('/ai-control/groot/stop', {
     method: 'POST',
     body: JSON.stringify({}),
     toast: { success: 'Groot stream stopped successfully.' },

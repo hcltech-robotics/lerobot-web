@@ -88,7 +88,7 @@ Like the parameters for running the groot server:
 
 ```bash
 PYTHON_BIN=python
-EVAL_SCRIPT=eval_lerobot.py
+EVAL_SCRIPT=eval_lerobot.py      # if the eval_lerobot.py script is inside the app folder
 EVAL_WORKDIR=./
 ```
 
