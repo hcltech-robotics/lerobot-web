@@ -70,9 +70,31 @@ sudo udevadm trigger
 ```
 
 
+## Update the .env file:
+
+Update the .env file with the correct values.
+
+Like camera settings:
+
+```bash
+CAMERA_WIDTH=640
+CAMERA_HEIGHT=480
+CAMERA_FPS=15
+```
+
+or 
+
+Like the parameters for running the groot server:
+
+```bash
+PYTHON_BIN=python
+EVAL_SCRIPT=eval_lerobot.py
+EVAL_WORKDIR=./
+```
+
 ## Start the app:
 
-Run the application itself:
+Run the application (from the root folder):
 
 ```
 uvicorn app.main:app --reload
