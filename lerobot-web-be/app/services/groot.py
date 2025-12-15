@@ -4,6 +4,7 @@ from typing import AsyncIterator
 
 from app.config import Settings
 from app.models.groot import GrootRequest, GrootStatusResponse
+from app.utils.serial_prefixes import get_serial_prefixes
 
 logger = logging.getLogger(__name__)
 
@@ -30,11 +31,13 @@ class GrootService:
         if self._manager.is_running():
             raise GrootAlreadyRunningError("Groot process already running")
 
+        prefixes = get_serial_prefixes(req.robot_port)
+        prefixed_robot_port = f"{prefixes[0]}{req.robot_port}"
         args = [
             self._settings.python_bin,
             self._settings.eval_script,
             f"--robot.type={req.robot_type}_follower",
-            f"--robot.port={req.robot_port}",
+            f"--robot.port={prefixed_robot_port}",
             "--robot.id=hcltech_lerobot_follower_arm_left",
             "--policy_host=127.0.0.1",
             "--show_images=False",

@@ -20,7 +20,7 @@ source lerobot/bin/activate
 Install dependencies:
 
 ```bash
-pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo process_manager
+pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo process_manager pydantic-settings
 ```
 
 ## Clone the `lerobot` repository into the root directory:

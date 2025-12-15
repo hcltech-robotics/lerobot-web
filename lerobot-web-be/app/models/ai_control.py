@@ -46,7 +46,3 @@ class UserModel(BaseModel):
     id: str
     private: bool
     createdAt: Optional[datetime]
-
-
-class UserModelsResponse(BaseModel):
-    models: List[UserModel]
