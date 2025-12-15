@@ -7,6 +7,7 @@ from app.routes import (
     record,
     robots,
     teleoperate,
+    groot
 )
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,10 +20,7 @@ app = FastAPI(
 )
 
 origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:8080",
-    "http://127.0.0.1:8080",
+    "*",
 ]
 
 app.add_middleware(
@@ -51,3 +49,4 @@ app.include_router(robots.router)
 app.include_router(calibrate.router)
 app.include_router(ai_control.router)
 app.include_router(record.router)
+app.include_router(groot.router)

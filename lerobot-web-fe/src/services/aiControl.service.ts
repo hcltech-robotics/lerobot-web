@@ -1,5 +1,5 @@
 import type { RobotTypes } from '../models/robot.model';
-import type { AiControlResponse, PoliciesResponse } from '../models/aiControl.model';
+import type { AiControlResponse, GrootStartPayload, PoliciesResponse } from '../models/aiControl.model';
 import type { ControlStatus } from '../models/general.model';
 import { apiFetch } from '../utils/apiFetch';
 import { createWebSocket } from '../utils/createWebsocket';
@@ -34,10 +34,10 @@ export async function fetchAIControl(
   });
 }
 
-export async function startGroot(langInstruction: string) {
+export async function startGroot(payload: GrootStartPayload) {
   return apiFetch<any>('/ai-control/groot/start', {
     method: 'POST',
-    body: JSON.stringify({ lang_instruction: langInstruction }),
+    body: JSON.stringify(payload),
     toast: { success: false },
   });
 }
