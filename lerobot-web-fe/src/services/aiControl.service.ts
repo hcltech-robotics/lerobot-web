@@ -41,7 +41,7 @@ export async function fetchAIControl(
 }
 
 export async function startGroot(payload: GrootStartPayload) {
-  return apiFetch<GrootStartResponse>('/ai-control/groot/start', {
+  return apiFetch<GrootStartResponse>('ai-control/groot/start', {
     method: 'POST',
     body: JSON.stringify(payload),
     toast: { success: false },
@@ -64,7 +64,7 @@ export function createGrootWebSocket(
 }
 
 export async function stopGroot() {
-  return apiFetch<GrootStopResponse>('/ai-control/groot/stop', {
+  return apiFetch<GrootStopResponse>('ai-control/groot/stop', {
     method: 'POST',
     body: JSON.stringify({}),
     toast: { success: 'Groot stream stopped successfully.' },

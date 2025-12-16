@@ -48,10 +48,10 @@ export default function ChatControl() {
       await startGroot({ lang_instruction: query, robot_port: follower, robot_type: robotType });
 
       wsRef.current?.close();
-      wsRef.current = createGrootWebSocket('/ai-control/groot/stream', (response) => {
+      wsRef.current = createGrootWebSocket('/ai-control/groot/stream', async (response) => {
         setIsTyping(false);
         if (response.includes('[GROOT]')) {
-          stop();
+          await stop();
           return;
         }
         addTextMessage(response, 'other');

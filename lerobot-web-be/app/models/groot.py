@@ -9,7 +9,7 @@ class GrootRequest(BaseModel):
 
 class GrootResponse(BaseModel):
     started: bool
-    pid: int | None = None
+    pid: int
 
 
 class GrootStatusResponse(BaseModel):
