@@ -14,7 +14,6 @@ async def video_stream(websocket: WebSocket, camera_id: int):
         async for frame in generate_frames(camera_id):
             await websocket.send_text(frame)
     except RuntimeError as e:
-        # Ha nem lehet megnyitni a kamerát, hibaüzenet visszaküldése
         await websocket.send_text(f"ERROR: {str(e)}")
     except WebSocketDisconnect:
         print(f"WebSocket disconnected for camera {camera_id}")

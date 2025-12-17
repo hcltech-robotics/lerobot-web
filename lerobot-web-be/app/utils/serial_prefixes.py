@@ -7,5 +7,5 @@ def get_serial_prefixes(robot_id: str = ""):
     else:
         print("no darwin")
         if robot_id.startswith("lerobot_"):
-            return "/dev/"
+            return ["/dev/"]
         return ["/dev/ttyACM", "/dev/ttyUSB"]

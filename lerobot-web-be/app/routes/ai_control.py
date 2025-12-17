@@ -1,7 +1,10 @@
 import logging
+import os
+import shlex
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from huggingface_hub import HfApi
+from http import HTTPStatus
 
 from ..models.ai_control import AIControlParams, AIControlResponse, UserModelsRequest, UserModelsResponse
 from ..services.ai_control import ai_control_manager
@@ -28,5 +31,7 @@ def list_user_models(req: UserModelsRequest):
         models_list = hf_api.list_models(author=req.user_id)
         models = [{"modelId": m.modelId, "id": m._id, "private": m.private, "createdAt": m.created_at} for m in models_list]
     except Exception as e:
-        raise HTTPException(status_code=e.response.status_code, detail=str(e))
+        logger.exception("Failed to list user models")
+        status_code = getattr(getattr(e, "response", None), "status_code", HTTPStatus.BAD_GATEWAY)
+        raise HTTPException(status_code=status_code, detail="Failed to list user models")
     return {"models": models}

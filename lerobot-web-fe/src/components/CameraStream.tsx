@@ -12,7 +12,7 @@ export function CameraStream() {
   return (
     <div className={styles.cameraStream}>
       {cameraIds && cameraIds.length > 0 && apiUrl ? (
-        cameraIds.map((cameraId) => <CameraBox id={cameraId} apiUrl={apiUrl} />)
+        cameraIds.map((cameraId) => <CameraBox id={cameraId} key={cameraId} apiUrl={apiUrl} />)
       ) : (
         <div className={styles.noSignal}>
           <ExclamationTriangleIcon className={styles.noSignalIcon} />

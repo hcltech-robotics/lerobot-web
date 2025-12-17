@@ -20,7 +20,7 @@ source lerobot/bin/activate
 Install dependencies:
 
 ```bash
-pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo
+pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo process_manager pydantic-settings
 ```
 
 ## Clone the `lerobot` repository into the root directory:
@@ -70,9 +70,29 @@ sudo udevadm trigger
 ```
 
 
+## Update the .env file:
+
+Update the .env file with the correct values.
+
+Camera settings:
+
+```bash
+CAMERA_WIDTH=640
+CAMERA_HEIGHT=480
+CAMERA_FPS=15
+```
+
+Groot server parameters:
+
+```bash
+PYTHON_BIN=python
+EVAL_SCRIPT=eval_lerobot.py
+EVAL_WORKDIR=./
+```
+
 ## Start the app:
 
-Run the application itself:
+Run the application (from the root folder):
 
 ```
 uvicorn app.main:app --reload

@@ -1,7 +1,6 @@
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel
-from datetime import datetime
+from pydantic import BaseModel, constr
 
 
 class CameraConfig(BaseModel):
@@ -37,5 +36,13 @@ class UserModelsItem(BaseModel):
     private: bool
     createdAt: datetime
 
+
 class UserModelsResponse(BaseModel):
     models: List[UserModelsItem]
+
+
+class UserModel(BaseModel):
+    modelId: str
+    id: str
+    private: bool
+    createdAt: Optional[datetime]

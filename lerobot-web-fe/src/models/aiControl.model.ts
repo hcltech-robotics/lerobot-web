@@ -19,3 +19,18 @@ export const aiControlStatusList = {
 } as const;
 
 export type AiControlStatus = (typeof aiControlStatusList)[keyof typeof aiControlStatusList];
+
+export interface GrootStartPayload {
+  lang_instruction: string;
+  robot_type: string;
+  robot_port: string;
+}
+
+export interface GrootStartResponse {
+  started: boolean;
+  pid: number;
+}
+
+export interface GrootStopResponse {
+  stopped: boolean;
+}
