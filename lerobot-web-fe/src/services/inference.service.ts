@@ -1,4 +1,3 @@
-import type { RobotTypes } from '../models/robot.model';
 import type {
   AiControlResponse,
   GrootStartPayload,
@@ -7,10 +6,10 @@ import type {
   InferencePayload,
   PoliciesResponse,
 } from '../models/aiControl.model';
-import type { ControlStatus } from '../models/general.model';
 import { apiFetch } from '../utils/apiFetch';
 import { createWebSocket } from '../utils/createWebsocket';
 import { useConfigStore } from '../stores/config.store';
+import { useCameraStore } from '../stores/camera.store';
 
 export async function getUserModels(apiKey: string, userId: string): Promise<PoliciesResponse> {
   return apiFetch<PoliciesResponse>('user-models', {
@@ -24,35 +23,36 @@ export async function getUserModels(apiKey: string, userId: string): Promise<Pol
 }
 
 export async function startInference(payload: InferencePayload): Promise<AiControlResponse> {
+  const { cameraList } = useCameraStore.getState();
+  const cameras = cameraList?.cameras.map((camera) => ({
+    type: 'opencv',
+    index_or_path: camera,
+    width: 640,
+    height: 480,
+    fps: 30,
+  }));
+
   return apiFetch<AiControlResponse>('inference/start', {
     method: 'POST',
     body: JSON.stringify({
       task_description: payload.singleTask,
-      model: payload.remoteModel,
+      remote_model: payload.remoteModel,
       model_id: payload.repoId,
       robot_id: payload.followerId,
       robot_type: payload.robotType,
       policy_path_local: payload.policyPathLocal,
       episode_time_s: payload.episodeTime,
       user_id: payload.userId,
+      cameras,
     }),
     toast: { success: 'Inference has started successfully.' },
   });
 }
 
-export async function stopInference(payload: InferencePayload): Promise<AiControlResponse> {
+export async function stopInference(): Promise<AiControlResponse> {
   return apiFetch<AiControlResponse>('inference/stop', {
     method: 'POST',
-    body: JSON.stringify({
-      task_description: payload.singleTask,
-      model: payload.remoteModel,
-      model_id: payload.repoId,
-      robot_id: payload.followerId,
-      robot_type: payload.robotType,
-      policy_path_local: payload.policyPathLocal,
-      episode_time_s: payload.episodeTime,
-      user_id: payload.userId,
-    }),
+    body: JSON.stringify({}),
     toast: { success: 'Inference has stopped successfully.' },
   });
 }
