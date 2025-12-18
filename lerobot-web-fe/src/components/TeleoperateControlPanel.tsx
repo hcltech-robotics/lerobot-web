@@ -25,11 +25,11 @@ export function TeleoperateControlPanel({ status, loading, error, isRunning, onT
 
   return (
     <div className={styles.statusBox}>
-      <h2 className={styles.statusTitle}>Teleoperation Status</h2>
+      <h2 className={styles.statusTitle}>Teleoperate</h2>
       {!isDisabled ? (
         <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
       ) : (
-        <p className={styles.statusText}>Select a leader and a follower arm in the top right corner</p>
+        <p className={styles.statusText}>Select a leader and a follower arm in the top right corner for start teleoperation</p>
       )}
       {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
       <button

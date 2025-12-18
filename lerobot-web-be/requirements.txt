@@ -8,3 +8,4 @@ transformers
 pytest
 feetech-servo-sdk
 placo
+pydantic_settings

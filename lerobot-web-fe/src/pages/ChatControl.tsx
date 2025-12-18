@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { ChatInput } from '../components/ChatInput';
 import { ChatHistory } from '../components/ChatHistory';
 import { useChatHistoryStore } from '../stores/chat.store';
-import { createGrootWebSocket, startGroot, stopGroot } from '../services/aiControl.service';
+import { createGrootWebSocket, startGroot, stopGroot } from '../services/inference.service';
 import { useRobotStore } from '../stores/robot.store';
 import { getFollowerBySide } from '../services/robot.service';
 import { robotSideList } from '../models/robot.model';

@@ -22,6 +22,10 @@
   cursor: not-allowed;
 }
 
+.selectTrigger[data-show-label="false"] {
+  width: 100%;
+}
+
 .selectContent {
   background-color: #ffffff;
   color: #000000;

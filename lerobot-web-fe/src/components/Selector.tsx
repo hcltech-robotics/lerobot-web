@@ -8,10 +8,11 @@ interface SelectorProps {
   selected: string;
   label?: string;
   disabled?: boolean;
+  showLabel?: boolean;
   onChange: (change: string) => void;
 }
 
-export function Selector({ options, selected, label = 'Select an option', disabled = false, onChange }: SelectorProps) {
+export function Selector({ options, selected, label = 'Select an option', disabled = false, showLabel = true, onChange }: SelectorProps) {
   const [mappedOptions, setMappedOptions] = useState<SelectOption[]>([]);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export function Selector({ options, selected, label = 'Select an option', disabl
     <>
       {mappedOptions.length > 0 ? (
         <div className={styles.selectWrapper}>
-          <BaseSelector label={label} value={selected} disabled={disabled} options={mappedOptions} onChange={onChange} />
+          <BaseSelector label={label} value={selected} disabled={disabled} options={mappedOptions} showLabel={showLabel} onChange={onChange} />
         </div>
       ) : (
         <p>There is no options</p>

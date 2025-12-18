@@ -4,6 +4,7 @@ import type {
   GrootStartPayload,
   GrootStartResponse,
   GrootStopResponse,
+  InferencePayload,
   PoliciesResponse,
 } from '../models/aiControl.model';
 import type { ControlStatus } from '../models/general.model';
@@ -22,21 +23,35 @@ export async function getUserModels(apiKey: string, userId: string): Promise<Pol
   });
 }
 
-export async function fetchAIControl(
-  model: string,
-  robotId: string,
-  mode: ControlStatus,
-  robotType: RobotTypes,
-): Promise<AiControlResponse> {
-  return apiFetch<AiControlResponse>('ai_control', {
+export async function startInference(payload: InferencePayload): Promise<AiControlResponse> {
+  return apiFetch<AiControlResponse>('inference/start', {
     method: 'POST',
     body: JSON.stringify({
-      mode,
-      model,
-      robot_id: robotId,
-      robot_type: robotType,
+      task_description: payload.singleTask,
+      model: payload.remoteModel,
+      modelId: payload.repoId,
+      robot_id: payload.followerId,
+      robot_type: payload.robotType,
+      policy_path_local: payload.policyPathLocal,
+      episode_time_s: payload.episodeTime,
     }),
-    toast: { success: mode === 'start' ? `AI control has ${mode}ed.` : `AI control has ${mode}ped.` },
+    toast: { success: 'Inference has started successfully.' },
+  });
+}
+
+export async function stopInference(payload: InferencePayload): Promise<AiControlResponse> {
+  return apiFetch<AiControlResponse>('inference/stop', {
+    method: 'POST',
+    body: JSON.stringify({
+      task_description: payload.singleTask,
+      model: payload.remoteModel,
+      modelId: payload.repoId,
+      robot_id: payload.followerId,
+      robot_type: payload.robotType,
+      policy_path_local: payload.policyPathLocal,
+      episode_time_s: payload.episodeTime,
+    }),
+    toast: { success: 'Inference has stopped successfully.' },
   });
 }
 

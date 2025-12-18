@@ -12,15 +12,16 @@ interface BaseSelectorProps {
   label: string;
   value: string;
   options: SelectOption[] | null;
-  onChange: (value: string) => void;
   disabled?: boolean;
+  showLabel?: boolean;
+  onChange: (value: string) => void;
 }
-export function BaseSelector({ label, value, options, onChange, disabled = false }: BaseSelectorProps) {
+export function BaseSelector({ label, value, options, onChange, disabled = false, showLabel = true }: BaseSelectorProps) {
   return (
     <>
-      <label className={styles.selectLabel}>{label}</label>
+      {showLabel && <label className={styles.selectLabel}>{label}</label>}
       <Select.Root value={value} onValueChange={onChange} disabled={disabled}>
-        <Select.Trigger className={styles.selectTrigger}>
+        <Select.Trigger className={styles.selectTrigger} data-show-label={showLabel}>
           <Select.Value />
           <Select.Icon>
             <ChevronDownIcon />
