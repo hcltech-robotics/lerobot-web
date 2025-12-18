@@ -14,7 +14,7 @@
 }
 
 .statusButton::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 10px;
@@ -45,5 +45,18 @@
   }
   50% {
     opacity: 0;
+  }
+}
+
+@media (min-width: 1921px) {
+  .statusButton {
+    font-size: 1.25em;
+    padding-left: 1.75em;
+    top: 2em;
+  }
+
+  .statusButton::before {
+    width: 0.75em;
+    height: 0.75em;
   }
 }

@@ -30,10 +30,6 @@
   border: none;
 }
 
-.inputBox .input {
-  border-radius: 0 8px 8px 0;
-}
-
 .inputBox .link {
   text-decoration: none;
   max-width: 70px;

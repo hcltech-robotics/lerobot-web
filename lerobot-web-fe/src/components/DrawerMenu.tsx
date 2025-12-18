@@ -21,7 +21,7 @@ interface DrawerProps {
 const pages = [
   { label: 'Teleoperate', path: '/teleoperate', icon: <RocketIcon /> },
   { label: 'Calibration', path: '/calibration', icon: <GearIcon /> },
-  { label: 'AI Control', path: '/ai-control', icon: <LightningBoltIcon /> },
+  { label: 'Inference', path: '/inference', icon: <LightningBoltIcon /> },
   { label: 'Record Dataset', path: '/record-dataset', icon: <LayersIcon /> },
   { label: 'Chat Control', path: '/chat-control', icon: <ChatBubbleIcon /> },
   { label: 'Configuration', path: '/configuration', icon: <MixerVerticalIcon /> },

@@ -104,3 +104,9 @@
         transform: translate(-50%, -50%) scale(1);
     }
 }
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2rem;
+  }
+}

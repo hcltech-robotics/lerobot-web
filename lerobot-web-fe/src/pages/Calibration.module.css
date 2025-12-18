@@ -60,7 +60,7 @@
   background-color: #3c91ff;
   color: #ffffff;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   border: none;
   font-size: 16px;
   padding: 12px;
@@ -84,7 +84,7 @@
   color: #ff0000;
   font-size: 16px;
   flex-direction: row;
-  border-radius: 12px;
+  border-radius: 8px;
   gap: 6px;
   margin: 12px;
 }
@@ -160,4 +160,19 @@
   color: #919eaf;
   background-color: #e6ebf5;
   cursor: not-allowed;
+}
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .tabContent,
+  .restartButton {
+    font-size: 1.25em;
+  }
+
+  .alert {
+    font-size: unset;
+  }
 }

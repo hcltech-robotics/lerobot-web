@@ -1,9 +1,16 @@
 .toastViewport {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 16px;
+  right: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   z-index: 9999;
+}
+
+@media (min-width: 1921px) {
+  .toastViewport {
+    bottom: 2em;
+    right: 2em;
+  }
 }

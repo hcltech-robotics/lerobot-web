@@ -5,4 +5,5 @@ export interface CameraListResponse {
 export interface CameraProps {
   id: number;
   apiUrl: string;
+  isZoomable?: boolean;
 }

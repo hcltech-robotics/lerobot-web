@@ -2,6 +2,7 @@ import asyncio
 import logging
 from typing import Optional
 
+from ..models.robots import RobotType
 from .recording_manager import RecordingManager
 
 logger = logging.getLogger(__name__)
@@ -16,15 +17,16 @@ class RecordingService:
     async def start_recording(
         self,
         follower_port: str,
-        leader_port: str,
+        leader_port: Optional[str],
         repo_id: str,
         num_episodes: int,
         fps: int,
         episode_time_s: int,
         reset_time_s: int,
         task_description: str,
-        display_data: bool,
         cameras: list,
+        robot_type: RobotType,
+        policy_path: Optional[str],
     ):
         if self._recording_task and not self._recording_task.done():
             raise RuntimeError("Recording already running")
@@ -39,6 +41,8 @@ class RecordingService:
             reset_time_s=reset_time_s,
             task_description=task_description,
             cameras=cameras,
+            robot_type=robot_type,
+            policy_path=policy_path,
         )
 
         # Event loop ref (because of the WebSocket streaming)
@@ -83,11 +87,6 @@ class RecordingService:
             return
         self._recording_manager.exit_current_loop()
         logger.info("Exit early requested")
-
-    def get_status(self) -> dict:
-        if not self._recording_manager:
-            return {"is_running": False}
-        return self._recording_manager.get_status()
 
     def get_manager(self) -> Optional[RecordingManager]:
         return self._recording_manager

@@ -1,15 +1,15 @@
 .selectLabel {
-  color: #8291A0;
+  color: #8291a0;
   font-weight: bold;
 }
 
 .selectTrigger {
   padding: 6px 12px;
   border: 1px solid #d5dce5;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: #ffffff;
   cursor: pointer;
-  color: #1D2123;
+  color: #1d2123;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -17,16 +17,20 @@
 }
 
 .selectTrigger:disabled {
-  color:#919EAF;
-  background-color: #E6EBF5;
-  cursor:not-allowed;
+  color: #919eaf;
+  background-color: #e6ebf5;
+  cursor: not-allowed;
+}
+
+.selectTrigger[data-show-label="false"] {
+  width: 100%;
 }
 
 .selectContent {
   background-color: #ffffff;
   color: #000000;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   margin-top: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
@@ -48,4 +52,11 @@
 .viewPort {
   max-height: 40vh;
   overflow: auto;
+}
+
+@media (min-width: 1921px) {
+  .selectTrigger,
+  .selectItem {
+    font-size: 1.25em;
+  }
 }

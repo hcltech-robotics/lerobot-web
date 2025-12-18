@@ -12,3 +12,10 @@
 .robotIcon.active svg {
   fill: #beebb4;
 }
+
+@media (min-width: 1921px) {
+  .robotIcon svg {
+    width: 5em;
+    height: 5em;
+  }
+}

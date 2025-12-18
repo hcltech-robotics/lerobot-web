@@ -1,25 +1,24 @@
 import asyncio
+import concurrent.futures
 import logging
 import threading
-import time
-from collections.abc import Mapping
+from datetime import datetime, timezone
+from typing import Any, Dict, Optional
 
-import numpy as np
-from lerobot.cameras.configs import CameraConfig
-from lerobot.cameras.opencv.configuration_opencv import OpenCVCameraConfig
+from lerobot.configs.policies import PreTrainedConfig
 from lerobot.datasets.lerobot_dataset import LeRobotDataset
-from lerobot.datasets.utils import hw_to_dataset_features
-from lerobot.processor.factory import make_default_processors
-from lerobot.robots.so100_follower import SO100Follower, SO100FollowerConfig
-from lerobot.scripts.lerobot_record import record_loop
-from lerobot.teleoperators.so100_leader.config_so100_leader import SO100LeaderConfig
-from lerobot.teleoperators.so100_leader.so100_leader import SO100Leader
-from lerobot.utils import visualization_utils as viz
-from lerobot.utils.control_utils import init_keyboard_listener
-from lerobot.utils.utils import log_say
-from lerobot.utils.visualization_utils import init_rerun
+from lerobot.datasets.pipeline_features import (
+    aggregate_pipeline_dataset_features,
+    create_initial_features,
+)
+from lerobot.datasets.utils import combine_feature_dicts
+from lerobot.policies.factory import make_policy, make_pre_post_processors
+from lerobot.processor import make_default_processors
+from lerobot.processor.rename_processor import rename_stats
 
-from ..utils.serial_prefixes import get_serial_prefixes
+from ..models.robots import RobotType
+from ..utils.record_loop_callback import record_loop
+from ..utils.robots import configure_follower, configure_leader
 
 logger = logging.getLogger(__name__)
 
@@ -27,233 +26,264 @@ logger = logging.getLogger(__name__)
 class RecordingManager:
     def __init__(
         self,
+        *,
         follower_port: str,
-        leader_port: str,
+        leader_port: Optional[str],
         repo_id: str,
-        cameras: list[OpenCVCameraConfig],
-        num_episodes: int = 5,
-        fps: int = 30,
-        episode_time_s: int = 60,
-        reset_time_s: int = 10,
-        task_description: str = "Task",
-        display_data: bool = True,
+        cameras: list,
+        num_episodes: int,
+        fps: int,
+        episode_time_s: float,
+        reset_time_s: float,
+        task_description: str,
+        robot_type: RobotType,
+        policy_path: Optional[str] = None,
+        rename_map: Optional[dict[str, str]] = None,
+        push_to_hub: bool = False,
     ):
-        self.num_episodes = num_episodes
+        self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        self._future = None
+        self._loop: Optional[asyncio.AbstractEventLoop] = None
+        self._clients = set()
+
+        self.repo_id = repo_id
         self.fps = fps
+        self.num_episodes = num_episodes
         self.episode_time_s = episode_time_s
         self.reset_time_s = reset_time_s
         self.task_description = task_description
-        self.repo_id = repo_id
-        self.display_data = display_data
+        self.policy_path = policy_path
+        self.rename_map = rename_map or {}
+        self.push_to_hub = push_to_hub
 
-        self.stop_recording = False
-        self.rerecord_episode = False
-        self.exit_early = False
-        self._episode_idx = 0
-        self._is_running = False
-        self._episode_start_time: float = 0.0
-        self._current_episode_duration: int = 0
-        self._in_reset = False
-        self._reset_start_time = 0.0
-
-        self._loop = None  # attach it later
-        self._clients = set()  # support multiple WebSocket client
-
-        # Create robot and teleoperator configs
-        camera_config: Mapping[str, CameraConfig] = {
-            "arm": cameras[1],
+        self._events = {
+            "exit_early": False,
+            "rerecord_episode": False,
+            "stop_recording": False,
         }
+        self._events_lock = threading.Lock()
 
-        prefixes = get_serial_prefixes()
+        self._is_running = False
+        self.phase = "idle"
+        self._progress: Dict[str, Any] = {}
+        self.follower_port = follower_port
 
-        self.robot_config = SO100FollowerConfig(
-            port=f"{prefixes[0]}{follower_port}",
-            id="left_follower_arm",
-            cameras=camera_config,
+        self.robot = configure_follower(
+            False,
+            {"follower_port": follower_port},
+            robot_type,
+            camera_config={"arm": cameras[0]},
         )
-        self.teleop_config = SO100LeaderConfig(
-            port=f"{prefixes[0]}{leader_port}",
-            id="left_leader_arm"
-        )
 
-        self.robot = SO100Follower(self.robot_config)
-        self.teleop = SO100Leader(self.teleop_config)
+        self.teleop = None
+        if leader_port:
+            self.teleop = configure_leader(
+                False, {"leader_port": leader_port}, robot_type
+            )
+        (
+            self.teleop_action_processor,
+            self.robot_action_processor,
+            self.robot_observation_processor,
+        ) = make_default_processors()
 
-        # Dataset setup
-        action_features = hw_to_dataset_features(self.robot.action_features, "action")  # type: ignore
-        obs_features = hw_to_dataset_features(
-            self.robot.observation_features, "observation"
+        dataset_features = combine_feature_dicts(
+            aggregate_pipeline_dataset_features(
+                pipeline=self.teleop_action_processor,
+                initial_features=create_initial_features(
+                    action=self.robot.action_features
+                ),
+                use_videos=True,
+            ),
+            aggregate_pipeline_dataset_features(
+                pipeline=self.robot_observation_processor,
+                initial_features=create_initial_features(
+                    observation=self.robot.observation_features
+                ),
+                use_videos=True,
+            ),
         )
-        dataset_features = {**action_features, **obs_features}
 
         self.dataset = LeRobotDataset.create(
             repo_id=self.repo_id,
-            fps=fps,
-            features=dataset_features,
+            fps=self.fps,
             robot_type=self.robot.name,
+            features=dataset_features,
             use_videos=True,
-            image_writer_threads=4,
+            image_writer_threads=4 * len(getattr(self.robot, "cameras", []) or [1]),
         )
-        self.dataset.start_image_writer(num_threads=4)
 
-        # Keyboard + visualization
-        self._listener, self._events = init_keyboard_listener()
-        init_rerun(session_name="recording")
+        self.policy = None
+        self.preprocessor = None
+        self.postprocessor = None
 
-    # --- Public control API ---
+        if self.policy_path:
+            cfg = PreTrainedConfig.from_pretrained(self.policy_path)
+            cfg.pretrained_path = self.policy_path
 
+            self.policy = make_policy(cfg, ds_meta=self.dataset.meta)
+
+            self.preprocessor, self.postprocessor = make_pre_post_processors(
+                policy_cfg=cfg,
+                pretrained_path=cfg.pretrained_path,
+                dataset_stats=rename_stats(self.dataset.meta.stats, self.rename_map),
+                preprocessor_overrides={
+                    "device_processor": {"device": cfg.device},
+                    "rename_observations_processor": {"rename_map": self.rename_map},
+                },
+            )
+
+    # ---------- WS ----------
     def attach_loop(self, loop: asyncio.AbstractEventLoop):
         self._loop = loop
 
-    def stop(self):
-        self.stop_recording = True
-
-    def rerecord(self):
-        self.rerecord_episode = True
-
-    def exit_current_loop(self):
-        self.exit_early = True
-
-    # --- WebSocket handling ---
-
     async def register_client(self, ws_send):
         self._clients.add(ws_send)
-        logger.info(f"WebSocket client connected. Total: {len(self._clients)}")
 
     async def unregister_client(self, ws_send):
         self._clients.discard(ws_send)
-        logger.info(f"WebSocket client disconnected. Total: {len(self._clients)}")
 
-    def _threadsafe_broadcast(self, data: dict):
-        """A recording threadből thread-safe broadcast"""
+    async def _broadcast(self, msg: dict):
+        msg = dict(msg)
+        msg["timestamp"] = datetime.now(timezone.utc).isoformat()
+        for ws in list(self._clients):
+            try:
+                await ws(msg)
+            except Exception:
+                self._clients.discard(ws)
+
+    def _threadsafe_broadcast(self, msg: dict):
         if not self._loop:
             return
-        for client in list(self._clients):
-            asyncio.run_coroutine_threadsafe(client(data), self._loop)
+        asyncio.run_coroutine_threadsafe(self._broadcast(msg), self._loop)
 
-    async def _stream_status(self, ws_send):
-        """Egyedi kliens stream (új csatlakozónál hívódik)"""
-        await self.register_client(ws_send)
-        try:
-            while self._is_running and not self.stop_recording:
-                data = self.get_status()
-                print(data)
-                await ws_send(data)
-                await asyncio.sleep(1 / self.fps)
-        except Exception as e:
-            print(f"Websocket disconnected: {e}")
+    # ---------- controls ----------
+    def stop(self):
+        with self._events_lock:
+            self._events["stop_recording"] = True
 
-        finally:
-            await self.unregister_client(ws_send)
+    def exit_current_loop(self):
+        with self._events_lock:
+            self._events["exit_early"] = True
 
-    # --- Recording logic (thread) ---
+    def rerecord(self):
+        with self._events_lock:
+            self._events["rerecord_episode"] = True
 
+    # ---------- main ----------
     async def start_recording(self):
-        self.robot.connect()
-        self.teleop.connect()
-        self._episode_idx = 0
+        if self._is_running:
+            raise RuntimeError("Already running")
+
+        # reset events
+        with self._events_lock:
+            for k in self._events:
+                self._events[k] = False
+
         self._is_running = True
-        teleop_action_processor, robot_action_processor, robot_observation_processor = (
-            make_default_processors()
-        )
+        loop = asyncio.get_running_loop()
+
+        def progress_cb(p: dict):
+            # thread → event loop WS
+            self._threadsafe_broadcast(p)
 
         def run():
             try:
-                for ep in range(self.num_episodes):
-                    if self.stop_recording:
-                        break
-                    self._episode_start_time = time.time()
-                    self._current_episode_duration = self.episode_time_s
-                    self._threadsafe_broadcast(
-                        {"type": "episode_start", "episode_idx": self._episode_idx}
-                    )
-                    print("RECORD STARTED")
+                self.robot.connect(calibrate=False)
+                if self.teleop is not None:
+                    self.teleop.connect(calibrate=False)
 
+                recorded = 0
+                while (
+                    recorded < self.num_episodes and not self._events["stop_recording"]
+                ):
+                    # RECORDING
+                    self.phase = "recording"
                     record_loop(
-                        self.robot,
-                        self._events,
-                        self.fps,
-                        teleop_action_processor,
-                        robot_action_processor,
-                        robot_observation_processor,
-                        self.dataset,
-                        self.teleop,
-                        None,
-                        None,
-                        None,
-                        self.episode_time_s,
-                        self.task_description,
-                        self.display_data,
+                        robot=self.robot,
+                        events=self._events,
+                        fps=self.fps,
+                        teleop_action_processor=self.teleop_action_processor,
+                        robot_action_processor=self.robot_action_processor,
+                        robot_observation_processor=self.robot_observation_processor,
+                        dataset=self.dataset,
+                        teleop=self.teleop,
+                        policy=self.policy,
+                        preprocessor=self.preprocessor,
+                        postprocessor=self.postprocessor,
+                        control_time_s=self.episode_time_s,
+                        single_task=self.task_description,
+                        phase="recording",
+                        progress_cb=progress_cb,
+                        current_episode=recorded + 1,
+                        total_episodes=self.num_episodes,
+                        follower_port=self.follower_port,
                     )
 
-                    if self.stop_recording:
-                        break
-
-                    # Reset
-                    self._in_reset = True
-                    self._reset_start_time = time.time()
-
-                    self._threadsafe_broadcast(
-                        {"type": "reset_start", "episode_idx": self._episode_idx}
-                    )
-                    record_loop(
-                        self.robot,
-                        self._events,
-                        self.fps,
-                        teleop_action_processor,
-                        robot_action_processor,
-                        robot_observation_processor,
-                        None,
-                        self.teleop,
-                        None,
-                        None,
-                        None,
-                        self.reset_time_s,
-                        self.task_description,
-                        True,
-                    )
-                    self._in_reset = False
-                    self._reset_start_time = 0.0
-                    self._threadsafe_broadcast(
-                        {"type": "reset_end", "episode_idx": self._episode_idx}
-                    )
+                    if self._events["rerecord_episode"]:
+                        self._events["rerecord_episode"] = False
+                        self._events["exit_early"] = False
+                        self.dataset.clear_episode_buffer()
+                        continue
 
                     self.dataset.save_episode()
-                    self._episode_idx += 1
+                    recorded += 1
 
-                self._threadsafe_broadcast({"type": "recording_end"})
+                    if self._events["stop_recording"]:
+                        break
+
+                    # RESETTING (skip after last episode)
+                    if recorded < self.num_episodes:
+                        self.phase = "resetting"
+                        record_loop(
+                            robot=self.robot,
+                            events=self._events,
+                            fps=self.fps,
+                            teleop_action_processor=self.teleop_action_processor,
+                            robot_action_processor=self.robot_action_processor,
+                            robot_observation_processor=self.robot_observation_processor,
+                            dataset=None,
+                            teleop=self.teleop,
+                            policy=None,
+                            preprocessor=None,
+                            postprocessor=None,
+                            control_time_s=self.reset_time_s,
+                            single_task=self.task_description,
+                            phase="resetting",
+                            progress_cb=progress_cb,
+                            current_episode=recorded,
+                            total_episodes=self.num_episodes,
+                            follower_port=self.follower_port,
+                        )
+
+                self.phase = "completed"
+                self._threadsafe_broadcast(
+                    {
+                        "phase": "completed",
+                        "current_episode": recorded,
+                        "total_episodes": self.num_episodes,
+                        "is_running": False,
+                    }
+                )
+
+            except Exception as e:
+                logger.exception("Worker crashed")
+                self.phase = "error"
+                self._threadsafe_broadcast(
+                    {"phase": "error", "message": str(e), "is_running": False}
+                )
             finally:
-                print("DISCONECTED?????")
-
-                self.robot.disconnect()
-                self.teleop.disconnect()
-                if self._listener:
-                    self._listener.stop()
                 self._is_running = False
+                try:
+                    if self.teleop is not None and getattr(
+                        self.teleop, "is_connected", False
+                    ):
+                        self.teleop.disconnect()
+                except Exception:
+                    logger.exception("teleop disconnect failed")
+                try:
+                    if getattr(self.robot, "is_connected", False):
+                        self.robot.disconnect()
+                except Exception:
+                    logger.exception("robot disconnect failed")
 
-        threading.Thread(target=run, daemon=True).start()
-
-    def get_status(self) -> dict:
-        time_left = 0
-        if (
-            self._is_running
-            and not self.stop_recording
-            and self._episode_start_time > 0
-        ):
-            if self._in_reset and self._reset_start_time > 0:
-                elapsed = time.time() - self._reset_start_time
-                time_left = max(0, self.reset_time_s - int(elapsed))
-            else:
-                elapsed = time.time() - self._episode_start_time
-                time_left = max(0, self._current_episode_duration - int(elapsed))
-
-        return {
-            "is_running": self._is_running and not self.stop_recording,
-            "current_episode": self._episode_idx,
-            "total_episodes": self.num_episodes,
-            "episode_start_time": self._episode_start_time,
-            "time_left_s": time_left,
-            "reset_time_s": self.reset_time_s,
-            "in_reset": self._in_reset,
-            "episodes_left": max(0, self.num_episodes - (self._episode_idx + 1)),
-        }
+        self._future = loop.run_in_executor(self._executor, run)

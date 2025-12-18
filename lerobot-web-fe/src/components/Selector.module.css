@@ -10,3 +10,9 @@
   font-size: 14px;
   font-weight: normal;
 }
+
+@media (min-width: 1921px) {
+  .selectWrapper label {
+    font-size: 1.25em;
+  }
+}

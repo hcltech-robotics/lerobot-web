@@ -1,6 +1,6 @@
 .historyMessage {
   padding: 9px 16px;
-  border-radius: 10px;
+  border-radius: 8px;
   border-bottom-right-radius: 0;
   max-width: 70%;
   pointer-events: painted;
@@ -35,4 +35,10 @@
 .historyMessage.other {
   align-self: flex-start;
   background-color: #b3b3b3;
+}
+
+@media (min-width: 1921px) {
+  .historyMessage {
+    font-size: 1.5em;
+  }
 }

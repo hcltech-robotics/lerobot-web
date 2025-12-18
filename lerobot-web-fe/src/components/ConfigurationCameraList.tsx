@@ -14,7 +14,7 @@ export default function ConfigurationCameraList() {
       {cameraIds && cameraIds.length > 0 && apiUrl ? (
         cameraIds.map((cameraId) => (
           <div key={cameraId} className={styles.cameraBoxWrapper}>
-            <CameraBox apiUrl={apiUrl} id={cameraId} />
+            <CameraBox id={cameraId} apiUrl={apiUrl} isZoomable={false} />
           </div>
         ))
       ) : (

@@ -14,7 +14,7 @@ export interface JointStatesResponse {
 }
 
 export interface JointStatesWSResponse {
-  timestamp: Date;
+  timestamp: string;
   jointState: JointState;
 }
 

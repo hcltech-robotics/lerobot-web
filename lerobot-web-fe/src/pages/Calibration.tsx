@@ -30,28 +30,42 @@ export default function Calibration() {
     currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? secondStepAnimationState : startPositionJointState;
 
   const handleTabClick = async (index: number) => {
-    if (index !== currentStep || !selectedId) {
+    if (index !== currentStep || !selectedId || completed) {
       return;
     }
 
-    const step = calibrationSteps[index] as CalibrationStep;
+    const step = calibrationSteps[index];
 
     try {
       if (step.id === 'start') {
         if (!robotKind) {
-          throw new Error('Missing robot kind for startCalibration');
+          throw new Error('Missing robot kind');
         }
-        await startCalibration(selectedId, robotKind, robotType);
+
+        await startCalibration(selectedId, robotKind, robotType, selectedId);
+
+        await new Promise((res) => setTimeout(res, 300));
+
         await confirmCalibrationStart();
-      } else if (step.id !== 'finish') {
+
+        goToNextStep();
+        return;
+      }
+
+      // === STEP 1 & STEP 2 ===
+      if (step.id === 'step1' || step.id === 'step2') {
         await confirmCalibrationStep();
+        goToNextStep();
+        return;
       }
-      if (step.step) {
-        await new Promise((res) => setTimeout(res, 1000));
+
+      // === FINISH ===
+      if (step.id === 'finish') {
+        goToNextStep();
+        return;
       }
-      goToNextStep();
-    } catch (error) {
-      console.error('Calibration API call failed for', step.id, error);
+    } catch (err) {
+      console.error('Calibration failed:', err);
     }
   };
 

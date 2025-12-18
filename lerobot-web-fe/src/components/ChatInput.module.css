@@ -1,6 +1,5 @@
 .chatForm {
   padding: 9px 16px;
-  box-shadow: 0 0 9px 0 #00000088;
   pointer-events: all;
   color: #333;
   background-color: #f0f0f091;
@@ -71,7 +70,7 @@
 }
 
 .chatButton.pulse:before {
-  content: '';
+  content: "";
   position: absolute;
   display: block;
   width: 48px;
@@ -93,5 +92,16 @@
   100% {
     transform: scale(2);
     opacity: 0;
+  }
+}
+
+@media (min-width: 1921px) {
+  .chatTextarea {
+    font-size: 1.5em;
+  }
+
+  .chatButton svg {
+    width: 2em;
+    height: 2em;
   }
 }

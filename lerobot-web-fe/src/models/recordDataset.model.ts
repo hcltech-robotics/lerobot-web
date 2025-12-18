@@ -24,8 +24,9 @@ export interface RecordingSessionWsResponse {
   current_episode: number;
   episode_start_time: number;
   episodes_left: number;
-  in_reset: number;
-  is_running: number;
+  in_reset: boolean;
+  is_running: boolean;
+  phase: string;
   reset_time_s: number;
   time_left_s: number;
   total_episodes: number;

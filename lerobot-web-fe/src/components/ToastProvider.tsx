@@ -9,7 +9,9 @@ export function ToastProvider() {
 
   return (
     <Toast.Provider swipeDirection="right">
-      {toasts?.map((t) => <ToastItem key={t.id} toast={t} onRemove={removeToast} />)}
+      {toasts?.map((t) => (
+        <ToastItem key={t.id} toast={t} onRemove={removeToast} />
+      ))}
       <Toast.Viewport className={styles.toastViewport} />
     </Toast.Provider>
   );

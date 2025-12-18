@@ -19,3 +19,13 @@
   border: 1px solid #fff;
   border-radius: 8px;
 }
+
+@media (min-width: 1921px) {
+  .configurationWrapper {
+    max-width: 50vw;
+  }
+
+  .title {
+    font-size: 2em;
+  }
+}

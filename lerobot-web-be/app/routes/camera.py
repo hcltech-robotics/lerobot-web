@@ -33,8 +33,10 @@ async def video_stream(websocket: WebSocket, camera_id: int):
     stream = camera_streams[camera_id]
 
     try:
-        async for frame in stream.subscribe():
-            await websocket.send_bytes(frame)
+        async for frame in generate_frames(camera_id):
+            await websocket.send_text(frame)
+    except RuntimeError as e:
+        await websocket.send_text(f"ERROR: {str(e)}")
     except WebSocketDisconnect:
         logger.info("WebSocket disconnected for camera %s", camera_id)
     except RuntimeError as e:
