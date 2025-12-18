@@ -29,8 +29,8 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
   useEffect(() => {
     if (!wsResponse) return;
 
-    const isLastEpisode = wsResponse.current_episode === wsResponse.total_episodes;
-    const isFinished = isLastEpisode && !wsResponse.in_reset && wsResponse.episode_start_time === 0 && wsResponse.time_left_s === 0;
+    const isFinished = wsResponse.phase === 'completed' && wsResponse.current_episode === wsResponse.total_episodes;
+    console.log('ISFINISHED????: ', isFinished);
 
     if (isFinished) {
       onFinish();
@@ -57,12 +57,13 @@ export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionPro
       .padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
 
   if (wsResponse) {
+    if (wsResponse.phase === 'completed') {
+      statusText = 'Recording completed.';
+      timeLeft = null;
+    }
     if (wsResponse.in_reset) {
       statusText = 'Reset time…';
-      timeLeft = wsResponse.reset_time_s;
-    } else if (wsResponse.episode_start_time > 0) {
-      statusText = `Episode ${wsResponse.current_episode} start in…`;
-      timeLeft = wsResponse.episode_start_time;
+      timeLeft = wsResponse.time_left_s;
     } else {
       statusText = `Episode ${wsResponse.current_episode} is running…`;
       timeLeft = wsResponse.time_left_s;
