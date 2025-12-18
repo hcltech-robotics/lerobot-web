@@ -80,7 +80,7 @@ export function InferenceForm({ remoteModels, isRunning, onSubmit }: InferenceFo
             className={`${styles.input}`}
             type="text"
             name="repoId"
-            placeholder="userId/example"
+            placeholder="example-id"
             value={formData.repoId}
             onChange={handleChange}
             disabled={isRunning}
@@ -158,7 +158,7 @@ export function InferenceForm({ remoteModels, isRunning, onSubmit }: InferenceFo
               className={`${styles.input}`}
               type="text"
               name="policyPathLocal"
-              placeholder="./examples/..."
+              placeholder="Enter the full path of the folder"
               value={formData.policyPathLocal}
               disabled={isRunning}
               onChange={handleChange}

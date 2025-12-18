@@ -91,5 +91,3 @@ class GrootService:
 
             except Exception:
                 logger.exception("Failed to parse action line: %s", line)
-
-            yield line

@@ -55,7 +55,7 @@ export default function Inference() {
     }
 
     getRemoteModels(apiKey, userId);
-  }, [apiKey]);
+  }, [apiKey, userId]);
 
   const getRemoteModels = async (apiKey: string, userId: string) => {
     setLoading(true);
@@ -72,10 +72,10 @@ export default function Inference() {
   };
 
   const handleInferenceSubmit = (data: InferenceMetaData) => {
-    if (!isBimanualMode && followers.length !== 0) {
+    if (!isBimanualMode && followers.length !== 0 && userId) {
       const followerId = followers[0]?.id || '';
 
-      handleInferenceStart({ ...data, followerId, robotType });
+      handleInferenceStart({ ...data, followerId, robotType, userId });
     }
   };
 

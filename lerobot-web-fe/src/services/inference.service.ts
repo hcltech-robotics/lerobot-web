@@ -29,11 +29,12 @@ export async function startInference(payload: InferencePayload): Promise<AiContr
     body: JSON.stringify({
       task_description: payload.singleTask,
       model: payload.remoteModel,
-      modelId: payload.repoId,
+      model_id: payload.repoId,
       robot_id: payload.followerId,
       robot_type: payload.robotType,
       policy_path_local: payload.policyPathLocal,
       episode_time_s: payload.episodeTime,
+      user_id: payload.userId,
     }),
     toast: { success: 'Inference has started successfully.' },
   });
@@ -45,11 +46,12 @@ export async function stopInference(payload: InferencePayload): Promise<AiContro
     body: JSON.stringify({
       task_description: payload.singleTask,
       model: payload.remoteModel,
-      modelId: payload.repoId,
+      model_id: payload.repoId,
       robot_id: payload.followerId,
       robot_type: payload.robotType,
       policy_path_local: payload.policyPathLocal,
       episode_time_s: payload.episodeTime,
+      user_id: payload.userId,
     }),
     toast: { success: 'Inference has stopped successfully.' },
   });

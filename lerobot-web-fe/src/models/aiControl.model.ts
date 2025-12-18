@@ -48,6 +48,7 @@ export interface InferenceMetaData {
 export interface InferencePayload extends InferenceMetaData {
   followerId: string;
   robotType: RobotTypes;
+  userId: string;
 }
 
 export const initFormData: InferenceMetaData = {
