@@ -97,6 +97,7 @@ def configure_follower(
             follower_id = list(follower_map.values())[0]
             follower_config = SO100FollowerConfig(
                 port=f"{prefixes[0]}{follower_id}",
+                cameras=camera_config,
                 id="hcltech_lerobot_follower_arm_left",
             )
             return SO100Follower(follower_config)
@@ -114,6 +115,7 @@ def configure_follower(
             follower_id = list(follower_map.values())[0]
             follower_config = SO101FollowerConfig(
                 port=f"{prefixes[0]}{follower_id}",
+                cameras=camera_config,
                 id="hcltech_lerobot_follower_arm_left",
             )
             return SO101Follower(follower_config)

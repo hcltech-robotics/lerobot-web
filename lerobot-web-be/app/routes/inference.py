@@ -3,19 +3,19 @@ import logging
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
 
-from ..models.record import RecordingStartParams
+from ..models.record import InferenceStartParams
 from ..services.record import recording_service
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@router.post("/record/start")
-async def start_record(req: RecordingStartParams):
+@router.post("/inference/start")
+async def start_record(req: InferenceStartParams):
     try:
         await recording_service.start_recording(
             follower_port=req.follower_port,
-            leader_port=req.leader_port,
+            leader_port=None,
             repo_id=req.repo_id,
             num_episodes=req.num_episodes,
             fps=req.fps,
@@ -26,37 +26,19 @@ async def start_record(req: RecordingStartParams):
             robot_type=req.robot_type,
             policy_path=req.policy_path,
         )
-        return {"message": "Recording started"}
+        return {"message": "Inference started"}
     except Exception as e:
-        logger.exception("Failed to start recording")
+        logger.exception("Failed to start inference")
         mgr = recording_service.get_manager()
         if mgr:
             asyncio.create_task(mgr._broadcast({"phase": "error", "message": str(e)}))
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/record/stop")
+@router.post("/inference/stop")
 async def stop_record():
     await recording_service.stop_recording()
     return {"message": "Recording stopped"}
-
-
-@router.post("/record/rerecord")
-async def rerecord_episode():
-    """
-    Rerecord current episode.
-    """
-    await recording_service.rerecord_episode()
-    return {"message": "Rerecord requested"}
-
-
-@router.post("/record/exit")
-async def exit_current_loop():
-    """
-    Early exit from current loop.
-    """
-    await recording_service.exit_current_loop()
-    return {"message": "Exit early requested"}
 
 
 @router.websocket("/record/ws")
