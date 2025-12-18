@@ -10,7 +10,7 @@ router = APIRouter()
 logger = logging.getLogger(__name__)
 
 
-@router.post("/record/start")
+@router.post("/record/start", tags=["record"])
 async def start_record(req: RecordingStartParams):
     try:
         await recording_service.start_recording(
@@ -35,13 +35,13 @@ async def start_record(req: RecordingStartParams):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.post("/record/stop")
+@router.post("/record/stop", tags=["record"])
 async def stop_record():
     await recording_service.stop_recording()
     return {"message": "Recording stopped"}
 
 
-@router.post("/record/rerecord")
+@router.post("/record/rerecord", tags=["record"])
 async def rerecord_episode():
     """
     Rerecord current episode.
@@ -50,7 +50,7 @@ async def rerecord_episode():
     return {"message": "Rerecord requested"}
 
 
-@router.post("/record/exit")
+@router.post("/record/exit", tags=["record"])
 async def exit_current_loop():
     """
     Early exit from current loop.

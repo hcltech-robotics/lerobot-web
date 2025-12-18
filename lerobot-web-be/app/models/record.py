@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -32,9 +33,11 @@ class RecordingStartParams(BaseModel):
 
 
 class InferenceStartParams(BaseModel):
-    follower_port: str
+    robot_id: str
     leader_port: Optional[str] = None
-    repo_id: str
+    model_id: str
+    remote_model: Optional[str] = None
+    user_id: str
     num_episodes: int = 1
     fps: int = 30
     episode_time_s: int
@@ -43,9 +46,32 @@ class InferenceStartParams(BaseModel):
     display_data: bool = False
     cameras: list[CameraConfig]
     robot_type: RobotType
-    policy_path: Optional[str] = None
+    policy_path_local: Optional[str] = None
 
 
 class RecordingControlResponse(BaseModel):
     status: str
     message: str
+
+
+class UserModelsRequest(BaseModel):
+    api_key: str
+    user_id: str
+
+
+class UserModelsItem(BaseModel):
+    id: str
+    modelId: str
+    private: bool
+    createdAt: datetime
+
+
+class UserModelsResponse(BaseModel):
+    models: List[UserModelsItem]
+
+
+class UserModel(BaseModel):
+    modelId: str
+    id: str
+    private: bool
+    createdAt: Optional[datetime]
