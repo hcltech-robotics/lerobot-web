@@ -3,11 +3,9 @@ import logging
 import time
 from typing import Optional
 
-from fastapi import WebSocketDisconnect
-from fastapi.websockets import WebSocketState
-
 from ..models.robots import RobotType
 from ..models.teleoperate import sleep_position
+from ..services.joint_state_manager import joint_state_manager
 from ..utils.joint_state import remap_keys_for_client_and_convert_to_deg
 from ..utils.robots import configure_follower, configure_leader
 from ..utils.serial_prefixes import get_serial_prefixes
@@ -93,6 +91,7 @@ class TeleoperationManager:
     # ---------- TELEOPERATION ----------
     async def _teleoperate_loop(self, fps: int, follower_map: dict):
         logger.info("Teleoperation loop started")
+
         if not self.follower_arm or not self.leader_arm:
             logger.error("Arms not initialized before teleopeation loop")
             return
@@ -103,35 +102,29 @@ class TeleoperationManager:
                 action = await asyncio.to_thread(self.leader_arm.get_action)
                 await asyncio.to_thread(self.follower_arm.send_action, action)
 
-                try:
-                    if self.is_bi_setup:
-                        left_action_map = {}
-                        right_action_map = {}
-                        prefixes = get_serial_prefixes(list(follower_map.values())[0])
+                if self.is_bi_setup:
+                    prefixes = get_serial_prefixes(list(follower_map.values())[0])
+                    left_id = f"{prefixes[0]}{follower_map['left']}"
+                    right_id = f"{prefixes[0]}{follower_map['right']}"
+                    left_action = {
+                        k[len("left_") :]: v
+                        for k, v in action.items()
+                        if k.startswith("left_")
+                    }
+                    right_action = {
+                        k[len("right_") :]: v
+                        for k, v in action.items()
+                        if k.startswith("right_")
+                    }
+                    left_obs = remap_keys_for_client_and_convert_to_deg(left_action)
+                    right_obs = remap_keys_for_client_and_convert_to_deg(right_action)
+                    joint_state_manager.publish(left_id, left_obs)
+                    joint_state_manager.publish(right_id, right_obs)
 
-                        left_arm_port = f"{prefixes[0]}{follower_map['left']}"
-                        right_arm_port = f"{prefixes[0]}{follower_map['right']}"
-                        for k, v in action.items():
-                            if k.startswith("left_"):
-                                left_action_map[k[len("left_") :]] = v
-                            if k.startswith("right_"):
-                                right_action_map[k[len("right_") :]] = v
-                        left_obs = remap_keys_for_client_and_convert_to_deg(
-                            left_action_map
-                        )
-                        right_obs = remap_keys_for_client_and_convert_to_deg(
-                            right_action_map
-                        )
-                        item = {left_arm_port: left_obs, right_arm_port: right_obs}
-                        self.joint_state_queue.put_nowait(item)
-
-                    else:
-                        robot_arm_port = list(follower_map.values())[0]
-                        obs = remap_keys_for_client_and_convert_to_deg(action)
-                        item = {robot_arm_port: obs}
-                        self.joint_state_queue.put_nowait(item)
-                except asyncio.QueueFull:
-                    pass
+                else:
+                    robot_id = list(follower_map.values())[0]
+                    obs = remap_keys_for_client_and_convert_to_deg(action)
+                    joint_state_manager.publish(robot_id, obs)
 
                 delay = max(1.0 / fps - (time.perf_counter() - t0), 0.0)
                 await asyncio.sleep(delay)
@@ -162,45 +155,12 @@ class TeleoperationManager:
             return
 
         self._stop_event.set()
-        await asyncio.sleep(0.2)  # small grace time
-        self.disconnect_arms(move_to_sleep=True)
 
-        if self._teleop_task:
-            await self._teleop_task
-        self._teleop_task = None
-
-    # ---------- JOINT STATE STREAM ----------
-    async def stream_joint_states(self, websocket, follower_id: str, fps: int = 60):
-        if not self.follower_arm or not self.follower_arm.is_connected:
-            await websocket.send_json({"error": "Follower not connected"})
-            await websocket.close()
-            return
         try:
-            while not self._stop_event.is_set():
-                joint_states_map = await self.joint_state_queue.get()
-                matched_state = None
-                for port, obs in joint_states_map.items():
-                    if follower_id in port:
-                        matched_state = obs
-                if matched_state is not None:
-                    await websocket.send_json(
-                        {
-                            "timestamp": time.time(),
-                            "jointState": matched_state,
-                        }
-                    )
-                else:
-                    print(
-                        f"The robot_id: {follower_id} is not accessible in the joint state map"
-                    )
-                await asyncio.sleep(1 / fps)
-        except WebSocketDisconnect:
-            logger.info("WebSocket client disconnected")
-            return
-        except Exception as e:
-            logger.error(f"Joint state stream error: {e}")
-            if websocket.application_state == WebSocketState.CONNECTED:
-                await websocket.close()
+            await asyncio.wait_for(self._teleop_task, timeout=2)
+        except asyncio.TimeoutError:
+            self._teleop_task.cancel()
+        self._teleop_task = None
 
 
 teleop_manager = TeleoperationManager()

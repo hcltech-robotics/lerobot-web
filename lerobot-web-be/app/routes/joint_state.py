@@ -1,16 +1,23 @@
-from fastapi import APIRouter, Query, WebSocket
-from pydantic import BaseModel
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 
-from ..services.teleoperate import teleop_manager
+from ..services.joint_state_manager import joint_state_manager
 
 router = APIRouter()
 
 
-class JointStateRequest(BaseModel):
-    follower_id: str
-
-
 @router.websocket("/ws/joint_state")
-async def websocket_joint_state(websocket: WebSocket, follower_id: str = Query(...)):
+async def joint_state_ws(websocket: WebSocket, follower_id: str):
     await websocket.accept()
-    await teleop_manager.stream_joint_states(websocket, follower_id)
+
+    try:
+        while True:
+            await joint_state_manager.wait_for_update()
+
+            payload = joint_state_manager.get_latest(follower_id)
+            if payload is None:
+                continue
+
+            await websocket.send_json(payload)
+
+    except WebSocketDisconnect:
+        return
