@@ -80,10 +80,7 @@ Camera settings:
 CAMERA_WIDTH=640
 CAMERA_HEIGHT=480
 CAMERA_FPS=15
-CAMERA_PATHS={
-  front: {type: opencv, index_or_path: /dev/cam_overhead, width: 640, height: 480, fps: 30, fourcc: 'MJPG'},
-  wrist: {type: opencv, index_or_path: /dev/cam_wrist_right, width: 640, height: 480, fps: 30, fourcc: 'MJPG'}
-}
+CAMERA_CONFIG="{front: {type: opencv, index_or_path: /dev/video0, width: 640, height: 480, fps: 15}, wrist: {type: opencv, index_or_path: /dev/video1, width: 640, height: 480, fps: 15}}"
 ```
 
 Groot server parameters:
