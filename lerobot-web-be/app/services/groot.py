@@ -45,6 +45,7 @@ class GrootService:
             "--use_action_smoothing=True",
             "--smoothing_alpha=0.1",
             f"--lang_instruction={req.lang_instruction}",
+            f'--robot.cameras="{self._settings.camera_paths}"',
         ]
 
         env = os.environ.copy()
