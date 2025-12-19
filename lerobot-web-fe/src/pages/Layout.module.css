@@ -17,6 +17,109 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
-  padding: 10px 20px;
-  height: 60px;
+  padding: 16px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.contentArea {
+  display: flex;
+  flex: 1;
+  background: linear-gradient(90deg, #0f5fdc, #ffffff 200%);
+  position: relative;
+}
+
+.leftArea {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cameraContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+}
+
+.sceneContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.mainScene {
+  flex: 1;
+  display: flex;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.controlPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-family: sans-serif;
+  margin: 16px;
+  z-index: 1;
+  width: 250px;
+  background-color: #f0f0f091;
+  box-shadow: 0px 0px 2px 0px #fff;
+  border-radius: 8px;
+  max-height: 85vh;
+  overflow: auto;
+}
+
+.autorotateControl {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  cursor: pointer;
+  color: #fff;
+  background: none;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  opacity: 0.2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+}
+
+@media (min-width: 1921px) {
+  .autorotateControl {
+    gap: 0.5em;
+    font-size: 1.5em;
+    bottom: 2em;
+    left: 2em;
+  }
+
+  .autorotateControl svg {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  .controlPanel {
+    width: 30em;
+    margin: 2em;
+  }
+
+  .cameraContainer {
+    top: 2em;
+    right: 2em;
+  }
 }

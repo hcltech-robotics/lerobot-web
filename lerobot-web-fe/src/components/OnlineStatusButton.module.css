@@ -1,0 +1,62 @@
+.statusButton {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 20px;
+  padding: 2px 10px;
+  cursor: pointer;
+  z-index: 1;
+  padding-left: 30px;
+  background-color: #f0f0f091;
+  border: 1px solid #fff;
+  box-shadow: 0px 0px 2px 0px #fff;
+}
+
+.statusButton::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.offline::before {
+  background-color: #757575;
+}
+
+.online::before {
+  background-color: #00e400;
+  animation: blink 1s infinite;
+}
+
+.online {
+  border-color: #00e400;
+  color: #757575;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 1921px) {
+  .statusButton {
+    font-size: 1.25em;
+    padding-left: 1.75em;
+    top: 2em;
+  }
+
+  .statusButton::before {
+    width: 0.75em;
+    height: 0.75em;
+  }
+}

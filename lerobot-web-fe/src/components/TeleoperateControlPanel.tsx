@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { PlayIcon, StopIcon } from '@radix-ui/react-icons';
-import { RobotLeaderSelector } from './RobotLeaderSelector';
+import { useRobotStore } from '../stores/robot.store';
+import { validateRobots } from '../services/robot.service';
 
 import styles from './TeleoperateControlPanel.module.css';
 
@@ -8,33 +10,32 @@ type TeleoperateControlPanelProps = {
   loading: boolean;
   error: string | null;
   isRunning: boolean;
-  isLeaderSelected: boolean;
   onToggleTeleoperate: () => void;
 };
 
-export function TeleoperateControlPanel({
-  status,
-  loading,
-  error,
-  isRunning,
-  isLeaderSelected,
-  onToggleTeleoperate,
-}: TeleoperateControlPanelProps) {
-  return (
-    <div className={styles.controlPanel}>
-      <div className={styles.statusBox}>
-        <h2 className={styles.statusTitle}>Teleoperation Status</h2>
-        <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
-        {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
-        <div className={styles.selectWrapper}>
-          <RobotLeaderSelector disabled={isRunning} />
-        </div>
-      </div>
+export function TeleoperateControlPanel({ status, loading, error, isRunning, onToggleTeleoperate }: TeleoperateControlPanelProps) {
+  const isBimanualMode = useRobotStore((store) => store.isBimanualMode);
+  const robots = useRobotStore((store) => store.robots);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
+  useEffect(() => {
+    const isValid = validateRobots(robots, isBimanualMode);
+    setIsDisabled(!isValid);
+  }, [isBimanualMode, robots]);
+
+  return (
+    <div className={styles.statusBox}>
+      <h2 className={styles.statusTitle}>Teleoperate</h2>
+      {!isDisabled ? (
+        <p className={styles.statusText}>{loading ? 'Loading...' : status}</p>
+      ) : (
+        <p className={styles.statusText}>Select a leader and a follower arm in the top right corner for start teleoperation</p>
+      )}
+      {error && <p className={styles.errorText}>⚠ Error: {error}</p>}
       <button
         className={`${styles.controlButton} ${isRunning ? styles.stop : styles.start}`}
         onClick={onToggleTeleoperate}
-        disabled={!isLeaderSelected || loading}
+        disabled={isDisabled || loading}
       >
         {loading ? (
           <>

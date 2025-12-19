@@ -11,8 +11,3 @@ export const teleoperateStatusList = {
 } as const;
 
 export type teleoperateStatus = (typeof teleoperateStatusList)[keyof typeof teleoperateStatusList];
-
-export interface RobotIds {
-  leader: string;
-  follower: string;
-}

@@ -1,19 +1,26 @@
+from app.routes import (
+    calibrate,
+    camera,
+    groot,
+    inference,
+    joint_state,
+    move_to_sleep,
+    record,
+    robots,
+    teleoperate,
+)
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import subprocess
-import os
-import cv2
-from .routers import status, teleoperate, websockets
+from pydantic import BaseModel
 
 app = FastAPI(
-    title="LeRobot Backend",
-    summary="This is a backend service for web control of the LeRobot robotic arm",
+    title="HCLTech Robot Dojo Backend",
+    summary="This is a backend service for web control of the HCLTech Robot Dojo",
     version="0.0.1",
 )
 
 origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
+    "*",
 ]
 
 app.add_middleware(
@@ -21,27 +28,25 @@ app.add_middleware(
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-@app.on_event("startup")
-def start_xvfb_if_needed():
-    try:
-        result = subprocess.run(["pgrep", "Xvfb"], stdout=subprocess.DEVNULL)
-        if result.returncode != 0:
-            print("[startup] Xvfb is not running, starting it...")
-            subprocess.Popen(
-                ["Xvfb", ":0", "-screen", "0", "1024x768x24"],
-                stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL
-            )
-        else:
-            print("[startup] Xvfb is already running.")
-        os.environ["DISPLAY"] = ":0"
-        print("[startup] DISPLAY environment variable set: :0")
-    except Exception as e:
-        print("[startup] An error occurred while starting Xvfb: ", str(e))
 
-app.include_router(status.router)
+class BackendStatusResponse(BaseModel):
+    message: str
+
+
+@app.get("/", response_model=BackendStatusResponse, tags=["status"])
+def root():
+    return {"message": "Backend running."}
+
+
+app.include_router(joint_state.router)
+app.include_router(move_to_sleep.router)
 app.include_router(teleoperate.router)
-app.include_router(websockets.router)
+app.include_router(camera.router)
+app.include_router(robots.router)
+app.include_router(calibrate.router)
+app.include_router(record.router)
+app.include_router(groot.router)
+app.include_router(inference.router)

@@ -2,8 +2,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 16px;
-  gap: 16px;
   min-width: 0;
   min-height: 0;
 }
@@ -11,16 +9,13 @@
 .controlPanel {
   display: flex;
   flex-direction: column;
-  background-color: #f9f9fb;
   padding: 16px 24px;
   border-radius: 8px;
-}
-
-.selectWrapper {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  background-color: #f0f0f091;
+  backdrop-filter: blur(5px);
+  border: 1px solid #fff;
+  box-shadow: 0px 0px 2px 0px #fff;
+  margin: 16px 16px 0 16px;
 }
 
 .progressIndicator {
@@ -65,7 +60,7 @@
   background-color: #3c91ff;
   color: #ffffff;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   border: none;
   font-size: 16px;
   padding: 12px;
@@ -87,10 +82,9 @@
   align-items: center;
   justify-content: center;
   color: #ff0000;
-  background: #f0f2f8;
   font-size: 16px;
   flex-direction: row;
-  border-radius: 12px;
+  border-radius: 8px;
   gap: 6px;
   margin: 12px;
 }
@@ -107,8 +101,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #82dc73;
+  color: #24ff00;
   font-weight: bold;
+  text-shadow: 0 0 5px #a3a3a3;
 }
 
 .sceneContainer {
@@ -124,58 +119,60 @@
 .mainScene {
   flex: 1;
   display: flex;
-  background: #f0f0f0;
   border-radius: 8px;
   box-sizing: border-box;
   width: 100%;
   height: 100%;
 }
 
-.isLive {
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 1px solid #b0b0b0;
-  border-radius: 20px;
-  color: #b0b0b0;
-  padding: 2px 10px;
-  cursor: pointer;
-  z-index: 1;
-  padding-left: 30px;
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #333;
 }
 
-.isLive::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
+.nameWrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
-.offline::before {
-  background-color: #b0b0b0;
+.nameWrapper label {
+  color: #555555;
+  font-size: 14px;
+  font-weight: normal;
 }
 
-.online::before {
-  background-color: #11ce11;
-  animation: blink 1s infinite;
+.nameWrapper input {
+  padding: 6px 12px;
+  border: 1px solid #d5dce5;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #1d2123;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.online {
-  border-color: #11ce11;
-  color: #868686;
+.nameWrapper input:disabled {
+  color: #919eaf;
+  background-color: #e6ebf5;
+  cursor: not-allowed;
 }
 
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
   }
-  50% {
-    opacity: 0;
+
+  .tabContent,
+  .restartButton {
+    font-size: 1.25em;
+  }
+
+  .alert {
+    font-size: unset;
   }
 }

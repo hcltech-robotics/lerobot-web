@@ -1,0 +1,44 @@
+.historyMessage {
+  padding: 9px 16px;
+  border-radius: 8px;
+  border-bottom-right-radius: 0;
+  max-width: 70%;
+  pointer-events: painted;
+}
+
+.historyMessage.long {
+  max-height: 50vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.long.showTopGradient.showBottomGradient {
+  box-shadow:
+    inset 0px 40px 20px -30px #000000bf,
+    inset 0px -40px 20px -30px #000000bf;
+}
+
+.long.showTopGradient {
+  box-shadow: inset 0px 40px 20px -30px #000000bf;
+}
+
+.long.showBottomGradient {
+  box-shadow: inset 0px -40px 20px -30px #000000bf;
+}
+
+.historyMessage.me {
+  align-self: flex-end;
+  background-color: #105fdc;
+  color: #fff;
+}
+
+.historyMessage.other {
+  align-self: flex-start;
+  background-color: #b3b3b3;
+}
+
+@media (min-width: 1921px) {
+  .historyMessage {
+    font-size: 1.5em;
+  }
+}

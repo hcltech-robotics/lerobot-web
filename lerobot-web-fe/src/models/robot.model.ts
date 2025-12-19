@@ -1,5 +1,3 @@
-import type { StatusResponse } from '../models/status.model';
-
 export const DEFAULT_ROBOT_COUNT = 2;
 export const EMPTY_ROBOT_INDEX = '-1';
 
@@ -12,8 +10,12 @@ export const unitList = {
 export type unitlistName = (typeof unitList)[keyof typeof unitList];
 
 export interface JointStatesResponse {
-  angles: number[];
-  unit: unitlistName;
+  jointState: JointState;
+}
+
+export interface JointStatesWSResponse {
+  timestamp: string;
+  jointState: JointState;
 }
 
 export interface JointState {
@@ -36,9 +38,33 @@ export const jointStateNameList = {
 
 export type jointStateNames = (typeof jointStateNameList)[keyof typeof jointStateNameList];
 
+export const robotSideList = {
+  LEFT: 'left',
+  RIGHT: 'right',
+} as const;
+
+export type RobotSides = (typeof robotSideList)[keyof typeof robotSideList];
+
+export const robotRoleList = {
+  LEADER: 'leader',
+  FOLLOWER: 'follower',
+} as const;
+
+export type RobotRoles = (typeof robotRoleList)[keyof typeof robotRoleList];
+
+export const robotTypeList = {
+  SO100: 'so100',
+  SO101: 'so101',
+} as const;
+
+export type RobotTypes = (typeof robotTypeList)[keyof typeof robotTypeList];
+
 export interface RobotProps {
   isLive: boolean;
   calibrationJointState?: JointState | null;
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+  robotLabel: string;
 }
 
 export const JOINT_STATES_OFFSETS = {
@@ -47,42 +73,32 @@ export const JOINT_STATES_OFFSETS = {
   JAW: -3.3,
 } as const;
 
-export interface RobotStatus {
-  device_name: string | null;
-  name: string;
-  robot_type: string;
+export interface RobotItem {
+  id: string;
+  side: RobotSides;
+  role: RobotRoles;
 }
 
-export const mockStatusResponse: StatusResponse = {
-  status: 'ok',
-  name: 'jetson',
-  robots: ['so-100', 'so-100', 'agilex-piper'],
-  robot_status: [
-    {
-      name: 'so-100',
-      robot_type: 'manipulator',
-      device_name: '58FA101935',
-    },
-    {
-      name: 'so-100',
-      robot_type: 'manipulator',
-      device_name: '5A4B049137',
-    },
-    {
-      name: 'agilex-piper',
-      robot_type: 'manipulator',
-      device_name: null,
-    },
-  ],
-  cameras: {
-    cameras_status: [],
-    is_stereo_camera_available: false,
-    realsense_available: false,
-    video_cameras_ids: [],
+export interface RobotIds {
+  leader: string;
+  follower: string;
+}
+
+export type RobotLayoutKey = RobotSides | 'single';
+
+export type RobotLayout = Record<RobotLayoutKey, { position: [number, number, number]; rotation: [number, number, number] }>;
+
+export const robotLayout: RobotLayout = {
+  left: {
+    position: [0.35, 0.42, -0.3],
+    rotation: [-Math.PI / 2, 0, 0],
   },
-  version_id: '0.3.49',
-  is_recording: false,
-  ai_running_status: 'stopped',
-  server_ip: '192.168.100.102',
-  leader_follower_status: false,
+  right: {
+    position: [-0.35, 0.42, -0.3],
+    rotation: [-Math.PI / 2, 0, 0],
+  },
+  single: {
+    position: [0, 0.42, -0.3],
+    rotation: [-Math.PI / 2, 0, 0],
+  },
 };

@@ -2,6 +2,7 @@
   display: flex;
   cursor: pointer;
   gap: 10px;
+  position: relative;
 }
 
 .robotIcon svg {
@@ -10,4 +11,11 @@
 
 .robotIcon.active svg {
   fill: #beebb4;
+}
+
+@media (min-width: 1921px) {
+  .robotIcon svg {
+    width: 5em;
+    height: 5em;
+  }
 }

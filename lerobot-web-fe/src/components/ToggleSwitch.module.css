@@ -1,0 +1,79 @@
+.switchWrapper {
+  display: flex;
+  justify-content: space-between;
+  line-height: 45px;
+  font-size: 14px;
+}
+
+.switchContainer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.switch {
+  width: 40px;
+  background-color: #fff;
+  border-radius: 50px;
+  position: relative;
+  border: 1px solid #b0b0b0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ebebeb;
+  }
+
+  &[data-state="checked"] {
+    background-color: #0f5fdc;
+  }
+
+  &[data-state="checked"]:hover {
+    background-color: #2e7eff;
+  }
+
+  &[data-disabled] {
+    background-color: #aaa;
+    border: 1px solid #aaa;
+    cursor: not-allowed;
+  }
+}
+
+.switchThumb {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: #0f5fdc;
+  border-radius: 50px;
+  transition: transform 100ms;
+  transform: translateX(-5px);
+  will-change: transform;
+
+  &[data-state="checked"] {
+    transform: translateX(15px);
+    background-color: #fff;
+  }
+
+  &[data-disabled] {
+    background-color: #eee;
+  }
+}
+
+@media (min-width: 1921px) {
+  .switchWrapper {
+    font-size: 1.5em;
+  }
+
+  .switch {
+    width: 4em;
+    height: 2em;
+  }
+
+  .switchThumb {
+    width: 1.75em;
+    height: 1.75em;
+  }
+
+  .switchThumb[data-state="checked"] {
+    transform: translateX(1.5em);
+  }
+}

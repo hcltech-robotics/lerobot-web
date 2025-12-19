@@ -1,43 +1,49 @@
-import * as Select from '@radix-ui/react-select';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
+import { useEffect, useState } from 'react';
+import { BaseSelector, type SelectOption } from './BaseSelector';
+
 import styles from './Selector.module.css';
 
-type SelectOption = {
-  label: string;
-  value: string;
-};
-
 interface SelectorProps {
-  label: string;
-  value: string;
-  options: SelectOption[];
-  onChange: (value: string) => void;
+  options: string[] | SelectOption[];
+  selected: string;
+  label?: string;
   disabled?: boolean;
+  showLabel?: boolean;
+  onChange: (change: string) => void;
 }
 
-export default function Selector({ label, value, options, onChange, disabled = false }: SelectorProps) {
+export function Selector({ options, selected, label = 'Select an option', disabled = false, showLabel = true, onChange }: SelectorProps) {
+  const [mappedOptions, setMappedOptions] = useState<SelectOption[]>([]);
+
+  useEffect(() => {
+    let mapped: SelectOption[];
+
+    if (!options) {
+      return;
+    }
+
+    if (typeof options[0] === 'string') {
+      const robotOptions = options.map((value) => ({
+        label: value,
+        value: value,
+      }));
+      mapped = robotOptions as SelectOption[];
+    } else {
+      mapped = options as SelectOption[];
+    }
+
+    setMappedOptions(mapped);
+  }, [options]);
+
   return (
     <>
-      <label className={styles.selectLabel}>{label}</label>
-      <Select.Root value={value} onValueChange={onChange} disabled={disabled}>
-        <Select.Trigger className={styles.selectTrigger}>
-          <Select.Value />
-          <Select.Icon>
-            <ChevronDownIcon />
-          </Select.Icon>
-        </Select.Trigger>
-        <Select.Portal>
-          <Select.Content className={styles.selectContent} position="popper">
-            <Select.Viewport>
-              {options.map((option) => (
-                <Select.Item key={option.value} value={option.value} className={styles.selectItem}>
-                  <Select.ItemText>{option.label}</Select.ItemText>
-                </Select.Item>
-              ))}
-            </Select.Viewport>
-          </Select.Content>
-        </Select.Portal>
-      </Select.Root>
+      {mappedOptions.length > 0 ? (
+        <div className={styles.selectWrapper}>
+          <BaseSelector label={label} value={selected} disabled={disabled} options={mappedOptions} showLabel={showLabel} onChange={onChange} />
+        </div>
+      ) : (
+        <p>There is no options</p>
+      )}
     </>
   );
 }

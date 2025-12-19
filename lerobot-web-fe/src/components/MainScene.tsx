@@ -1,26 +1,42 @@
-import type { PropsWithChildren } from 'react';
+import { Suspense, type PropsWithChildren } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Grid, OrbitControls } from '@react-three/drei';
+import { TableModel } from './TableModel';
 
-export function MainScene(props: PropsWithChildren) {
+type MainSceneProps = PropsWithChildren<{
+  isAutoRotate?: boolean;
+  zoom?: number;
+}>;
+
+export function MainScene({ children, isAutoRotate = false, zoom = 10 }: MainSceneProps) {
   return (
     <>
-      <Canvas camera={{ position: [10, 2, 5], fov: 5 }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 10, 5]} intensity={1} castShadow />
-        <Grid
-          position={[0, 0, 0]}
-          args={[10, 10]}
-          cellSize={10.5}
-          cellColor="#555"
-          sectionSize={0.5}
-          sectionColor="#999"
-          fadeDistance={15}
-          fadeStrength={0.5}
-          infiniteGrid
-        />
-        {props.children}
-        <OrbitControls />
+      <Canvas shadows camera={{ position: [6, 3, 5], fov: zoom }}>
+        <Suspense fallback={null}>
+          <ambientLight intensity={0.8} />
+          <directionalLight position={[0, 8, 0]} intensity={1.5} castShadow />
+          <Grid
+            position={[0, 0, 0]}
+            args={[10, 10]}
+            cellSize={10.5}
+            sectionSize={0.5}
+            sectionColor="#5f1ebe"
+            fadeDistance={30}
+            fadeStrength={0.5}
+            infiniteGrid
+          />
+          {children}
+          <TableModel />
+          <OrbitControls
+            minPolarAngle={0}
+            maxPolarAngle={Math.PI / 2}
+            enablePan={true}
+            enableZoom={true}
+            target={[0, 0.45, 0]}
+            autoRotate={!isAutoRotate}
+            autoRotateSpeed={0.1}
+          />
+        </Suspense>
       </Canvas>
     </>
   );

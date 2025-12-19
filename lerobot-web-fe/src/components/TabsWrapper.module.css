@@ -1,0 +1,32 @@
+.trigger {
+  all: unset;
+  padding: 10px 15px;
+  color: #333;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  font-size: 1em;
+}
+
+.trigger:hover {
+  color: #0f5fdc;
+}
+
+.trigger[data-state="active"] {
+  color: #0f5fdc;
+  border-bottom: 1px solid #0f5fdc;
+}
+
+.content {
+  margin-top: 20px;
+}
+
+.list {
+  border-bottom: 1px solid #0f5fdc;
+}
+
+@media (min-width: 1921px) {
+  .trigger {
+    font-size: 1.5em;
+  }
+}

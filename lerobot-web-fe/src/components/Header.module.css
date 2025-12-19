@@ -9,9 +9,21 @@
   transition:
     margin-left 0.3s ease,
     width 0.3s ease;
+  border-bottom: 1px solid #fff;
 }
 
 .title {
-  font-size: 20px;
+  font-size: 1.25em;
   font-weight: bold;
+  color: #fff;
+}
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .header {
+    height: 5em;
+  }
 }

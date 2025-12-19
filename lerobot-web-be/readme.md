@@ -2,35 +2,98 @@
 
 Created by Python based FastAPI web framework.
 
-## Activate lerobot env
+## Activating a virtual environment for the backend
+
+If you haven't created your own yet, see [Python virtual environment setup](https://www.w3schools.com/python/python_virtualenv.asp).
 
 ```bash
-conda activate lerobot
+python -m venv lerobot
+```
+
+Activation (e.g. on Linux and macOS):
+```bash
+source lerobot/bin/activate
 ```
 
 ## Install
 
-Install dependecies via txt:
+Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python transformers pytest feetech-servo-sdk placo process_manager pydantic-settings
 ```
 
-or,
+## Clone the `lerobot` repository into the root directory:
 
 ```bash
-pip install "fastapi[standard]" uvicorn starlette aiortc python-multipart opencv-python
+git clone https://github.com/hcltech-robotics/lerobot.git
 ```
 
-Install a virtual display:
+## Navigate into the `lerobot` folder and install the package:
 
 ```bash
-sudo api install xvfb
+cd lerobot
+pip install -e .
 ```
 
-## Run
+## Verify the installation from the root directory:
 
-Run the application itself:
+```bash
+python -c "import lerobot; print(lerobot.__file__)"
+```
+
+## (OPTIONAL) Create udev rules:
+
+```bash
+nano /etc/udev/rules.d/99-robots.rules
+```
+
+Use the following or similar text to create udev rule. It is IMPORTANT to start the SYMLINK and TAG with "lerobot_".
+
+```bash
+# Follower
+SUBSYSTEM=="tty", KERNEL=="ttyACM*", \
+  ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d3", ATTRS{serial}=="{{FOLLOWER_ROBOT_SERIAL}}", \
+  SYMLINK+="lerobot_follower_1", TAG+="lerobot_follower", GROUP="dialout", MODE="0660"
+
+# Leader
+SUBSYSTEM=="tty", KERNEL=="ttyACM*", \
+  ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d3", ATTRS{serial}=="{{LEADER_ROBOT_SERIAL}}", \
+  SYMLINK+="lerobot_leader_1", TAG+="lerobot_leader", GROUP="dialout", MODE="0660"
+```
+
+Then trigger the rules with the following:
+```bash
+sudo udevadm control --reload-rules
+
+sudo udevadm trigger
+```
+
+
+## Update the .env file:
+
+Update the .env file with the correct values.
+
+Camera settings:
+
+```bash
+CAMERA_WIDTH=640
+CAMERA_HEIGHT=480
+CAMERA_FPS=15
+CAMERA_PATHS="{front: {type: opencv, index_or_path: /dev/video0, width: 640, height: 480, fps: 15}, wrist: {type: opencv, index_or_path: /dev/video1, width: 640, height: 480, fps: 15}}"
+```
+
+Groot server parameters:
+
+```bash
+PYTHON_BIN=python
+EVAL_SCRIPT=eval_lerobot.py
+EVAL_WORKDIR=./
+```
+
+## Start the app:
+
+Run the application (from the root folder):
 
 ```
 uvicorn app.main:app --reload
@@ -38,6 +101,6 @@ uvicorn app.main:app --reload
 
 Then, you can check it in the browser, just open: http://127.0.0.1:8000
 
-## Interactive API docs
+## Interactive API docs:
 
 There is an auto generated swagger ui for the available api point, just open: http://127.0.0.1:8000/docs#/

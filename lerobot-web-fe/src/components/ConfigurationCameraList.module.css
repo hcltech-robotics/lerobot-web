@@ -1,0 +1,39 @@
+.cameraListWrapper {
+  display: flex;
+  gap: 10px;
+}
+
+.cameraBoxWrapper {
+  width: 250px;
+}
+
+.noSignal {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  font-weight: bold;
+  font-size: 18px;
+  flex-direction: column;
+  border-radius: 8px;
+  gap: 6px;
+}
+
+.noSignalIcon {
+  width: 32px;
+  height: 32px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+@media (min-width: 1921px) {
+  .noSignal {
+    font-size: 1.5em;
+  }
+
+  .noSignalIcon {
+    width: 2em;
+    height: 2em;
+  }
+}

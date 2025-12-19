@@ -10,8 +10,8 @@
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  background-color: #919EAF;
-  color: #C8D2DD;
+  background-color: #919eaf;
+  color: #c8d2dd;
   border: none;
   transition: all 0.3s ease;
   z-index: 1;
@@ -22,10 +22,10 @@
 }
 
 .active {
-  background-color: #3C91FF;
+  background-color: #3c91ff;
   color: #ffffff;
-  border: 2px solid #B4DBFC;
-  box-shadow: 0 0 10px #B4DBFC;
+  border: 2px solid #b4dbfc;
+  box-shadow: 0 0 10px #b4dbfc;
 }
 
 .active:hover {
@@ -33,8 +33,8 @@
 }
 
 .completed {
-  background-color: #5F1EBE;
-  color: #C8D2DD;
+  background-color: #5f1ebe;
+  color: #c8d2dd;
 }
 
 .connector {
@@ -47,5 +47,24 @@
 }
 
 .connectorCompleted {
-  background-color: #5F1EBE;
+  background-color: #5f1ebe;
+}
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .tabContent {
+    font-size: 1.25em;
+  }
+
+  .alert {
+    font-size: unset;
+  }
+
+  .tabTrigger {
+    font-size: 1.25em;
+    width: 20em;
+  }
 }

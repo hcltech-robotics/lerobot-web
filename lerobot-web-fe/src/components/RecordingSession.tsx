@@ -1,0 +1,110 @@
+import { useEffect, useRef, useState } from 'react';
+import { type RecordingSessionProps, type RecordingSessionWsResponse } from '../models/recordDataset.model';
+import { AlertDialog } from './AlertDialog';
+import { ControlButtons } from './ControlButtons';
+import { pauseRecording, retryRecording, stopRecording, useRecordingStatus } from '../services/recordDataset.service';
+import { useConfigStore } from '../stores/config.store';
+
+import styles from './RecordingSession.module.css';
+
+export function RecordingSession({ meta, onStop, onFinish }: RecordingSessionProps) {
+  const [open, setOpen] = useState(false);
+  const [wsResponse, setWsResponse] = useState<RecordingSessionWsResponse | null>(null);
+  const [, setLoading] = useState(false);
+  const apiUrl = useConfigStore((state) => state.apiUrl);
+  const websocket = useRef<WebSocket | null>(null);
+
+  let statusText: string | null = null;
+  let timeLeft: number | null = null;
+
+  useEffect(() => {
+    if (!apiUrl) return;
+    setLoading(true);
+
+    websocket.current = useRecordingStatus(setWsResponse, () => setLoading(false));
+
+    return () => websocket.current?.close();
+  }, [apiUrl]);
+
+  useEffect(() => {
+    if (!wsResponse) return;
+
+    const isFinished = wsResponse.phase === 'completed' && wsResponse.current_episode === wsResponse.total_episodes;
+    console.log('ISFINISHED????: ', isFinished);
+
+    if (isFinished) {
+      onFinish();
+    }
+  }, [wsResponse, onFinish]);
+
+  const handleAlertSubmit = () => {
+    setOpen(false);
+    onStop();
+    stopRecording();
+  };
+
+  const onPause = () => {
+    pauseRecording();
+  };
+
+  const onRetry = () => {
+    retryRecording();
+  };
+
+  const formatTime = (time: number) =>
+    `${Math.floor(time / 60)
+      .toString()
+      .padStart(2, '0')}:${(time % 60).toString().padStart(2, '0')}`;
+
+  if (wsResponse) {
+    if (wsResponse.phase === 'completed') {
+      statusText = 'Recording completed.';
+      timeLeft = null;
+    }
+    if (wsResponse.in_reset) {
+      statusText = 'Reset time…';
+      timeLeft = wsResponse.time_left_s;
+    } else {
+      statusText = `Episode ${wsResponse.current_episode} is running…`;
+      timeLeft = wsResponse.time_left_s;
+    }
+  }
+
+  return (
+    <div className={styles.sessionContainer}>
+      <div className={styles.sessionHeader}>
+        <p className={styles.selectedId}>
+          Selected Id: <strong>{meta.repoId}</strong>
+        </p>
+        <p className={styles.episodeCounter}>
+          Episode {wsResponse?.current_episode} / {wsResponse?.total_episodes}
+        </p>
+      </div>
+
+      <div className={styles.progressBarWrapper}>
+        <progress value={wsResponse?.current_episode} max={wsResponse?.total_episodes}></progress>
+      </div>
+
+      {statusText && (
+        <div className={styles.statusSection}>
+          <p className={styles.statusText}>{statusText}</p>
+          {timeLeft !== null && <p>{formatTime(timeLeft)}</p>}
+        </div>
+      )}
+
+      <div className={styles.controlButtonsWrapper}>
+        <ControlButtons onPause={onPause} onRetry={onRetry} onStop={() => setOpen(true)} />
+      </div>
+
+      <AlertDialog
+        open={open}
+        onOpenChange={setOpen}
+        title="Are you sure?"
+        description="This action cannot be undone. This will permanently stop recording and any episodes recorded so far will be lost."
+        cancelText="Cancel"
+        actionText="Yes, stop recording"
+        onAction={handleAlertSubmit}
+      />
+    </div>
+  );
+}

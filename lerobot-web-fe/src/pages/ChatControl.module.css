@@ -1,0 +1,9 @@
+.contentArea {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translate(-50%);
+    width: 100%;
+    min-width: 500px;
+    max-width: 750px;
+}

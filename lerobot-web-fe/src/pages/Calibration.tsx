@@ -1,63 +1,84 @@
 import { useState } from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
-
 import CalibrationTabItem from '../components/CalibrationTabItem';
-import Selector from '../components/Selector';
 import { MainScene } from '../components/MainScene';
 import { Robot } from '../components/Robot';
-
+import { confirmCalibrationStart, confirmCalibrationStep, startCalibration } from '../services/calibration.service';
 import { calibrationFirstStepJointStates, startPositionJointState } from '../models/calibration.model';
 import { calibrationSteps } from '../models/calibration.model';
 import { useCalibration } from '../hooks/useCalibration';
 import { useSecondStepAnimation } from '../hooks/useSecondStepAnimation';
 import type { CalibrationStep } from '../models/calibration.model';
+import { useRobotStore } from '../stores/robot.store';
+import { Selector } from '../components/Selector';
 
 import styles from './Calibration.module.css';
 
 export default function Calibration() {
-  const [selectedRobotIndex, setSelectedRobotIndex] = useState('0');
-
+  const [selectedId, setSelectedId] = useState<string>('');
+  const robots = useRobotStore((store) => store.robots);
+  const robotType = useRobotStore((store) => store.robotType);
+  const robotKind = robots!.find((robot) => robot.id === selectedId)?.role;
   const { currentStep, tabValue, completed, goToNextStep, restartCalibration } = useCalibration();
 
-  const robotOptions = [
-    { label: 'Robot Arm 1', value: '0' },
-    { label: 'Robot Arm 2', value: '1' },
-  ];
-
-  const selectedRobot = robotOptions[parseInt(selectedRobotIndex)];
-
-  const handleTabClick = async (index: number) => {
-    if (index !== currentStep || !selectedRobot) return;
-
-    const step = calibrationSteps[index] as CalibrationStep;
-
-    try {
-      if (step.step) {
-        await new Promise((res) => setTimeout(res, 1000));
-      }
-
-      goToNextStep();
-    } catch (error) {
-      console.error('Calibration API call failed', error);
-      return;
-    }
-  };
+  const mappedRobots = robots && robots.map((item) => ({ label: `${item.side}-${item.role} (${item.id})`, value: item.id }));
 
   const secondStepActive = currentStep === 2;
   const secondStepAnimationState = useSecondStepAnimation(secondStepActive);
   const calibrationJointState =
     currentStep === 1 ? calibrationFirstStepJointStates : currentStep === 2 ? secondStepAnimationState : startPositionJointState;
 
+  const handleTabClick = async (index: number) => {
+    if (index !== currentStep || !selectedId || completed) {
+      return;
+    }
+
+    const step = calibrationSteps[index];
+
+    try {
+      if (step.id === 'start') {
+        if (!robotKind) {
+          throw new Error('Missing robot kind');
+        }
+
+        await startCalibration(selectedId, robotKind, robotType, selectedId);
+
+        await new Promise((res) => setTimeout(res, 300));
+
+        await confirmCalibrationStart();
+
+        goToNextStep();
+        return;
+      }
+
+      // === STEP 1 & STEP 2 ===
+      if (step.id === 'step1' || step.id === 'step2') {
+        await confirmCalibrationStep();
+        goToNextStep();
+        return;
+      }
+
+      // === FINISH ===
+      if (step.id === 'finish') {
+        goToNextStep();
+        return;
+      }
+    } catch (err) {
+      console.error('Calibration failed:', err);
+    }
+  };
+
   return (
     <div className={styles.contentArea}>
       <div className={styles.controlPanel}>
-        <div className={styles.selectWrapper}>
+        <h2 className={styles.title}>Calibration</h2>
+        <div>
           <Selector
-            label="Select robot arm to calibrate"
-            options={robotOptions}
-            value={selectedRobotIndex}
-            onChange={setSelectedRobotIndex}
+            label="Select a robot arm"
+            selected={selectedId}
+            options={mappedRobots || []}
+            onChange={setSelectedId}
             disabled={currentStep !== 0 || completed}
           />
           {currentStep > 0 && !completed && (
@@ -72,7 +93,7 @@ export default function Calibration() {
           <Tabs.List className={styles.tabsList}>
             {calibrationSteps.map((step, index) => {
               const isFirst = index === 0;
-              const disabled = isFirst && (!selectedRobotIndex || robotOptions.length === 0);
+              const disabled = isFirst && (!selectedId || robots!.length === 0);
               return (
                 <CalibrationTabItem
                   key={step.id}
@@ -92,7 +113,7 @@ export default function Calibration() {
 
           {calibrationSteps.map((step) => (
             <Tabs.Content key={step.id} value={step.id} className={styles.tabContent}>
-              {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration</p>}
+              {!completed ? step.content : <p className={styles.calibrationFinish}>Congratulation, you have finished the calibration!</p>}
               {step.id === 'start' && (
                 <div className={styles.alert}>
                   <ExclamationTriangleIcon className={styles.alertIcon} />
@@ -107,11 +128,10 @@ export default function Calibration() {
           Restart Calibration
         </button>
       </div>
-
       <div className={styles.sceneContainer}>
         <div className={styles.mainScene}>
-          <MainScene>
-            <Robot isLive={false} calibrationJointState={calibrationJointState} />
+          <MainScene zoom={5}>
+            <Robot isLive={false} calibrationJointState={calibrationJointState} robotLabel={selectedId} />
           </MainScene>
         </div>
       </div>

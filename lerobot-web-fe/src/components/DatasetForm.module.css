@@ -1,0 +1,147 @@
+.controlForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field:nth-child(5) {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 35px;
+  color: #555;
+}
+
+.inputBox {
+  display: flex;
+  align-items: center;
+  border: 1px solid #555;
+  border-radius: 8px;
+}
+
+.inputBox input {
+  border: none;
+}
+
+.inputBox .input {
+  border-radius: 0 8px 8px 0;
+}
+
+.inputBox .link {
+  text-decoration: none;
+  max-width: 70px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 50px;
+  text-align: center;
+}
+
+.inputBox .prefix {
+  color: #555;
+  font-size: 14px;
+  padding: 0 4px;
+}
+
+.inputBox.reverse {
+  flex-direction: row-reverse;
+}
+
+.inputBox.reverse .input {
+  border-radius: 8px 0 0 8px;
+}
+
+.submitButton {
+  background-color: #3c91ff;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+  align-items: center;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.submitButton:hover {
+  background-color: #1f78e0;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.submitButton svg {
+  margin-right: 10px;
+  vertical-align: text-top;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.input {
+  padding: 0 10px;
+  height: 35px;
+  line-height: 1;
+  border: 1px solid #333;
+  border-radius: 8px;
+  color: #333;
+  width: calc(100% - 20px);
+}
+
+.input:focus-visible {
+  outline: none;
+}
+
+.textarea {
+  padding: 10px;
+  line-height: unset;
+  font-family: unset;
+  resize: vertical;
+  min-height: 50px;
+}
+
+@media (max-width: 768px) {
+  .controlForm {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1921px) {
+  .label {
+    font-size: 1.5em;
+    line-height: 1.3em;
+  }
+
+  .statusBox p,
+  .submitButton,
+  .errorMessage,
+  .input,
+  .select,
+  .inputBox .prefix {
+    font-size: 1.25em;
+  }
+
+  .submitButton svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+
+  .field {
+    margin-bottom: 1em;
+    gap: 0.5em;
+  }
+}

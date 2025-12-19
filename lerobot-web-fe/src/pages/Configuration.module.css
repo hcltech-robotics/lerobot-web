@@ -1,100 +1,31 @@
-.ConfigurationWrapper {
-  margin: 0 16px;
+.configurationWrapper {
+  margin: 16px;
+  background-color: #f0f0f091;
+  border: 1px solid #fff;
+  border-radius: 8px;
+  width: 100%;
+  height: fit-content;
+  padding: 16px;
+  padding-top: 0;
 }
 
-.Title {
+.title {
   color: #333;
 }
 
-.Form {
-  width: 500px;
-  background-color: #eee;
-  padding: 15px;
+.contentArea {
+  background-color: #f0f0f091;
+  backdrop-filter: blur(5px);
+  border: 1px solid #fff;
   border-radius: 8px;
 }
 
-.Field {
-  display: grid;
-  margin-bottom: 10px;
-}
+@media (min-width: 1921px) {
+  .configurationWrapper {
+    max-width: 50vw;
+  }
 
-.Label {
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 35px;
-  color: #333;
-}
-
-.ErrorMessage {
-  font-size: 13px;
-  color: #ff0000;
-  opacity: 0.8;
-  margin-top: 4px;
-}
-
-.Input {
-  padding: 0 10px;
-  height: 35px;
-  line-height: 1;
-  border: 1px solid #333;
-  border-radius: 8px;
-  color: #333;
-}
-
-.InputError {
-  border-color: #ff0000;
-}
-
-.Input:focus-visible {
-  outline: none;
-}
-
-.SubmitButton {
-  background-color: #3c91ff;
-  color: #ffffff;
-  cursor: pointer;
-  border-radius: 6px;
-  border: none;
-  font-size: 16px;
-  padding: 12px;
-  transition: background-color 0.2s ease;
-  margin-top: 10px;
-}
-
-.SubmitButton:hover {
-  background-color: #1f78e0;
-}
-
-.SubmitButton:disabled {  
-  opacity: 0.6;
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
-.MessageContainer {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-
-.TokenWrapper {
-  border: 1px solid #333;
-  border-radius: 8px;
-}
-
-.TokenInput.Input {
-  width: calc(100% - 55px);
-  border: unset;
-}
-
-.TokenInput:hover {
-  box-shadow: unset;
-}
-
-.TokenIconButton {
-  height: 35px;
-  width: 35px;
-  border-radius: 0 8px 8px 0;
-  border: unset;
-  cursor: pointer;
+  .title {
+    font-size: 2em;
+  }
 }

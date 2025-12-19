@@ -1,6 +1,7 @@
 import * as Popover from '@radix-ui/react-popover';
-import styles from './PopoverWrapper.module.css';
 import type { ReactNode } from 'react';
+
+import styles from './PopoverWrapper.module.css';
 
 interface PopoverWrapperProps {
   trigger: ReactNode;

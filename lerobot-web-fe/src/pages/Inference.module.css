@@ -1,0 +1,123 @@
+.contentArea {
+  display: flex;
+  flex: 1;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.sceneContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.mainScene {
+  flex: 1;
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 8px;
+  box-sizing: border-box;
+  height: 100%;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.statusBox {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #fff;
+}
+
+.controlButton {
+  background-color: #3c91ff;
+  color: #ffffff;
+  transition: background-color 0.2s ease;
+  align-items: center;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.controlButton:hover {
+  background-color: #1f78e0;
+}
+
+.controlButton svg {
+  margin-right: 10px;
+  vertical-align: text-top;
+}
+
+.controlButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.start {
+  background-color: #3c91ff;
+  color: #fff;
+}
+
+.start:hover {
+  background-color: #1f78e0;
+}
+
+.stop {
+  background-color: #ff4f4f;
+  color: #fff;
+}
+
+.stop:hover {
+  background-color: #d93939;
+}
+
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  gap: 16px;
+  min-width: 0;
+}
+
+.errorMessage {
+  font-size: 13px;
+  color: #ff0000;
+  opacity: 0.8;
+}
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+  }
+
+  .statusBox p,
+  .controlButton {
+    font-size: 1.25em;
+  }
+
+  .controlButton svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+}

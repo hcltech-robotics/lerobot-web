@@ -1,0 +1,29 @@
+.statusBox {
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #fff;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+@media (min-width: 1921px) {
+  .title {
+    font-size: 2em;
+    margin-bottom: 1em;
+  }
+
+  .statusBox p,
+  .controlButton {
+    font-size: 1.25em;
+  }
+
+  .controlButton svg {
+    width: 1.25em;
+    height: 1.25em;
+  }
+}

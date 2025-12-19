@@ -1,7 +1,7 @@
 .drawer {
   height: 100vh;
-  background-color: #f4f4f4;
-  border-right: 1px solid #ddd;
+  background-color: #0f5fdc;
+  border-right: 1px solid #fff;
   transition: width 0.3s ease;
   overflow: hidden;
   display: flex;
@@ -29,7 +29,9 @@
   border: none;
   cursor: pointer;
   padding: 8px 0px;
-  color: #8291a0;
+  color: #fff;
+  width: 24px;
+  height: 24px;
 }
 
 .drawerContent {
@@ -41,26 +43,26 @@
 
 .drawerItem {
   display: flex;
-  gap: 10px;
+  gap: 0.75em;
   background: none;
   border: none;
   cursor: pointer;
   padding: 8px;
-  border-radius: 6px;
+  border-radius: 8px;
   text-decoration: none;
 }
 
 .drawerItem:hover {
-  background-color: #e0e0e0;
+  background-color: #00000030;
 }
 
 .selected {
-  background-color: #c8d2dd;
+  background-color: #00000030;
 }
 
 .drawerLabel {
   font-size: 18px;
-  color: #8291a0;
+  color: #fff;
   align-self: center;
 }
 
@@ -73,5 +75,31 @@
 .drawerIcon svg {
   height: 24px;
   width: 24px;
-  color: #8291a0;
+  color: #fff;
+}
+
+@media (min-width: 1921px) {
+  .open {
+    width: 20em;
+  }
+
+  .closed {
+    width: 5em;
+    align-items: center;
+  }
+
+  .drawerLabel {
+    font-size: 1.5em;
+  }
+
+  .drawerIcon svg,
+  .burger,
+  .close {
+    height: 2em;
+    width: 2em;
+  }
+
+  .drawerHeader {
+    padding: 1em;
+  }
 }

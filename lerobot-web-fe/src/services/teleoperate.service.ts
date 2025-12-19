@@ -1,85 +1,25 @@
-import { useStatusStore } from '../stores/status.store';
-import type { RobotIds, TeleoperateResponse } from '../models/teleoperate.model';
+import type { ControlStatus } from '../models/general.model';
+import type { RobotItem, RobotTypes } from '../models/robot.model';
+import type { TeleoperateResponse } from '../models/teleoperate.model';
+import { apiFetch } from '../utils/apiFetch';
 
-export async function startTeleoperate({ leader, follower }: RobotIds): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore.getState();
-
-  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
-
-  try {
-    const response = await fetch(`${apiUrl}/move/leader/start`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        robot_pairs: [
-          {
-            leader_id: leader,
-            follower_id: follower,
-          },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Teleoperate start failed: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error('Error starting Teleoperation:', error);
-    throw error;
-  }
+export async function toggleTeleoperate(
+  mode: ControlStatus,
+  robots: RobotItem[],
+  robotType: RobotTypes,
+  fps: number = 30,
+): Promise<TeleoperateResponse> {
+  return apiFetch<TeleoperateResponse>(`teleoperate/${mode}`, {
+    method: 'POST',
+    body: JSON.stringify({ mode, robots, robot_type: robotType, fps }),
+    toast: { success: `Teleoperate ${mode} successfully completed`, error: `Teleoperate ${mode} failed` },
+  });
 }
 
-export async function stopTeleoperate(): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore.getState();
-
-  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
-
-  try {
-    const response = await fetch(`${apiUrl}/move/leader/stop`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Teleoperate stop failed: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error('Error stoping Teleoperation:', error);
-    throw error;
-  }
-}
-
-export async function sleepPosition(id: string): Promise<TeleoperateResponse> {
-  const { apiUrl } = useStatusStore.getState();
-
-  if (!apiUrl) throw new Error('API URL not set. Please configure the system.');
-
-  try {
-    const response = await fetch(`${apiUrl}/move/sleep?robot_id=${id}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Move to sleep failed: ${response.statusText}`);
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error('Error moving Sleep position:', error);
-    throw error;
-  }
+export async function sleepPosition(follower_id: string, robotType: RobotTypes): Promise<TeleoperateResponse> {
+  return apiFetch<TeleoperateResponse>('move_to_sleep', {
+    method: 'POST',
+    body: JSON.stringify({ follower_id, robot_type: robotType }),
+    toast: { error: 'Sleep position failed' },
+  });
 }
